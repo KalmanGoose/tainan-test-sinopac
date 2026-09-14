@@ -2,405 +2,1361 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SinoPac Foodie - CINDY & MELON 台南專利大戰與美食之旅</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SinoPac Foodie & Trip Planner - CINDY & MELON 台南專利大戰客製行程</title>
     <style>
         :root {
-            --dawho-bg: #1a1a1a;       /* 參考大戶黑 */
-            --dawho-gold: #c5a065;     /* 大戶金 */
-            --primary-green: #008f4c;  /* 永豐綠 */
-            --bg-light: #f5f5f5;
+            --dawho-bg: #181818;
+            --dawho-card: #242424;
+            --dawho-gold: #c5a065;
+            --dawho-gold-light: #f5e6cc;
+            --primary-green: #008f4c;
+            --primary-green-light: #e6f7ef;
+            --accent-red: #ff4d4f;
+            --accent-blue: #2563eb;
+            --bg-light: #f6f7fb;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-sub: #6b7280;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-
-        body { background-color: #2b2b2b; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px 0; }
-
-        /* iPhone 外框尺寸 */
-        .iphone-frame {
-            width: 375px; height: 812px; background: var(--bg-light);
-            border-radius: 40px; border: 8px solid #000;
-            position: relative; overflow: hidden; display: flex; flex-direction: column;
-            box-shadow: 0 0 50px rgba(0,0,0,0.6);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
-        /* App Header */
+        body {
+            background-color: #121212;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 10px 0;
+            color: var(--text-main);
+        }
+
+        /* 響應式手機外框：電腦為精美 iPhone 框，手機為 100% 全螢幕 */
+        .app-container {
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            border-radius: 36px;
+            overflow: hidden;
+            border: 8px solid #2a2a2a;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 0; background: var(--bg-light); }
+            .app-container { border-radius: 0; border: none; max-width: 100%; }
+        }
+
+        /* 頂部 Header */
         .app-header {
-            background: #fff; padding: 48px 16px 12px;
-            display: flex; justify-content: space-between; align-items: center;
-            border-bottom: 1px solid #eee;
+            background: #ffffff;
+            padding: 20px 16px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eaeaea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
-        .logo { font-size: 17px; font-weight: 800; color: #1a1a1a; }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .logo {
+            font-size: 17px;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -0.5px;
+        }
         .logo span { color: var(--primary-green); }
+        .badge-tag {
+            font-size: 10px;
+            background: var(--dawho-gold-light);
+            color: #8c6d32;
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-weight: 700;
+        }
 
-        /* CINDY & MELON 住宿按鈕 */
         .user-badge {
-            background: var(--dawho-gold); color: white; padding: 5px 12px;
-            border-radius: 20px; font-size: 11px; font-weight: bold;
-            cursor: pointer; border: none; transition: transform 0.1s;
-            box-shadow: 0 2px 6px rgba(197, 160, 101, 0.4);
-        }
-        .user-badge:active { transform: scale(0.95); }
-
-        .content-area { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 90px; }
-        .content-area::-webkit-scrollbar { display: none; }
-
-        /* 飽足感 Dashboard */
-        .ctl-dashboard {
-            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
-            border-radius: 20px; padding: 18px; color: white; margin-bottom: 16px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
-        }
-        .ctl-title { font-size: 11px; color: #aaa; letter-spacing: 1px; margin-bottom: 5px; }
-        .ctl-value { font-size: 42px; font-weight: 700; color: var(--primary-green); transition: color 0.3s; }
-        .ctl-unit { font-size: 14px; color: #aaa; margin-left: 5px; }
-
-        /* 飽足感滑動動畫條 */
-        .progress-container { background: #444; height: 8px; border-radius: 4px; margin-top: 12px; overflow: hidden; }
-        .progress-fill {
-            height: 100%; background: var(--primary-green);
-            width: 50%; transition: width 0.4s ease-out, background 0.3s;
+            background: linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 3px 8px rgba(197, 160, 101, 0.35);
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
-        /* 任務卡片樣式 */
-        .task-card {
-            background: #fff; border-radius: 14px; padding: 12px 14px; margin-bottom: 10px;
-            display: flex; align-items: center; gap: 12px; border: 1px solid #f0f0f0;
-            cursor: pointer; transition: transform 0.1s, box-shadow 0.2s;
+        /* 飽足感與調情 Dashboard */
+        .status-widget {
+            background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
+            margin: 12px 14px 8px;
+            border-radius: 18px;
+            padding: 14px 16px;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.12);
         }
-        .task-card:active { transform: scale(0.98); }
-        .task-card.low-stomach { border-color: #ff4d4f; opacity: 0.8; background: #fff0f0; }
 
-        .icon-box { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; background: #f0f0f0; flex-shrink: 0; }
-        .task-info { flex: 1; min-width: 0; }
-        .task-name { font-weight: 700; font-size: 14px; color: #1a1a1a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .task-meta { font-size: 11px; color: #888; margin-top: 2px; }
-        .map-link { color: var(--primary-green); font-size: 11px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 4px; }
-
-        /* 下方固定選單 (6 個項目) */
-        .bottom-nav {
-            position: absolute; bottom: 0; width: 100%; height: 75px;
-            background: white; border-top: 1px solid #eee;
-            display: flex; justify-content: space-around; padding-top: 8px; z-index: 100;
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #aaa;
         }
-        .nav-item { display: flex; flex-direction: column; align-items: center; font-size: 9px; color: #aaa; cursor: pointer; transition: color 0.2s; flex: 1; }
-        .nav-item.active { color: var(--primary-green); font-weight: bold; }
-        .nav-icon { font-size: 18px; margin-bottom: 2px; }
 
-        /* 互動浮層動畫 */
-        #dialogue-box { background: #fff5e6; border-left: 4px solid var(--dawho-gold); padding: 12px; border-radius: 8px; font-size: 12px; margin: 12px 0; display: none; animation: fadeIn 0.3s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .status-val-row {
+            display: flex;
+            align-items: baseline;
+            gap: 4px;
+            margin: 4px 0;
+        }
 
-        /* 親親動畫層 */
+        .status-val {
+            font-size: 34px;
+            font-weight: 800;
+            color: var(--primary-green);
+            transition: color 0.3s;
+        }
+
+        .progress-bar-bg {
+            background: #3a3a3c;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: var(--primary-green);
+            width: 50%;
+            transition: width 0.35s ease, background 0.3s;
+        }
+
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-action {
+            flex: 1;
+            padding: 7px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            transition: transform 0.1s;
+        }
+        .btn-action:active { transform: scale(0.96); }
+        .btn-kiss { background: #ff4757; color: white; }
+        .btn-flirt { background: var(--dawho-gold); color: white; }
+
+        /* 對話框通知 */
+        #dialogue-box {
+            background: #fffdf5;
+            border-left: 4px solid var(--dawho-gold);
+            padding: 10px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin: 8px 14px;
+            display: none;
+            animation: fadeIn 0.25s ease-out;
+            color: #333;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        }
+
+        /* 主分頁切換 Segmented Navigation */
+        .main-tabs {
+            display: flex;
+            background: #ffffff;
+            margin: 8px 14px;
+            padding: 4px;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px 2px;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 700;
+            border-radius: 10px;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            border: none;
+            background: transparent;
+        }
+
+        .tab-btn.active {
+            background: var(--dawho-bg);
+            color: var(--dawho-gold);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        /* 內容展示區 */
+        .tab-content {
+            padding: 8px 14px 90px;
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 卡片共用風格 */
+        .custom-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1px solid #eef0f2;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            position: relative;
+        }
+
+        .card-header-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .badge-pill {
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-weight: 700;
+            display: inline-block;
+        }
+        .badge-green { background: var(--primary-green-light); color: var(--primary-green); }
+        .badge-gold { background: var(--dawho-gold-light); color: #916828; }
+        .badge-blue { background: #e0f2fe; color: #0369a1; }
+        .badge-red { background: #fee2e2; color: #dc2626; }
+
+        /* 交通自由選卡片專用 */
+        .train-option-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .train-option-card:hover { border-color: #cbd5e1; }
+        .train-option-card.selected {
+            border-color: var(--primary-green);
+            background: #f0fdf4;
+        }
+        .train-option-card.selected::after {
+            content: "✓ 已選取";
+            position: absolute;
+            top: 10px;
+            right: 12px;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--primary-green);
+            background: #dcfce7;
+            padding: 2px 6px;
+            border-radius: 6px;
+        }
+
+        .train-time-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .train-time {
+            font-size: 17px;
+            font-weight: 800;
+            color: #111827;
+        }
+        .train-arrow { color: #9ca3af; font-size: 14px; }
+        .train-meta-tag {
+            font-size: 11px;
+            color: #6b7280;
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        .train-price-tag {
+            font-size: 12px;
+            font-weight: 800;
+            color: #b45309;
+        }
+
+        /* 即時交通搭配總結面板 */
+        .transit-summary-box {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border-radius: 16px;
+            padding: 14px 16px;
+            color: white;
+            margin-bottom: 14px;
+            border-left: 4px solid var(--dawho-gold);
+        }
+
+        /* 模式切換按鈕 (六日一 vs 五天完整) */
+        .plan-mode-switcher {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+        .plan-btn {
+            padding: 10px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 800;
+            border: 2px solid #e2e8f0;
+            background: #ffffff;
+            color: #475569;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+        }
+        .plan-btn.active {
+            border-color: var(--dawho-gold);
+            background: #fdfaf3;
+            color: #855d1d;
+            box-shadow: 0 3px 10px rgba(197, 160, 101, 0.2);
+        }
+
+        /* 行程任務清單 */
+        .spot-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #f1f5f9;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .spot-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+        .spot-card.completed {
+            opacity: 0.65;
+            background: #f8fafc;
+            text-decoration: line-through;
+        }
+        .spot-icon-box {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #f1f5f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+        .spot-content { flex: 1; min-width: 0; }
+        .spot-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #0f172a;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .spot-meta {
+            font-size: 11px;
+            color: #64748b;
+            margin-top: 3px;
+            line-height: 1.4;
+        }
+        .spot-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 6px;
+        }
+        .map-btn {
+            color: var(--primary-green);
+            font-size: 11px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            background: var(--primary-green-light);
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+
+        /* 住宿試算器 Checkbox Item */
+        .subsidy-item {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+        }
+        .subsidy-item.active {
+            border-color: var(--dawho-gold);
+            background: #fffcf7;
+        }
+        .custom-checkbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            border: 2px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+            color: white;
+            transition: all 0.2s;
+            flex-shrink: 0;
+        }
+        .subsidy-item.active .custom-checkbox {
+            background: var(--dawho-gold);
+            border-color: var(--dawho-gold);
+        }
+
+        /* 比賽日程時間軸 */
+        .timeline-item {
+            position: relative;
+            padding-left: 24px;
+            margin-bottom: 14px;
+            border-left: 2px solid #e2e8f0;
+        }
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            left: -6px;
+            top: 4px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--dawho-gold);
+        }
+        .timeline-item.active-time::before {
+            background: var(--accent-red);
+            box-shadow: 0 0 0 4px rgba(255, 77, 79, 0.2);
+        }
+
+        /* 滿版親親 Overlay */
         #kiss-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(233, 30, 99, 0.95); display: none;
-            flex-direction: column; justify-content: center; align-items: center; color: white; z-index: 1000;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(233, 30, 99, 0.96);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 9999;
         }
-        .kiss-count { font-size: 80px; font-weight: 900; animation: heartBeat 0.5s infinite alternate; }
-        @keyframes heartBeat { from {transform: scale(1);} to {transform: scale(1.1);} }
+        .kiss-count { font-size: 72px; font-weight: 900; animation: pulse 0.5s infinite alternate; }
+        @keyframes pulse { from {transform: scale(1);} to {transform: scale(1.15);} }
 
-        /* 住宿資訊彈窗 */
-        #hotel-overlay {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); display: none;
-            flex-direction: column; justify-content: flex-end; z-index: 2000;
+        /* 底部固定導航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 440px;
+            height: 65px;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
         }
-        .hotel-modal {
-            background: #fff; border-radius: 25px 25px 0 0; padding: 22px 18px;
-            height: 75%; overflow-y: auto; position: relative;
-            animation: slideUp 0.35s ease-out;
+        .nav-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 10px;
+            color: #94a3b8;
+            text-decoration: none;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
         }
-        @keyframes slideUp { from {transform: translateY(100%);} to {transform: translateY(0);}}
-        .hotel-card { border: 1px solid #eee; border-left: 5px solid var(--dawho-gold); padding: 14px; border-radius: 12px; margin-bottom: 12px; background: #fafafa; }
-        .close-btn { position: absolute; top: 12px; right: 18px; font-size: 28px; color: #ccc; cursor: pointer; }
-
-        .action-btn { flex: 1; padding: 10px; border-radius: 10px; font-weight: bold; cursor: pointer; border: none; font-size: 12px; display: flex; align-items: center; justify-content: center; gap: 4px; }
+        .nav-link.active {
+            color: var(--primary-green);
+            font-weight: 800;
+        }
+        .nav-link-icon { font-size: 18px; margin-bottom: 2px; }
     </style>
 </head>
 <body>
 
-    <div class="iphone-frame">
+    <div class="app-container">
+        <!-- 頂部 Header -->
         <div class="app-header">
-            <div class="logo">SinoPac <span>Foodie</span></div>
-            <button class="user-badge" onclick="showHotel()">CINDY🍰 & MELON🍈 🏠</button>
+            <div class="logo-area">
+                <div class="logo">SinoPac <span>Planner</span></div>
+                <div class="badge-tag">南區專利戰</div>
+            </div>
+            <button class="user-badge" onclick="flirt()">
+                <span>CINDY🍰 & MELON🍈</span>
+            </button>
         </div>
 
-        <div class="content-area">
-            <div class="ctl-dashboard">
-                <div class="ctl-title">CINDY 當前胖胖飽狀況</div>
-                <div style="display:flex; align-items:baseline;">
-                    <div id="stomach-val" class="ctl-value">50</div>
-                    <div class="ctl-unit">%</div>
+        <!-- 飽足感與調情 Dashboard -->
+        <div class="status-widget">
+            <div class="status-header">
+                <span>CINDY 當前胖胖飽足狀況</span>
+                <span id="stomach-tag">狀態良好，可以開吃！</span>
+            </div>
+            <div class="status-val-row">
+                <div id="stomach-val" class="status-val">50</div>
+                <div style="font-size: 14px; color: #aaa;">%</div>
+            </div>
+            <div class="progress-bar-bg">
+                <div id="stomach-bar" class="progress-bar-fill"></div>
+            </div>
+            <div class="action-row">
+                <button onclick="triggerKiss()" class="btn-action btn-kiss">💋 補魔力親親</button>
+                <button onclick="flirt()" class="btn-action btn-flirt">💖 男友調情一下</button>
+            </div>
+        </div>
+
+        <!-- 浮動對話通知框 -->
+        <div id="dialogue-box"></div>
+
+        <!-- 主要功能分頁 (4大核心自訂功能) -->
+        <div class="main-tabs">
+            <button class="tab-btn active" onclick="switchTab('transit', this)">
+                <span style="font-size:16px;">🚆</span>
+                <span>車次自由選</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('itinerary', this)">
+                <span style="font-size:16px;">🗺️</span>
+                <span>行程模式</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('hotel', this)">
+                <span style="font-size:16px;">🏨</span>
+                <span>住宿試算</span>
+            </button>
+            <button class="tab-btn" onclick="switchTab('contest', this)">
+                <span style="font-size:16px;">🏆</span>
+                <span>專利賽程</span>
+            </button>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 1: 🚆 車次自由配 (去程/回程班次點選與即時試算) -->
+        <!-- ==================================================================== -->
+        <div id="tab-transit" class="tab-content active">
+            <!-- 實時配置總結卡 -->
+            <div class="transit-summary-box">
+                <div style="font-size:11px; color:var(--dawho-gold); font-weight:bold; margin-bottom:4px;">✨ 您目前的專案交通配置</div>
+                <div style="font-size:15px; font-weight:800; margin-bottom:6px;" id="summary-outbound">去程：自強(3000) 371次 (06:57➜08:47)</div>
+                <div style="font-size:15px; font-weight:800; margin-bottom:8px;" id="summary-return">回程：高鐵 0806次 (07:41➜08:34)</div>
+                <div style="font-size:12px; color:#cbd5e1; line-height:1.5; border-top:1px solid #334155; padding-top:6px;">
+                    💰 <strong>雙人來回預估票價：</strong><span id="summary-total-fare" style="color:#fbbf24; font-weight:bold;">$2,114</span><br>
+                    🛵 <strong>週一回校承諾：</strong>台中高鐵牽機車雙載，09:05 提前抵達法學院，行李 Melon 全包！
                 </div>
-                <div class="progress-container">
-                    <div id="stomach-bar" class="progress-fill"></div>
-                </div>
-                <div id="status-tag" style="margin-top:8px; font-size:11px; color: #4ade80;">✅ 狀態良好，可以開吃！</div>
             </div>
 
-            <div style="display:flex; gap:8px; margin-bottom:16px;">
-                <button onclick="triggerKiss()" class="action-btn" style="background: #ff4d4f; color:white;">💋 補魔力</button>
-                <button onclick="flirt()" class="action-btn" style="background: var(--dawho-gold); color:white;">💖 調情一下</button>
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 12px 0 8px;">
+                ① 選擇【去程車次】(臺中 ➔ 臺南)
             </div>
 
-            <div id="dialogue-box"></div>
-            <div id="day-title" style="font-weight:bold; margin-bottom:12px; font-size:15px; color: #222;">9/17 (四) 【下課南下 ‧ 府城宵夜場】</div>
-            <div id="mission-list"></div>
+            <!-- 去程分類切換 -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+                <button id="btn-dep-sat" onclick="switchDepGroup('sat')" class="badge-pill badge-green" style="border:none; cursor:pointer; padding:6px 12px; font-size:11px;">☀️ 9/19 週六早班 (直衝報到)</button>
+                <button id="btn-dep-eve" onclick="switchDepGroup('eve')" class="badge-pill" style="border:none; cursor:pointer; padding:6px 12px; font-size:11px; background:#e2e8f0; color:#475569;">🌙 9/17或9/18 傍晚班次</button>
+            </div>
+
+            <!-- 週六早班車次 -->
+            <div id="dep-group-sat">
+                <div class="train-option-card selected" onclick="selectOutbound(this, '自強(3000) 371次', '06:57', '08:47', 487, '直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！時間最完美！')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-green">★ 官方最推薦首選</span>
+                        <span class="train-price-tag">$487 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">06:57</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">08:47</span>
+                        <span style="font-size:12px; color:#64748b;">(1時50分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>自強(3000) 371次</strong> | 新自強舒適安靜，下車 5 分鐘抵達成大自強校區！</div>
+                </div>
+
+                <div class="train-option-card" onclick="selectOutbound(this, '自強號 101次', '05:30', '07:44', 244, '超早出發享大學生 5 折優惠！07:44 到台南可悠閒吃早餐牛肉湯。')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-gold">💰 大學生 5 折只要 $244</span>
+                        <span class="train-price-tag">$244 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">05:30</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">07:44</span>
+                        <span style="font-size:12px; color:#64748b;">(2時14分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>自強號 101次</strong> | 省錢天花板！到站先吃一碗美鮮牛肉湯再進場！</div>
+                </div>
+
+                <div class="train-option-card" onclick="selectOutbound(this, '區間快 3005次', '06:04', '08:21', 314, '08:21 到台南後站，時間充裕，票價親民。')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-blue">早安區間快</span>
+                        <span class="train-price-tag">$314 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">06:04</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">08:21</span>
+                        <span style="font-size:12px; color:#64748b;">(2時17分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>區間快 3005次</strong> | 臺中至臺南，免劃位彈性搭乘。</div>
+                </div>
+            </div>
+
+            <!-- 傍晚班次 (9/17或9/18提早南下) -->
+            <div id="dep-group-eve" style="display:none;">
+                <div class="train-option-card" onclick="selectOutbound(this, '自強(3000) 143次', '19:54', '21:34', 487, '全天最快速列車！只要 1 小時 40 分鐘即達台南！')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-green">⚡ 全日最快 100 分鐘直達</span>
+                        <span class="train-price-tag">$487 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">19:54</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">21:34</span>
+                        <span style="font-size:12px; color:#64748b;">(1時40分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>自強(3000) 143次</strong> | 下課後吃個飯搭這班，21:34 抵達正好吃美鮮牛肉湯！</div>
+                </div>
+
+                <div class="train-option-card" onclick="selectOutbound(this, '自強號 141次', '19:47', '21:52', 390, '享大學生 8 折優惠只要 $390！')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-gold">🎓 大學生 8 折</span>
+                        <span class="train-price-tag">$390 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">19:47</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">21:52</span>
+                        <span style="font-size:12px; color:#64748b;">(2時05分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>自強號 141次</strong> | 學生優惠班次，平價好選擇。</div>
+                </div>
+
+                <div class="train-option-card" onclick="selectOutbound(this, '自強(3000) 167次', '17:45', '19:34', 487, '傍晚 17:45 出發，晚上 19:34 到台南逛夜市。')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-blue">傍晚黃金時段</span>
+                        <span class="train-price-tag">$487 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">17:45</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">19:34</span>
+                        <span style="font-size:12px; color:#64748b;">(1時49分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>自強(3000) 167次</strong> | 早早抵達直接去安平吃阿財牛肉湯！</div>
+                </div>
+
+                <div class="train-option-card" onclick="selectOutbound(this, '自強號 281次', '21:46', '23:44', 341, '夜貓首選！大學生 7 折超划算！')">
+                    <div class="card-header-line">
+                        <span class="badge-pill badge-gold">🌙 大學生 7 折夜貓班</span>
+                        <span class="train-price-tag">$341 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">21:46</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">23:44</span>
+                        <span style="font-size:12px; color:#64748b;">(1時58分)</span>
+                    </div>
+                    <div class="train-meta-tag"><strong>自強號 281次</strong> | 深夜抵達直接吃豆奶宗沙茶蛋餅！</div>
+                </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 18px 0 8px;">
+                ② 選擇【9/21 (一) 回程晨車】(臺南 ➔ 臺中，奔赴 10:10 民法物權)
+            </div>
+
+            <!-- 回程高鐵/台鐵班次 -->
+            <div class="train-option-card selected" onclick="selectReturn(this, '高鐵 0806次', '07:41', '08:34', 570, '08:34 抵達台中高鐵，牽機車雙載 09:05 到教室，提前整整 65 分鐘從容就座！')">
+                <div class="card-header-line">
+                    <span class="badge-pill badge-green">★ 貼心首選 (提前65分到)</span>
+                    <span class="train-price-tag">$570 (大學生88折)</span>
+                </div>
+                <div class="train-time-row">
+                    <span class="train-time">07:41</span>
+                    <span class="train-arrow">➔</span>
+                    <span class="train-time">08:34</span>
+                    <span style="font-size:12px; color:#64748b;">(53分)</span>
+                </div>
+                <div class="train-meta-tag">
+                    🚄 <strong>高鐵 0806次</strong> ➔ 台中高鐵牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>。<br>
+                    ☕ Cindy 還可以悠閒喝杯燕麥奶拿鐵，行李由 Melon 扛走！
+                </div>
+            </div>
+
+            <div class="train-option-card" onclick="selectReturn(this, '高鐵 0810次', '08:41', '09:34', 485, '09:34 抵達台中高鐵，牽機車雙載 10:05 抵達系館，踩點準時入座！票價 75 折最便宜！')">
+                <div class="card-header-line">
+                    <span class="badge-pill badge-gold">💰 大學生 75 折超划算</span>
+                    <span class="train-price-tag">$485 (大學生75折)</span>
+                </div>
+                <div class="train-time-row">
+                    <span class="train-time">08:41</span>
+                    <span class="train-arrow">➔</span>
+                    <span class="train-time">09:34</span>
+                    <span style="font-size:12px; color:#64748b;">(53分)</span>
+                </div>
+                <div class="train-meta-tag">
+                    🚄 <strong>高鐵 0810次</strong> ➔ 09:45 牽機車出發 ➔ <strong>10:05 抵達系館</strong>。<br>
+                    ⏱️ 10:10 上課剛剛好入座，適合週日想多睡 1 小時的情侶！
+                </div>
+            </div>
+
+            <div class="train-option-card" onclick="selectReturn(this, '台鐵 自強108次', '06:08', '08:28', 487, '台鐵直達台中火車站，08:40 騎車約 09:00 抵達學校。')">
+                <div class="card-header-line">
+                    <span class="badge-pill badge-blue">台鐵直達台中車站</span>
+                    <span class="train-price-tag">$487</span>
+                </div>
+                <div class="train-time-row">
+                    <span class="train-time">06:08</span>
+                    <span class="train-arrow">➔</span>
+                    <span class="train-time">08:28</span>
+                    <span style="font-size:12px; color:#64748b;">(2時20分)</span>
+                </div>
+                <div class="train-meta-tag"><strong>自強號 108次</strong> | 免去高鐵站，臺南市區火車站直接上車。</div>
+            </div>
         </div>
 
-        <div class="bottom-nav">
-            <div class="nav-item active" onclick="switchDay('Day 1', this)"><div class="nav-icon">❶</div><span>9/17四</span></div>
-            <div class="nav-item" onclick="switchDay('Day 2', this)"><div class="nav-icon">❷</div><span>9/18五</span></div>
-            <div class="nav-item" onclick="switchDay('Day 3', this)"><div class="nav-icon">❸</div><span>9/19賽</span></div>
-            <div class="nav-item" onclick="switchDay('Day 4', this)"><div class="nav-icon">❹</div><span>9/20日</span></div>
-            <div class="nav-item" onclick="switchDay('Day 5', this)"><div class="nav-icon">❺</div><span>9/21課</span></div>
-            <div class="nav-item" onclick="switchDay('所有景點', this)"><div class="nav-icon">☻</div><span>全部</span></div>
+        <!-- ==================================================================== -->
+        <!-- TAB 2: 🗺️ 行程模式自由排 (六日一 vs 五天完整 vs 景點清單) -->
+        <!-- ==================================================================== -->
+        <div id="tab-itinerary" class="tab-content">
+            <!-- 模式切換按鈕 -->
+            <div class="plan-mode-switcher">
+                <button id="btn-mode-3day" class="plan-btn active" onclick="switchPlanMode('3day')">
+                    🌟 方案一：玩六日一<br><span style="font-size:10px; font-weight:normal;">(精華超值 3天2夜)</span>
+                </button>
+                <button id="btn-mode-5day" class="plan-btn" onclick="switchPlanMode('5day')">
+                    🎒 方案二：五天深度遊<br><span style="font-size:10px; font-weight:normal;">(9/17-9/21 全套吃爆)</span>
+                </button>
+            </div>
+
+            <!-- 天數切換 Tab (動態生成) -->
+            <div id="day-subtabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px;"></div>
+
+            <div id="itinerary-title" style="font-size:14px; font-weight:800; color:#1e293b; margin-bottom:10px;"></div>
+
+            <!-- 任務與景點卡片列表 -->
+            <div id="itinerary-list"></div>
         </div>
 
+        <!-- ==================================================================== -->
+        <!-- TAB 3: 🏨 住宿與補助試算器 -->
+        <!-- ==================================================================== -->
+        <div id="tab-hotel" class="tab-content">
+            <div class="custom-card" style="background:linear-gradient(135deg, #2d3748 0%, #1a202c 100%); color:white;">
+                <div style="font-size:11px; color:var(--dawho-gold); font-weight:800;">💰 國旅補助即時試算器</div>
+                <div style="display:flex; justify-content:space-between; align-items:baseline; margin:8px 0;">
+                    <div>
+                        <span style="font-size:30px; font-weight:900; color:#4ade80;" id="calc-total-saved">$3,800</span>
+                        <span style="font-size:11px; color:#cbd5e1;">總計為您省下</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <span style="font-size:12px; color:var(--dawho-gold); font-weight:bold;" id="calc-nights-count">住 2 晚 (補助 1 晚 + 免費 1 晚)</span>
+                    </div>
+                </div>
+                <div style="font-size:11px; color:#cbd5e1; line-height:1.5;">
+                    💡 臺南振興國旅補助：平日（週日至週四）每房現折 <strong>$800</strong>！<br>
+                    🏠 週六成大朋友家免費借住，現省 <strong>$3,000+</strong> 週末天價！
+                </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin:14px 0 8px;">
+                🏨 勾選您要入住的夜晚：
+            </div>
+
+            <!-- 住宿夜選單 -->
+            <div class="subsidy-item active" id="night-919" onclick="toggleNight('919', 0, 3000)">
+                <div class="custom-checkbox">✓</div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-weight:800; font-size:13px;">9/19 (六) - 成大朋友家溫暖小窩</span>
+                        <span class="badge-pill badge-green">完全免費 $0</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:2px;">
+                        成大校區周邊，專利大戰比完直接步行入住，現省週六週末房費約 $3,000！
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsidy-item active" id="night-920" onclick="toggleNight('920', 800, 800)">
+                <div class="custom-checkbox">✓</div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-weight:800; font-size:13px;">9/20 (日) - 府城商旅 / 路徒行旅成大館</span>
+                        <span class="badge-pill badge-gold">國旅折 $800</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:2px;">
+                        週日算平日！平日價折抵 $800 後自付只要幾百元，週一早起直接搭車！
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsidy-item" id="night-917" onclick="toggleNight('917', 800, 800)">
+                <div class="custom-checkbox"></div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-weight:800; font-size:13px;">9/17 (四) - 平日提早南下入住</span>
+                        <span class="badge-pill badge-gold">國旅折 $800</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:2px;">
+                        成大門口路徒行旅或古巷商旅，下課南下辦理入住享平日第一波折抵！
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsidy-item" id="night-918" onclick="toggleNight('918', 0, 0)">
+                <div class="custom-checkbox"></div>
+                <div style="flex:1;">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span style="font-weight:800; font-size:13px;">9/18 (五) - 續住同家原房 (週五晚)</span>
+                        <span class="badge-pill" style="background:#f1f5f9; color:#475569;">自費續住</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:2px;">
+                        免拖行李換房，週五睡飽迎戰隔天專利大戰。
+                    </div>
+                </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin:16px 0 8px;">
+                📍 補助精選推薦飯店：
+            </div>
+
+            <div class="custom-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:800; font-size:14px;">路徒行旅 成大館</span>
+                    <span class="badge-pill badge-gold">成大正對面</span>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin:4px 0 8px;">東區前鋒路141號 | 步行 2 分鐘抵達自強校區與後站</div>
+                <a href="https://maps.google.com/?cid=12395371052428747014" target="_blank" class="map-btn">📍 Google 地圖查看</a>
+            </div>
+
+            <div class="custom-card">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-weight:800; font-size:14px;">府城商旅</span>
+                    <span class="badge-pill badge-gold">CP值超高</span>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin:4px 0 8px;">東區大同路一段 | 週日折完只要幾百元</div>
+                <a href="https://maps.google.com/?cid=17253077583729000409" target="_blank" class="map-btn">📍 Google 地圖查看</a>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 4: 🏆 專利大戰南區賽程指南 -->
+        <!-- ==================================================================== -->
+        <div id="tab-contest" class="tab-content">
+            <div class="custom-card" style="border-left: 4px solid var(--accent-red);">
+                <div style="font-size:11px; color:var(--accent-red); font-weight:800;">第三屆全國大專院校專利大戰桌遊競賽 (南區)</div>
+                <div style="font-size:16px; font-weight:900; margin:4px 0 8px; color:#0f172a;">國立成功大學 自強校區</div>
+                <div style="font-size:12px; color:#475569; line-height:1.6;">
+                    📍 <strong>場地：</strong>儀器設備大樓 10 樓 會議室<br>
+                    🚶 <strong>步行：</strong>臺南車站後站出來，沿大學路直行 5~7 分鐘即抵達自強校區！<br>
+                    🎯 <strong>賽制：</strong>三輪積分賽 (初賽、複賽、決賽)，爭奪南區最高榮譽與獎金！
+                </div>
+                <div style="margin-top:10px;">
+                    <a href="https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z" target="_blank" class="map-btn">📍 導航至成大自強校區會場</a>
+                </div>
+            </div>
+
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin:16px 0 10px;">
+                ⏱️ 9/19 (六) 當日詳細賽程表：
+            </div>
+
+            <div class="timeline-item active-time">
+                <div style="font-weight:800; font-size:13px; color:#dc2626;">09:00 - 09:25【選手報到與入座】</div>
+                <div style="font-size:11px; color:#64748b;">自強371次 08:47 到站，步行 5 分鐘剛好從容完成報到！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="font-weight:800; font-size:13px;">09:30 - 10:00【長官致詞 & 競賽規則說明】</div>
+                <div style="font-size:11px; color:#64748b;">裁判宣讀專利桌遊機制、積分計算與違規裁決標準。</div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="font-weight:800; font-size:13px; color:#0369a1;">10:00 - 11:40【初賽 第一輪對決】</div>
+                <div style="font-size:11px; color:#64748b;">第一場激烈桌遊交鋒！穩扎穩打爭取小組領先。</div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="font-weight:800; font-size:13px; color:#059669;">11:40 - 13:00【午餐休息補給】</div>
+                <div style="font-size:11px; color:#64748b;">成大校園周邊享用午餐（鐵牛起司蛋餅或給我咬一口披薩）。</div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="font-weight:800; font-size:13px; color:#0369a1;">13:00 - 14:40【複賽 第二輪交鋒】</div>
+                <div style="font-size:11px; color:#64748b;">高強度策略博弈，晉級關鍵戰役！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="font-weight:800; font-size:13px; color:#d97706;">14:50 - 16:30【決賽 第三輪總冠軍爭霸】</div>
+                <div style="font-size:11px; color:#64748b;">巔峰對決，衝擊全國決賽名額與豐厚獎金！</div>
+            </div>
+
+            <div class="timeline-item">
+                <div style="font-weight:800; font-size:13px; color:#7c3aed;">17:00 - 18:15【講評、頒獎典禮、大合影】</div>
+                <div style="font-size:11px; color:#64748b;">榮耀時刻！賽後前往成大朋友家辦理入住與慶祝晚餐。</div>
+            </div>
+        </div>
+
+        <!-- 滿版親親 Overlay -->
         <div id="kiss-overlay" onclick="closeKiss()">
             <div style="font-size:50px;">❤️</div>
             <div id="kiss-num" class="kiss-count">0</div>
-            <div style="font-weight:bold;">正在補魔力中...</div>
-            <div style="font-size:12px; margin-top:20px;">(體力恢復 +20%)</div>
+            <div style="font-weight:bold; margin-top:8px;">正在補魔力親親中...</div>
+            <div style="font-size:12px; margin-top:16px;">(體力恢復 +20%，隨時充滿愛意)</div>
         </div>
 
-        <div id="hotel-overlay" onclick="if(event.target == this) closeHotel()">
-            <div class="hotel-modal">
-                <div class="close-btn" onclick="closeHotel()">×</div>
-                <h2 style="margin-bottom: 14px; color: #1a1a1a; font-size: 18px;">🏠 住宿與回程交通規劃</h2>
-
-                <div class="hotel-card">
-                    <div style="font-size: 11px; color: var(--dawho-gold); font-weight: bold; margin-bottom: 4px;">9/17 (四) - 第一晚【國旅補助現折 $800】</div>
-                    <div style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">路徒行旅成大館 / 成功古巷 / 府城商旅</div>
-                    <div style="font-size: 12px; color: #555; line-height: 1.6;">
-                        📍 <strong>位置：</strong>成大門口（前鋒路）或火車站周邊<br>
-                        💰 <strong>好康：</strong>平日住宿扣 $800 補助，自付只要幾百元！<br>
-                        🕒 <strong>安排：</strong>15:00 下課後悠閒搭車南下辦理入住。<br>
-                        ⚠️ <strong>提醒：</strong>現場出示實體身分證正本即可直接折抵！
-                    </div>
-                </div>
-
-                <div class="hotel-card">
-                    <div style="font-size: 11px; color: var(--dawho-gold); font-weight: bold; margin-bottom: 4px;">9/18 (五) - 第二晚【續住同家 ‧ 養精蓄銳】</div>
-                    <div style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">續住原飯店（自費週五週末房）</div>
-                    <div style="font-size: 12px; color: #555; line-height: 1.6;">
-                        📍 <strong>優勢：</strong>不用換飯店拖行李，悠閒享受兩人約會。<br>
-                        🛌 <strong>狀態：</strong>整天在台南散步吃好料，睡飽備戰隔天比賽！
-                    </div>
-                </div>
-
-                <div class="hotel-card" style="border-left-color: #ff4d4f;">
-                    <div style="font-size: 11px; color: #ff4d4f; font-weight: bold; margin-bottom: 4px;">9/19 (六) - 第三晚【成大朋友家 ‧ 免費 $0】</div>
-                    <div style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">成大朋友溫暖小窩（$0 入住）</div>
-                    <div style="font-size: 12px; color: #1e3a8a; background: #eff6ff; padding: 6px 10px; border-radius: 6px; margin-bottom: 8px; line-height: 1.5;">
-                        🚆 <strong>週六去程台鐵直達推薦：</strong><br>
-                        • <strong>自強(3000) 371次：</strong>06:57 臺中 ➜ 08:47 臺南後站（1hr50分），下車 5 分鐘抵達成大自強校區 09:00 報到！<br>
-                        • <strong>自強 101次：</strong>05:30 臺中 ➜ 07:44 臺南，享<strong>大學生 5 折只要 $244</strong>！
-                    </div>
-                    <div style="font-size: 12px; color: #555; line-height: 1.6;">
-                        📍 <strong>位置：</strong>成大校區周邊，比完賽直接入住。<br>
-                        🎉 <strong>神助攻：</strong>現省週六數千元天價房費！<br>
-                        🍢 <strong>行程：</strong>專利大戰結束後與成大朋友相聚吃夜市。
-                    </div>
-                </div>
-
-                <div class="hotel-card" style="border-left-color: var(--primary-green);">
-                    <div style="font-size: 11px; color: var(--primary-green); font-weight: bold; margin-bottom: 4px;">9/20 (日) - 第四晚【國旅補助第二波 ‧ 週日再折 $800】</div>
-                    <div style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">府城商旅 / 亞伯大飯店 / 成大周邊</div>
-                    <div style="font-size: 12px; color: #555; line-height: 1.6;">
-                        📍 <strong>亮點：</strong>週日算平日！享腰斬平日價再折 $800！<br>
-                        ✨ <strong>超值：</strong>銅板價多爽住一晚，週日晚上無壓力吃大東東夜市。
-                    </div>
-                </div>
-
-                <div class="hotel-card" style="border-left-color: #3b82f6;">
-                    <div style="font-size: 11px; color: #3b82f6; font-weight: bold; margin-bottom: 4px;">9/21 (一) - 回程晨風【高鐵 ➜ 機車直奔民法物權】</div>
-                    <div style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">高鐵台南站 ➔ 台中烏日 ➔ 學校系館</div>
-                    <div style="font-size: 12px; color: #555; line-height: 1.6;">
-                        🚄 <strong>車次：</strong>07:41 出發 (88折, 08:34到) 或 08:41 (75折, 09:34到)<br>
-                        🛵 <strong>機車：</strong>高鐵站牽車雙載直奔系館門口（約 18~20 分鐘）<br>
-                        💼 <strong>男友承諾：</strong>行李 Melon 全包扛走！Cindy 兩手空空優雅走進 10:10 教室！
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
+    <!-- 腳本區：資料驅動與完整客製功能 -->
     <script>
         // ==========================================
-        // 1. 💎 資料區 (台南美食與專利大戰行程資料)
-        const allData = [
-            {"name": "無名羊肉湯-大菜市", "time": "05:30-13:00 (週二休)", "addr": "中西區府前路二段144號", "map": "https://maps.google.com/?cid=6988823270250232013", "melon": "必搶！米其林推薦完全無羊騷味。", "cindy": "⭐⭐⭐⭐⭐ (快點幫我拍照！)", "full": 20},
-            {"name": "美鮮牛肉湯", "time": "24小時 (週一二休)", "addr": "南區新興路419號之1", "map": "https://maps.google.com/?cid=2734682962622339755", "melon": "宵夜首選！9/17 抵達台南的第一餐。", "cindy": "⭐⭐⭐⭐⭐ (熱湯配肉燥飯超讚)", "full": 20},
-            {"name": "阿財牛肉湯", "time": "11:30-22:00", "addr": "安平區古堡街5號", "map": "https://maps.google.com/?cid=14531624740468646438", "melon": "安平觀光客與在地人都愛的店。", "cindy": "⭐⭐⭐⭐⭐ (安平必吃牛肉湯)", "full": 20},
-            {"name": "下大道蘭米糕", "time": "09:00-19:00 (週三至五休)", "addr": "中西區康樂街6號", "map": "https://maps.google.com/?cid=3085742664717935776", "melon": "週日限定必吃！米糕配魚鬆超香。", "cindy": "⭐⭐⭐⭐⭐ (終於吃到了)", "full": 15},
-            {"name": "無名米糕 (中山路)", "time": "09:30-15:00 (週日休)", "addr": "中西區中山路8巷5號", "map": "https://maps.google.com/?cid=3482488932888708341", "melon": "巷弄裡的傳奇。米糕濕潤度剛好。", "cindy": "⭐⭐⭐⭐⭐ (好有老台南fu)", "full": 15},
-            {"name": "阿龍香腸熟肉", "time": "10:30-19:00 (週一休)", "addr": "中西區保安路34號", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "台南特有的「黑白切」每樣都想吃。", "cindy": "⭐⭐⭐⭐⭐ (黑白切就是藝術)", "full": 15},
-            {"name": "阿鳳浮水虱目魚羹", "time": "07:30-00:00", "addr": "中西區保安路59號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "每一口羹都吃得到虱目魚肚肉塊。", "cindy": "⭐⭐⭐⭐ (就在阿龍隔壁)", "full": 15},
-            {"name": "給我咬一口披薩", "time": "11:30-21:30 (週一二休)", "addr": "中西區赤崁東街46-3號", "map": "https://maps.google.com/?cid=4568156167290177597", "melon": "憑學生證超便宜！薄脆餅皮現烤。", "cindy": "⭐⭐⭐⭐ (CP值爆表！)", "full": 15},
-            {"name": "蔡家豬血湯", "time": "10:30-18:30 (週一休)", "addr": "東區中華東路二段41巷", "map": "https://www.google.com/maps/search/?api=1&query=蔡家豬血湯", "melon": "料多到懷疑老闆虧本。", "cindy": "⭐⭐⭐⭐ (料也太多)", "full": 15},
-            {"name": "鐵牛早餐", "time": "14:00-19:00", "addr": "東區林森路二段166號", "map": "https://maps.google.com/?cid=5511486227572991761", "melon": "成大自強校區旁！罪惡起司蛋餅。", "cindy": "⭐⭐⭐⭐ (賽前補足戰力！)", "full": 15},
-            {"name": "丹瓦樓", "time": "17:00-01:30", "addr": "北區海安路三段51號", "map": "https://maps.google.com/?cid=10538179209633656791", "melon": "營業到深夜的滷味名店。", "cindy": "⭐⭐⭐⭐ (宵夜良伴)", "full": 15},
-            {"name": "豆奶宗", "time": "21:40-10:30", "addr": "中西區府前路二段175號", "map": "https://maps.google.com/?cid=13132803753236278417", "melon": "深夜限定！沙茶蛋餅是靈魂。", "cindy": "⭐⭐⭐⭐ (經典中的經典)", "full": 15},
-            {"name": "祿記水晶餃", "time": "08:00-16:30", "addr": "中西區開山路3巷27號", "map": "https://maps.google.com/?cid=15113525052136485682", "melon": "秒殺級美食！熱騰騰咬下去爆汁。", "cindy": "⭐⭐⭐⭐⭐ (水晶皮超透Q彈)", "full": 10},
-            {"name": "連得堂餅家", "time": "08:00-20:00 (週六至18:00)", "addr": "北區崇安街54號", "map": "https://maps.app.goo.gl/DJBUgafAVXdprV6fA", "melon": "每人限購2包。百年古法手作煎餅。", "cindy": "⭐⭐⭐⭐⭐ (伴手禮get！)", "full": 10},
-            {"name": "灣裡薯條脆肉店", "time": "14:30-18:00 (週日休)", "addr": "南區省躬一街58號", "map": "https://maps.google.com/?cid=1498015060232698701", "melon": "南區神級下午茶。炸脆肉必點。", "cindy": "⭐⭐⭐⭐⭐ (騎車也甘願)", "full": 10},
-            {"name": "協進國小後門黑輪", "time": "10:30-19:00", "addr": "中西區大新街18號", "map": "https://maps.google.com/?cid=16972007626922579178", "melon": "在地人從小吃到的古早味。", "cindy": "⭐⭐⭐⭐ (湯頭免費喝到飽)", "full": 10},
-            {"name": "台灣黑輪 (2元黑輪)", "time": "10:00-19:00", "addr": "中西區開山路74號", "map": "https://maps.google.com/?cid=14732152349071063688", "melon": "一串只要2元！懷舊復古風情。", "cindy": "⭐⭐⭐⭐ (吃回憶的小點心)", "full": 10},
-            {"name": "啾醬 韓式炸雞", "time": "16:00-23:00", "addr": "北區公園路768號", "map": "https://maps.google.com/?cid=972410313880436814", "melon": "比完賽的犒賞！韓式炸雞配啤酒。", "cindy": "⭐⭐⭐⭐⭐ (肉質鮮嫩多汁)", "full": 15},
-            {"name": "你我他之家", "time": "10:00-21:00", "addr": "中西區西門路一段733號", "map": "https://maps.google.com/?cid=11488587630718534125", "melon": "冰鎮鴨翅、鴨舌超刷嘴。", "cindy": "⭐⭐⭐⭐ (邊看劇邊啃超搭)", "full": 10},
-            {"name": "五畝地の薯燒", "time": "15:00-20:00", "addr": "中西區國華街二段168號", "map": "https://maps.google.com/?cid=1534062164414902196", "melon": "濃郁起司薯燒，排隊小吃。", "cindy": "⭐⭐⭐⭐ (起司控必衝)", "full": 10},
-            {"name": "古早味麥仔煎", "time": "14:00-18:30", "addr": "中西區國華街三段186號", "map": "https://maps.google.com/?cid=1308316279183416174", "melon": "厚實香甜的花生與芝麻香。", "cindy": "⭐⭐⭐⭐ (外脆內軟的好滋味)", "full": 10},
-            {"name": "冰鄉", "time": "12:00-20:00", "addr": "中西區民生路一段160號", "map": "https://maps.google.com/?cid=13397649642501993091", "melon": "一定要領號碼牌！傳統手工豆花與冰品。", "cindy": "⭐⭐⭐⭐⭐ (布丁豆花超好吃！)", "full": 10},
-            {"name": "小北阿松冰品", "time": "14:00-22:00", "addr": "北區西門路四段101號", "map": "https://maps.google.com/?cid=13924745127369615997", "melon": "高CP值冰品，隱藏在小北商圈裡。", "cindy": "⭐⭐⭐⭐⭐ (價格超佛心)", "full": 10},
-            {"name": "豆發王", "time": "14:00-19:00", "addr": "東區崇德路482號", "map": "https://maps.google.com/?cid=12395371052428747014", "melon": "20 元佛心珍珠豆花！成大周邊必訪。", "cindy": "⭐⭐⭐⭐⭐ (20元豆花哪裡找)", "full": 10},
-            {"name": "Mr.Z 烘焙小棧", "time": "11:00-20:00", "addr": "中西區尊王路60號", "map": "https://maps.google.com/?cid=13190751101230769464", "melon": "現烤菠蘿泡芙專賣店。", "cindy": "⭐⭐⭐⭐ (像冰淇淋一樣酥脆)", "full": 10},
-            {"name": "Bula 冷奶油咖椰吐司", "time": "14:00-19:00", "addr": "中西區新美街18號", "map": "https://maps.google.com/?cid=14135714860676283086", "melon": "炭烤吐司夾入冰涼奶油。", "cindy": "⭐⭐⭐⭐ (好有南洋風味)", "full": 10},
-            {"name": "高大牛乳台南營業所", "time": "09:00-19:00 (週日休)", "addr": "南區公英一街13號", "map": "https://maps.google.com/?cid=2690950442146061340", "melon": "鮮乳界的 LV，濃純香。", "cindy": "⭐⭐⭐⭐ (玻璃瓶身必收)", "full": 5},
-            {"name": "義發豆腐豆漿", "time": "15:30-22:00 (週三日休)", "addr": "中西區民生路一段181巷", "map": "https://maps.google.com/?cid=1082121498780722578", "melon": "70年老店。透明古早塑膠袋裝。", "cindy": "⭐⭐⭐⭐ (袋裝好復古超可愛)", "full": 5},
-            {"name": "林義豐冬瓜茶", "time": "10:00-19:00", "addr": "安平區安平路764號", "map": "https://maps.google.com/?cid=364084262162972388", "melon": "安平創始店，清涼消暑。", "cindy": "⭐⭐⭐⭐ (粉角冬瓜茶必喝)", "full": 5},
-            {"name": "漁光島", "time": "24小時", "addr": "安平區漁光路", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "美麗的月牙灣沙灘和森林步道。", "cindy": "⭐⭐⭐⭐⭐ (夕陽美哭，散步好舒服)", "full": -20},
-            {"name": "J.O.X tainan", "time": "14:00-21:00", "addr": "中西區衛民街52號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "質感選物店好逛，來這裡消化一下！", "cindy": "⭐⭐⭐⭐ (錢包守不住啦)", "full": -20},
+        // 1. 全域資料庫 (景點、美食、專利賽事)
+        // ==========================================
+        const allSpots = [
+            {"id": 1, "name": "無名羊肉湯-大菜市", "cat": "food", "time": "05:30-13:00 (週二休)", "addr": "中西區府前路二段144號", "map": "https://maps.google.com/?cid=6988823270250232013", "melon": "必搶！米其林推薦完全無羊騷味。", "cindy": "⭐⭐⭐⭐⭐ (快點幫我拍照！)", "full": 20},
+            {"id": 2, "name": "美鮮牛肉湯", "cat": "food", "time": "24小時 (週一二休)", "addr": "南區新興路419號之1", "map": "https://maps.google.com/?cid=2734682962622339755", "melon": "宵夜首選！抵達台南的第一餐。", "cindy": "⭐⭐⭐⭐⭐ (熱湯配肉燥飯超讚)", "full": 20},
+            {"id": 3, "name": "阿財牛肉湯", "cat": "food", "time": "11:30-22:00", "addr": "安平區古堡街5號", "map": "https://maps.google.com/?cid=14531624740468646438", "melon": "安平名店，肉質鮮嫩清甜。", "cindy": "⭐⭐⭐⭐⭐ (安平必吃牛肉湯)", "full": 20},
+            {"id": 4, "name": "下大道蘭米糕", "cat": "food", "time": "09:00-19:00 (週三至五休)", "addr": "中西區康樂街6號", "map": "https://maps.google.com/?cid=3085742664717935776", "melon": "週日限定必吃！米糕配魚鬆超香。", "cindy": "⭐⭐⭐⭐⭐ (週日有開太幸運啦)", "full": 15},
+            {"id": 5, "name": "無名米糕 (中山路)", "cat": "food", "time": "09:30-15:00 (週日休)", "addr": "中西區中山路8巷5號", "map": "https://maps.google.com/?cid=3482488932888708341", "melon": "巷弄裡的傳奇。米糕濕潤度剛好。", "cindy": "⭐⭐⭐⭐⭐ (好有老台南fu)", "full": 15},
+            {"id": 6, "name": "阿龍香腸熟肉", "cat": "food", "time": "10:30-19:00 (週一休)", "addr": "中西區保安路34號", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "台南特有「黑白切」，每樣只要銅板價。", "cindy": "⭐⭐⭐⭐⭐ (黑白切就是藝術)", "full": 15},
+            {"id": 7, "name": "阿鳳浮水虱目魚羹", "cat": "food", "time": "07:30-00:00", "addr": "中西區保安路59號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "每一口羹都咬得到虱目魚肉塊。", "cindy": "⭐⭐⭐⭐ (就在阿龍隔壁)", "full": 15},
+            {"id": 8, "name": "給我咬一口披薩", "cat": "food", "time": "11:30-21:30 (週一二休)", "addr": "中西區赤崁東街46-3號", "map": "https://maps.google.com/?cid=4568156167290177597", "melon": "憑學生證超划算！薄脆現烤披薩。", "cindy": "⭐⭐⭐⭐ (CP值爆表！)", "full": 15},
+            {"id": 9, "name": "蔡家豬血湯", "cat": "food", "time": "10:30-18:30 (週一休)", "addr": "東區中華東路二段41巷", "map": "https://www.google.com/maps/search/?api=1&query=蔡家豬血湯", "melon": "料多到懷疑老闆虧本。", "cindy": "⭐⭐⭐⭐ (料也太多)", "full": 15},
+            {"id": 10, "name": "鐵牛早餐", "cat": "food", "time": "14:00-19:00", "addr": "東區林森路二段166號", "map": "https://maps.google.com/?cid=5511486227572991761", "melon": "成大自強校區旁！罪惡爆漿起司蛋餅。", "cindy": "⭐⭐⭐⭐ (賽前補足戰力！)", "full": 15},
+            {"id": 11, "name": "丹瓦樓", "cat": "night", "time": "17:00-01:30", "addr": "北區海安路三段51號", "map": "https://maps.google.com/?cid=10538179209633656791", "melon": "營業到深夜的質感滷味名店。", "cindy": "⭐⭐⭐⭐ (宵夜良伴)", "full": 15},
+            {"id": 12, "name": "豆奶宗", "cat": "night", "time": "21:40-10:30", "addr": "中西區府前路二段175號", "map": "https://maps.google.com/?cid=13132803753236278417", "melon": "深夜排隊宵夜！沙茶蛋餅與刈包是招牌。", "cindy": "⭐⭐⭐⭐ (經典中的經典)", "full": 15},
+            {"id": 13, "name": "祿記水晶餃", "cat": "snack", "time": "08:00-16:30", "addr": "中西區開山路3巷27號", "map": "https://maps.google.com/?cid=15113525052136485682", "melon": "秒殺級名店！外皮晶瑩剔透爆汁。", "cindy": "⭐⭐⭐⭐⭐ (水晶皮超透Q彈)", "full": 10},
+            {"id": 14, "name": "連得堂餅家", "cat": "gift", "time": "08:00-20:00 (週六至18:00)", "addr": "北區崇安街54號", "map": "https://maps.app.goo.gl/DJBUgafAVXdprV6fA", "melon": "百年古法手工煎餅，每人限購2包！", "cindy": "⭐⭐⭐⭐⭐ (伴手禮get！)", "full": 10},
+            {"id": 15, "name": "灣裡薯條脆肉店", "cat": "snack", "time": "14:30-18:00 (週日休)", "addr": "南區省躬一街58號", "map": "https://maps.google.com/?cid=1498015060232698701", "melon": "炸脆肉酥香無比，神級台南下午茶。", "cindy": "⭐⭐⭐⭐⭐ (騎車也甘願)", "full": 10},
+            {"id": 16, "name": "協進國小後門黑輪", "cat": "snack", "time": "10:30-19:00", "addr": "中西區大新街18號", "map": "https://maps.google.com/?cid=16972007626922579178", "melon": "在地人從小吃到大的古早味關東煮。", "cindy": "⭐⭐⭐⭐ (熱湯免費喝到飽)", "full": 10},
+            {"id": 17, "name": "台灣黑輪 (2元黑輪)", "cat": "snack", "time": "10:00-19:00", "addr": "中西區開山路74號", "map": "https://maps.google.com/?cid=14732152349071063688", "melon": "一支2元的復古風情，吃的是情懷。", "cindy": "⭐⭐⭐⭐ (吃回憶的小點心)", "full": 10},
+            {"id": 18, "name": "啾醬 韓式炸雞", "cat": "night", "time": "16:00-23:00", "addr": "北區公園路768號", "map": "https://maps.google.com/?cid=972410313880436814", "melon": "比完賽的慶功宴！韓式炸雞皮脆多汁。", "cindy": "⭐⭐⭐⭐⭐ (賽後吃這個太過癮了！)", "full": 15},
+            {"id": 19, "name": "你我他之家", "cat": "night", "time": "10:00-21:00", "addr": "中西區西門路一段733號", "map": "https://maps.google.com/?cid=11488587630718534125", "melon": "冰鎮鴨翅、鴨舌超刷嘴。", "cindy": "⭐⭐⭐⭐ (邊看劇邊啃超搭)", "full": 10},
+            {"id": 20, "name": "五畝地の薯燒", "cat": "snack", "time": "15:00-20:00", "addr": "中西區國華街二段168號", "map": "https://maps.google.com/?cid=1534062164414902196", "melon": "濃郁起司薯燒，排隊小吃。", "cindy": "⭐⭐⭐⭐ (起司控必衝)", "full": 10},
+            {"id": 21, "name": "古早味麥仔煎", "cat": "snack", "time": "14:00-18:30", "addr": "中西區國華街三段186號", "map": "https://maps.google.com/?cid=1308316279183416174", "melon": "厚實香甜的花生與芝麻香。", "cindy": "⭐⭐⭐⭐ (外脆內軟的好滋味)", "full": 10},
+            {"id": 22, "name": "冰鄉", "cat": "dessert", "time": "12:00-20:00", "addr": "中西區民生路一段160號", "map": "https://maps.google.com/?cid=13397649642501993091", "melon": "一定要領號碼牌！傳統手工豆花與澎湃冰品。", "cindy": "⭐⭐⭐⭐⭐ (布丁豆花超好吃！)", "full": 10},
+            {"id": 23, "name": "小北阿松冰品", "cat": "dessert", "time": "14:00-22:00", "addr": "北區西門路四段101號", "map": "https://maps.google.com/?cid=13924745127369615997", "melon": "高CP值冰品，隱藏在小北商圈裡。", "cindy": "⭐⭐⭐⭐⭐ (價格超佛心)", "full": 10},
+            {"id": 24, "name": "豆發王", "cat": "dessert", "time": "14:00-19:00", "addr": "東區崇德路482號", "map": "https://maps.google.com/?cid=12395371052428747014", "melon": "20 元佛心珍珠豆花！成大周邊銅板甜點。", "cindy": "⭐⭐⭐⭐⭐ (20元豆花哪裡找)", "full": 10},
+            {"id": 25, "name": "Mr.Z 烘焙小棧", "cat": "dessert", "time": "11:00-20:00", "addr": "中西區尊王路60號", "map": "https://maps.google.com/?cid=13190751101230769464", "melon": "現烤菠蘿泡芙專賣店，外酥內冰涼。", "cindy": "⭐⭐⭐⭐ (像冰淇淋一樣酥脆)", "full": 10},
+            {"id": 26, "name": "Bula 冷奶油咖椰吐司", "cat": "dessert", "time": "14:00-19:00", "addr": "中西區新美街18號", "map": "https://maps.google.com/?cid=14135714860676283086", "melon": "炭烤吐司夾入冰涼奶油，南洋小甜點。", "cindy": "⭐⭐⭐⭐ (好有南洋風味)", "full": 10},
+            {"id": 27, "name": "高大牛乳台南營業所", "cat": "drink", "time": "09:00-19:00 (週日休)", "addr": "南區公英一街13號", "map": "https://maps.google.com/?cid=2690950442146061340", "melon": "鮮乳界的 LV，濃純香玻璃瓶裝。", "cindy": "⭐⭐⭐⭐ (玻璃瓶身必收)", "full": 5},
+            {"id": 28, "name": "義發豆腐豆漿", "cat": "drink", "time": "15:30-22:00 (週三日休)", "addr": "中西區民生路一段181巷", "map": "https://maps.google.com/?cid=1082121498780722578", "melon": "70年老店，透明塑膠袋裝古早味豆漿。", "cindy": "⭐⭐⭐⭐ (袋裝好復古超可愛)", "full": 5},
+            {"id": 29, "name": "林義豐冬瓜茶", "cat": "drink", "time": "10:00-19:00", "addr": "安平區安平路764號", "map": "https://maps.google.com/?cid=364084262162972388", "melon": "安平創始老店，清涼消暑古法熬煮。", "cindy": "⭐⭐⭐⭐ (粉角冬瓜茶必喝)", "full": 5},
+            {"id": 30, "name": "漁光島 (月牙灣)", "cat": "spot", "time": "24小時開放", "addr": "安平區漁光路", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "美麗的月牙灣沙灘和森林木棧道，看夕陽超浪漫。", "cindy": "⭐⭐⭐⭐⭐ (夕陽美哭，手牽手散步)", "full": -20},
+            {"id": 31, "name": "J.O.X tainan", "cat": "spot", "time": "14:00-21:00", "addr": "中西區衛民街52號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "質感文青選物店，剛好吃飽來這裡散步消化。", "cindy": "⭐⭐⭐⭐ (錢包守不住啦)", "full": -20},
             
-            // 🎯 新增：9/19 專利大戰與 9/21 交通返校行程卡片
-                        {"name": "🚆 臺鐵晨班直達（自強 371次 / 101次）", "time": "06:57➜08:47 / 05:30➜07:44", "addr": "臺中車站 ➔ 臺南車站後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "推薦自強371次！06:57台中開車，08:47直達台南後站，5分鐘到成大自強校區報到！或搭101次享大學生5折只要$244！", "cindy": "⭐⭐⭐⭐⭐ (直達台南後站不用轉車超方便！)", "full": 5},
-            {"name": "🎓 專利大戰桌遊競賽（成大自強校區）", "time": "09:00-18:15", "addr": "東區大學路1號 (儀器設備大樓10F)", "map": "https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z", "melon": "全國大專院校專利大戰！三輪總積分賽，Melon 拚拿南區冠軍！", "cindy": "⭐⭐⭐⭐⭐ (Melon 超強！幫你加油第一名！)", "full": -30},
-            {"name": "🚄 晨光高鐵（台南 ➔ 台中）", "time": "07:41 / 08:41", "addr": "高鐵台南站", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台南站", "melon": "搭乘大學生 88折/75折 優惠車次，40分鐘直達台中烏日！", "cindy": "⭐⭐⭐⭐⭐ (車上補眠剛剛好，完全不累)", "full": 5},
-            {"name": "🛵 台中高鐵牽機車雙載", "time": "08:40 / 09:40", "addr": "高鐵台中站機車停車場", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台中站", "melon": "出站直接牽機車出發！避開塞車，一路順風吹回系館！", "cindy": "⭐⭐⭐⭐⭐ (機車雙載兜風最浪漫惹)", "full": 5},
-            {"name": "🏠 成大朋友家（週六免費借住）", "time": "18:30 入住", "addr": "成大校區周邊", "map": "https://www.google.com/maps/search/?api=1&query=國立成功大學", "melon": "成大好朋友神助攻！現省週六數千元天價房費，晚上逛大東夜市！", "cindy": "⭐⭐⭐⭐⭐ (免費借住太神啦！省超多！)", "full": 10},
-            {"name": "📚 10:10 民法物權（準時入座）", "time": "10:10-12:00", "addr": "法律系系館教室", "map": "https://www.google.com/maps/search/?api=1&query=中興大學", "melon": "提前 30~60 分鐘抵達教室！行李 Melon 全扛走，Cindy 優雅入座！", "cindy": "⭐⭐⭐⭐⭐ (完全沒遲到！謝謝貼心男友！)", "full": -10}
+            // 賽事與交通專屬節點
+            {"id": 101, "name": "🚆 臺鐵晨班直達 (371次 / 101次)", "cat": "traffic", "time": "06:57➜08:47 / 05:30➜07:44", "addr": "臺中車站 ➔ 臺南後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "首選自強371次！06:57開車直達台南後站，步行5分抵達自強校區！", "cindy": "⭐⭐⭐⭐⭐ (直達不用換車太舒服了)", "full": 5},
+            {"id": 102, "name": "🎓 專利大戰桌遊競賽 (成大自強校區)", "cat": "contest", "time": "09:00-18:15", "addr": "東區大學路1號 (儀器設備大樓10F)", "map": "https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z", "melon": "全國大專院校專利大戰！三輪總積分賽，Melon 拚拿南區冠軍！", "cindy": "⭐⭐⭐⭐⭐ (Melon 超強！幫你加油第一名！)", "full": -30},
+            {"id": 103, "name": "🏠 成大朋友家 (週六免費小窩)", "cat": "hotel", "time": "18:30 入住", "addr": "成大校區周邊", "map": "https://www.google.com/maps/search/?api=1&query=國立成功大學", "melon": "成大好朋友借住神助攻！現省週六數千元天價房費，晚上一起逛大東夜市！", "cindy": "⭐⭐⭐⭐⭐ (省下來的房費吃爆台南！)", "full": 10},
+            {"id": 104, "name": "🚄 週一晨光高鐵 (台南 ➔ 烏日)", "cat": "traffic", "time": "07:41 / 08:41 出發", "addr": "高鐵台南站", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台南站", "melon": "搭乘大學生優惠車次，40-50分鐘極速飆回台中！", "cindy": "⭐⭐⭐⭐⭐ (車上補眠剛剛好，完全不累)", "full": 5},
+            {"id": 105, "name": "🛵 台中高鐵牽機車雙載", "cat": "traffic", "time": "08:40 / 09:40 牽車", "addr": "高鐵台中站機車停車場", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台中站", "melon": "出站直接牽機車出發！一路順風吹回學校系館！", "cindy": "⭐⭐⭐⭐⭐ (機車雙載兜風最浪漫惹)", "full": 5},
+            {"id": 106, "name": "📚 10:10 民法物權 (準時入座)", "cat": "school", "time": "10:10-12:00", "addr": "法律系系館教室", "map": "https://www.google.com/maps/search/?api=1&query=法律系館", "melon": "提前抵達系館！大件行李 Melon 全扛走，Cindy 優雅入座上課！", "cindy": "⭐⭐⭐⭐⭐ (完全沒遲到！謝謝貼心男友！)", "full": -10}
         ];
 
-        // 依 9/17(四) ~ 9/21(一) 五天行程精準分類
-        // 依 9/17(四) ~ 9/21(一) 五天行程精準分類 (六日一精準支援)
-        const traTrain = allData.find(d => d.name.includes("臺鐵晨班直達"));
-        const patentGame = allData.find(d => d.name.includes("專利大戰"));
-        const tieNiu = allData.find(d => d.name.includes("鐵牛早餐"));
-        const pizza = allData.find(d => d.name.includes("給我咬一口披薩"));
-        const friendHouse = allData.find(d => d.name.includes("成大朋友家"));
-        const chujiang = allData.find(d => d.name.includes("啾醬"));
-
-        const missions = {
-            "Day 1": [allData[1], allData[10], allData[11], allData[4]],
-            "Day 2": [allData[0], allData[25], allData[21], allData[30], allData[29], allData[5], allData[6]],
-            "Day 3": [traTrain, tieNiu, patentGame, pizza, friendHouse, chujiang].filter(Boolean),
-            "Day 4": [allData[2], allData[3], allData[12], allData[13], allData[23], allData[28], allData[14]],
-            "Day 5": [
-                allData.find(d => d.name.includes("高鐵")),
-                allData.find(d => d.name.includes("機車")),
-                allData.find(d => d.name.includes("民法物權"))
-            ].filter(Boolean),
-            "所有景點": allData
+        // ==========================================
+        // 2. 狀態管理 (客製化即時響應)
+        // ==========================================
+        let appState = {
+            stomach: 50,
+            activeTab: 'transit',
+            planMode: '3day', // '3day' or '5day'
+            activeDayKey: 'day_sat',
+            
+            // 交通自選
+            outboundTrain: { name: '自強(3000) 371次', dep: '06:57', arr: '08:47', fare: 487, note: '直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！' },
+            returnTrain: { name: '高鐵 0806次', dep: '07:41', arr: '08:34', fare: 570, note: '08:34 抵台中烏日，牽機車 09:05 到系館，提前 65 分鐘！' },
+            
+            // 住宿夜勾選
+            nights: {
+                '917': false,
+                '918': false,
+                '919': true,
+                '920': true
+            },
+            
+            // 勾選的自訂行程 ID
+            checkedSpots: {}
         };
 
-        const dayTitles = {
-            "Day 1": "9/17 (四) 【下課南下 ‧ 府城宵夜場】",
-            "Day 2": "9/18 (五) 【專屬約會 ‧ 慢活吃台南】",
-            "Day 3": "9/19 (六) 【成大專利大戰 ‧ 決賽日】",
-            "Day 4": "9/20 (日) 【週日慢遊 ‧ 國旅補助第二晚】",
-            "Day 5": "9/21 (一) 【高鐵機車 ‧ 10:10民法物權】",
-            "所有景點": "台南私房景點與美食總覽 (36選)"
+        // ==========================================
+        // 3. 方案分類與定義
+        // ==========================================
+        const planModesData = {
+            '3day': {
+                title: '方案一：玩六日一 (3天2夜精華版)',
+                days: [
+                    {
+                        key: 'day_sat',
+                        label: '9/19 (六) 專利決賽',
+                        title: '9/19 (六) 【成大專利大戰 ‧ 決賽之巔】',
+                        spotIds: [101, 10, 102, 8, 103, 18, 11]
+                    },
+                    {
+                        key: 'day_sun',
+                        label: '9/20 (日) 美食散策',
+                        title: '9/20 (日) 【週日府城慢遊 ‧ 國旅再折$800】',
+                        spotIds: [2, 4, 22, 14, 30, 12]
+                    },
+                    {
+                        key: 'day_mon',
+                        label: '9/21 (一) 晨風返校',
+                        title: '9/21 (一) 【晨光高鐵 ➔ 雙載機車 ➔ 10:10民法物權】',
+                        spotIds: [104, 105, 106]
+                    }
+                ]
+            },
+            '5day': {
+                title: '方案二：五天四夜全套深度遊 (9/17-9/21)',
+                days: [
+                    {
+                        key: 'day_thu',
+                        label: '9/17 (四) 宵夜場',
+                        title: '9/17 (四) 【下課南下 ‧ 府城宵夜入住】',
+                        spotIds: [2, 11, 12, 5]
+                    },
+                    {
+                        key: 'day_fri',
+                        label: '9/18 (五) 專屬約會',
+                        title: '9/18 (五) 【甜蜜約會 ‧ 府城慢活吃透透】',
+                        spotIds: [1, 26, 22, 31, 30, 6, 7]
+                    },
+                    {
+                        key: 'day_sat',
+                        label: '9/19 (六) 專利戰',
+                        title: '9/19 (六) 【成大專利大戰 ‧ 迎戰南區】',
+                        spotIds: [10, 102, 8, 103, 18]
+                    },
+                    {
+                        key: 'day_sun',
+                        label: '9/20 (日) 國旅再折',
+                        title: '9/20 (日) 【週日漫遊 ‧ 大東夜市吃爆】',
+                        spotIds: [3, 4, 13, 14, 24, 29, 15]
+                    },
+                    {
+                        key: 'day_mon',
+                        label: '9/21 (一) 完美返校',
+                        title: '9/21 (一) 【高鐵雙載 ‧ 10:10民法物權】',
+                        spotIds: [104, 105, 106]
+                    }
+                ]
+            }
         };
 
-        let state = { stomach: 50, currentDay: "Day 1" };
+        // ==========================================
+        // 4. 畫面切換與渲染函式
+        // ==========================================
+        function switchTab(tabName, el) {
+            appState.activeTab = tabName;
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
 
-        function render() {
-            const list = document.getElementById('mission-list');
-            list.innerHTML = '';
-            const currentList = missions[state.currentDay] || [];
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const target = document.getElementById('tab-' + tabName);
+            if (target) target.classList.add('active');
 
-            currentList.forEach(m => {
-                const card = document.createElement('div');
-                card.className = `task-card ${state.stomach < 20 && m.full > 0 ? 'low-stomach' : ''}`;
-                let icon = m.full < 0 ? (m.name.includes('專利') ? '🎓' : (m.name.includes('高鐵') ? '🚄' : (m.name.includes('機車') ? '🛵' : '🛍️'))) : (m.full < 10 ? '🥤' : '🍱');
-
-                card.innerHTML = `
-                    <div class="icon-box">${icon}</div>
-                    <div class="task-info">
-                        <div class="task-name">${m.name}</div>
-                        <div class="task-meta">${m.time} | ${m.addr}</div>
-                        <a href="${m.map}" target="_blank" class="map-link">📍 開啟地圖導航</a>
-                    </div>
-                    <div style="font-weight:bold; font-size:12px; color:${m.full > 0 ? 'var(--primary-green)' : '#ff4d4f'}">
-                        ${m.full > 0 ? '+' + m.full : m.full}%
-                    </div>
-                `;
-                card.onclick = (e) => { if(e.target.tagName !== 'A') eat(m); };
-                list.appendChild(card);
-            });
-            updateUI();
+            if (tabName === 'itinerary') renderItinerary();
         }
 
-        function eat(m) {
-            if (state.stomach + m.full > 100 && m.full > 0) { alert("太飽了！先去散散步或逛街消化一下！"); return; }
-            state.stomach = Math.max(0, Math.min(100, state.stomach + m.full));
+        // 交通切換 (早班 / 傍晚)
+        function switchDepGroup(group) {
+            const satGroup = document.getElementById('dep-group-sat');
+            const eveGroup = document.getElementById('dep-group-eve');
+            const btnSat = document.getElementById('btn-dep-sat');
+            const btnEve = document.getElementById('btn-dep-eve');
+
+            if (group === 'sat') {
+                satGroup.style.display = 'block';
+                eveGroup.style.display = 'none';
+                btnSat.style.background = 'var(--primary-green-light)';
+                btnSat.style.color = 'var(--primary-green)';
+                btnEve.style.background = '#e2e8f0';
+                btnEve.style.color = '#475569';
+            } else {
+                satGroup.style.display = 'none';
+                eveGroup.style.display = 'block';
+                btnEve.style.background = 'var(--primary-green-light)';
+                btnEve.style.color = 'var(--primary-green)';
+                btnSat.style.background = '#e2e8f0';
+                btnSat.style.color = '#475569';
+            }
+        }
+
+        // 點選去程車次
+        function selectOutbound(el, name, dep, arr, fare, note) {
+            document.querySelectorAll('#dep-group-sat .train-option-card, #dep-group-eve .train-option-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+
+            appState.outboundTrain = { name, dep, arr, fare, note };
+            updateTransitSummary();
+        }
+
+        // 點選回程車次
+        function selectReturn(el, name, dep, arr, fare, note) {
+            const parentCards = el.parentElement.querySelectorAll('.train-option-card');
+            parentCards.forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+
+            appState.returnTrain = { name, dep, arr, fare, note };
+            updateTransitSummary();
+        }
+
+        // 即時更新交通小計
+        function updateTransitSummary() {
+            const outEl = document.getElementById('summary-outbound');
+            const retEl = document.getElementById('summary-return');
+            const fareEl = document.getElementById('summary-total-fare');
+
+            const total2Person = (appState.outboundTrain.fare + appState.returnTrain.fare) * 2;
+            outEl.innerText = `去程：${appState.outboundTrain.name} (${appState.outboundTrain.dep}➜${appState.outboundTrain.arr})`;
+            retEl.innerText = `回程：${appState.returnTrain.name} (${appState.returnTrain.dep}➜${appState.returnTrain.arr})`;
+            fareEl.innerText = `$${total2Person.toLocaleString()} (雙人)`;
+        }
+
+        // 行程模式切換 (六日一 vs 五天)
+        function switchPlanMode(mode) {
+            appState.planMode = mode;
+            document.getElementById('btn-mode-3day').classList.toggle('active', mode === '3day');
+            document.getElementById('btn-mode-5day').classList.toggle('active', mode === '5day');
+
+            const modeConfig = planModesData[mode];
+            appState.activeDayKey = modeConfig.days[0].key;
+            renderItinerary();
+        }
+
+        // 渲染行程與自訂任務
+        function renderItinerary() {
+            const modeConfig = planModesData[appState.planMode];
+            const subtabs = document.getElementById('day-subtabs');
+            const titleEl = document.getElementById('itinerary-title');
+            const listEl = document.getElementById('itinerary-list');
+
+            // 渲染次級天數按鈕
+            subtabs.innerHTML = '';
+            modeConfig.days.forEach(day => {
+                const btn = document.createElement('button');
+                btn.className = `badge-pill ${day.key === appState.activeDayKey ? 'badge-gold' : ''}`;
+                btn.style.border = 'none';
+                btn.style.cursor = 'pointer';
+                btn.style.padding = '6px 12px';
+                btn.style.fontSize = '11px';
+                btn.style.flexShrink = '0';
+                if (day.key !== appState.activeDayKey) {
+                    btn.style.background = '#e2e8f0';
+                    btn.style.color = '#475569';
+                }
+                btn.innerText = day.label;
+                btn.onclick = () => {
+                    appState.activeDayKey = day.key;
+                    renderItinerary();
+                };
+                subtabs.appendChild(btn);
+            });
+
+            // 取得當天天數物件
+            const currentDay = modeConfig.days.find(d => d.key === appState.activeDayKey) || modeConfig.days[0];
+            titleEl.innerText = currentDay.title;
+
+            // 渲染景點卡片
+            listEl.innerHTML = '';
+            currentDay.spotIds.forEach(id => {
+                const item = allSpots.find(s => s.id === id);
+                if (!item) return;
+
+                const isChecked = !!appState.checkedSpots[item.id];
+                const card = document.createElement('div');
+                card.className = `spot-card ${isChecked ? 'completed' : ''}`;
+
+                let icon = '🍱';
+                if (item.cat === 'traffic') icon = '🚆';
+                else if (item.cat === 'contest') icon = '🎓';
+                else if (item.cat === 'hotel') icon = '🏠';
+                else if (item.cat === 'school') icon = '📚';
+                else if (item.cat === 'dessert') icon = '🍧';
+                else if (item.cat === 'drink') icon = '🥤';
+                else if (item.cat === 'spot') icon = '🏖️';
+                else if (item.cat === 'night') icon = '🍢';
+
+                card.innerHTML = `
+                    <div class="spot-icon-box">${icon}</div>
+                    <div class="spot-content">
+                        <div class="spot-title">
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} style="accent-color:var(--primary-green); transform:scale(1.2);" onclick="event.stopPropagation(); toggleSpotCheck(${item.id})">
+                            <span>${item.name}</span>
+                        </div>
+                        <div class="spot-meta">🕒 ${item.time} | 📍 ${item.addr}</div>
+                        <div class="spot-actions">
+                            <a href="${item.map}" target="_blank" class="map-btn" onclick="event.stopPropagation()">📍 地圖導航</a>
+                            <span style="font-size:10px; font-weight:bold; color:${item.full > 0 ? 'var(--primary-green)' : '#ff4d4f'}">
+                                ${item.full > 0 ? '+' + item.full : item.full}% 飽足
+                            </span>
+                        </div>
+                    </div>
+                `;
+
+                // 點擊觸發互動
+                card.onclick = () => eatSpot(item);
+                listEl.appendChild(card);
+            });
+        }
+
+        function toggleSpotCheck(id) {
+            appState.checkedSpots[id] = !appState.checkedSpots[id];
+            renderItinerary();
+        }
+
+        function eatSpot(m) {
+            if (appState.stomach + m.full > 100 && m.full > 0) {
+                alert("Cindy 肚子快爆炸啦！先牽手去散步消化一下！");
+                return;
+            }
+            appState.stomach = Math.max(0, Math.min(100, appState.stomach + m.full));
 
             const box = document.getElementById('dialogue-box');
             box.style.display = 'block';
             box.innerHTML = `<div><strong>🍈 哈密瓜：</strong>${m.melon}</div><div style="color:#666; margin-top:4px;"><strong>🍰 Cindy：</strong>${m.cindy}</div>`;
-            updateUI();
+            updateStomachUI();
         }
 
-        function updateUI() {
+        function updateStomachUI() {
             const val = document.getElementById('stomach-val');
             const bar = document.getElementById('stomach-bar');
-            const tag = document.getElementById('status-tag');
-            val.innerText = state.stomach;
-            bar.style.width = state.stomach + '%';
-            if(state.stomach > 90) {
-                tag.innerText = "⚠️ 肚子要炸了，快去散步消化！"; tag.style.color = "#ffbb00"; val.style.color = "#ffbb00"; bar.style.background = "#ffbb00";
-            } else if (state.stomach < 20) {
-                tag.innerText = "❌ 你的寶寶哈咪呱要餓死了，快找美食吃！"; tag.style.color = "#ff4d4f"; val.style.color = "#ff4d4f"; bar.style.background = "#ff4d4f";
+            const tag = document.getElementById('stomach-tag');
+            val.innerText = appState.stomach;
+            bar.style.width = appState.stomach + '%';
+
+            if (appState.stomach > 90) {
+                tag.innerText = "⚠️ 肚子要炸了，快散步！";
+                tag.style.color = "#ffbb00"; val.style.color = "#ffbb00"; bar.style.background = "#ffbb00";
+            } else if (appState.stomach < 20) {
+                tag.innerText = "❌ 你的哈密瓜要餓扁了！快開吃！";
+                tag.style.color = "#ff4d4f"; val.style.color = "#ff4d4f"; bar.style.background = "#ff4d4f";
             } else {
-                tag.innerText = "✅ 狀態良好，可以繼續開吃！"; tag.style.color = "#4ade80"; val.style.color = "var(--primary-green)"; bar.style.background = "var(--primary-green)";
+                tag.innerText = "✅ 狀態良好，可以繼續開吃！";
+                tag.style.color = "#4ade80"; val.style.color = "var(--primary-green)"; bar.style.background = "var(--primary-green)";
             }
         }
 
-        function switchDay(day, el) {
-            state.currentDay = day;
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            el.classList.add('active');
-            document.getElementById('day-title').innerText = dayTitles[day] || day;
-            render();
+        // 住宿夜勾選切換
+        function toggleNight(nightId, subsidy, savedAmount) {
+            appState.nights[nightId] = !appState.nights[nightId];
+            const el = document.getElementById('night-' + nightId);
+            el.classList.toggle('active', appState.nights[nightId]);
+            el.querySelector('.custom-checkbox').innerText = appState.nights[nightId] ? '✓' : '';
+
+            calculateSubsidy();
         }
 
+        function calculateSubsidy() {
+            let totalSaved = 0;
+            let activeCount = 0;
+
+            if (appState.nights['917']) { totalSaved += 800; activeCount++; }
+            if (appState.nights['918']) { activeCount++; }
+            if (appState.nights['919']) { totalSaved += 3000; activeCount++; }
+            if (appState.nights['920']) { totalSaved += 800; activeCount++; }
+
+            document.getElementById('calc-total-saved').innerText = '$' + totalSaved.toLocaleString();
+            document.getElementById('calc-nights-count').innerText = `已選 ${activeCount} 晚住宿`;
+        }
+
+        // 親親互動
         function triggerKiss() {
             const overlay = document.getElementById('kiss-overlay');
             const num = document.getElementById('kiss-num');
             overlay.style.display = 'flex';
             let c = 0;
             const timer = setInterval(() => {
-                c += 4; num.innerText = c;
-                if(c >= 100) {
+                c += 5; num.innerText = c;
+                if (c >= 100) {
                     clearInterval(timer);
-                    setTimeout(() => { overlay.style.display = 'none'; state.stomach = 70; updateUI(); }, 500);
+                    setTimeout(() => {
+                        overlay.style.display = 'none';
+                        appState.stomach = 70;
+                        updateStomachUI();
+                    }, 400);
                 }
-            }, 20);
+            }, 18);
         }
-
         function closeKiss() { document.getElementById('kiss-overlay').style.display = 'none'; }
 
+        // 調情金句
         function flirt() {
             const quotes = [
                 "Cindy 寶寶怎麼這麼可愛？",
-                "今天要吃多少都沒關係，胖死妳 笑死",
-                "Melon 最愛 Cindy 了 ❤️",
-                "走，下一站去ㄘ好吃的！",
-                "Melon 週六專利大戰一定拿第一名回來給妳看！",
-                "週一 10:10 民法物權絕對準時，行李 Melon 全包！",
-                "國旅補助折了 $1600，朋友家又免費，省下來的錢全帶妳吃好料！"
+                "今天不管吃多少，胖了也是 Melon 最愛的小豬豬 ❤️",
+                "Melon 最愛 Cindy 了，這趟台南全聽妳的！",
+                "走！下一站帶妳去吃爆漿起司蛋餅！",
+                "Melon 週六專利大戰一定拚南區冠軍回來送給妳！",
+                "週一 10:10 民法物權絕對準時！行李 Melon 全扛，妳美美進教室！",
+                "國旅補助現折 $1,600，成大朋友家又免費，省下的錢全帶妳買伴手禮！",
+                "坐高鐵牽機車雙載兜風，秋天微風吹著最浪漫惹～"
             ];
             const box = document.getElementById('dialogue-box');
             box.style.display = 'block';
-            box.innerText = "💌 " + quotes[Math.floor(Math.random() * quotes.length)];
+            box.innerHTML = "💌 " + quotes[Math.floor(Math.random() * quotes.length)];
         }
 
-        function showHotel() { document.getElementById('hotel-overlay').style.display = 'flex'; }
-        function closeHotel() { document.getElementById('hotel-overlay').style.display = 'none'; }
-
-        // 啟動應用
-        render();
+        // 初始化
+        updateTransitSummary();
+        renderItinerary();
+        calculateSubsidy();
     </script>
 </body>
 </html>
