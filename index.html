@@ -787,6 +787,83 @@
         .wish-ticker-text { font-size: 11px; font-weight: 700; color: #78350f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .wish-badge-count { font-size: 11px; font-weight: 800; color: #b45309; background: #fef08a; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
     
+    
+        /* 住宿模組化卡片與留言板 */
+        .hotel-card {
+            background: white;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            border: 1.5px solid #e2e8f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            transition: all 0.2s;
+        }
+        .hotel-card.consensus {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        .hotel-vote-btn {
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            border-radius: 20px;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .hotel-vote-btn.active-melon {
+            background: #ecfdf5;
+            color: #047857;
+            border-color: #10b981;
+        }
+        .hotel-vote-btn.active-cindy {
+            background: #fff1f2;
+            color: #be123c;
+            border-color: #f43f5e;
+        }
+
+        /* JSON 匯入匯出 Hub Modal */
+        .json-tabs {
+            display: flex;
+            gap: 6px;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+        .json-tab-btn {
+            background: none;
+            border: none;
+            font-weight: 800;
+            font-size: 12px;
+            color: #64748b;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .json-tab-btn.active {
+            background: #0f172a;
+            color: white;
+        }
+        .json-editor-area {
+            width: 100%;
+            height: 180px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+            font-size: 11px;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            background: #f8fafc;
+            color: #0f172a;
+            resize: vertical;
+            line-height: 1.4;
+        }
+        .json-editor-area:focus {
+            border-color: #3b82f6;
+            outline: none;
+            background: #ffffff;
+        }
+    
     </style>
 </head>
 <body>
@@ -826,7 +903,8 @@
             <div class="action-row">
                 <button onclick="triggerKiss()" class="btn-action btn-kiss">💋 補魔力親親</button>
                 <button onclick="flirt()" class="btn-action btn-flirt">💖 男友調情一下</button>
-                <button onclick="fetchCloudData(true)" class="btn-action" style="background:#334155; color:white; flex:0.6;">🔄 同步</button>
+                <button onclick="fetchCloudData(true)" class="btn-action" style="background:#334155; color:white; flex:0.5;">🔄 同步</button>
+                <button onclick="openJsonHub('all')" class="btn-action" style="background:#0f172a; color:#38bdf8; flex:0.7; font-weight:900;">📦 JSON/AI</button>
             </div>
         </div>
 
@@ -922,9 +1000,14 @@
             <!-- 自訂行程操作工具列 -->
             <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0;">
                 <div id="itinerary-title" style="font-size:13px; font-weight:800; color:#1e293b;"></div>
-                <button class="badge-pill badge-gold" style="border:none; cursor:pointer;" onclick="openAddCardModal()">
-                    ➕ 手動寫新卡片
-                </button>
+                <div style="display:flex; gap:6px;">
+                    <button class="badge-pill badge-gold" style="border:none; cursor:pointer;" onclick="openAddCardModal()">
+                        ➕ 寫新卡片
+                    </button>
+                    <button class="badge-pill" style="border:none; cursor:pointer; background:#0f172a; color:#38bdf8; font-weight:800;" onclick="openJsonHub('spot')">
+                        📦 匯入/匯出 JSON
+                    </button>
+                </div>
             </div>
 
             <!-- 放置區 / 行程清單 (支援 HTML5 Drag & Drop) -->
@@ -1059,34 +1142,67 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- TAB 5: 🏨 住宿試算器 -->
+        <!-- TAB 4: 🏨 住宿試算與專屬討論板 (支援自訂選項與留言討論) -->
         <!-- ==================================================================== -->
         <div id="tab-hotel" class="tab-content">
-            <div class="custom-card" style="background:linear-gradient(135deg, #2d3748 0%, #1a202c 100%); color:white;">
-                <div style="font-size:11px; color:var(--dawho-gold); font-weight:800;">💰 國旅補助即時試算器</div>
+            <!-- 國旅補助即時試算儀表 -->
+            <div class="custom-card" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:white; margin-bottom:12px;">
+                <div style="font-size:11px; color:var(--dawho-gold); font-weight:800;">💰 國旅補助與住宿預算儀表板</div>
                 <div style="display:flex; justify-content:space-between; align-items:baseline; margin:8px 0;">
                     <div>
                         <span style="font-size:30px; font-weight:900; color:#4ade80;" id="calc-total-saved">$3,800</span>
-                        <span style="font-size:11px; color:#cbd5e1;">總計為您省下</span>
+                        <span style="font-size:11px; color:#cbd5e1;">總計省下金額</span>
                     </div>
                     <div style="text-align:right;">
-                        <span style="font-size:12px; color:var(--dawho-gold); font-weight:bold;">住 2 晚 (補助 1 晚 + 免費 1 晚)</span>
+                        <span style="font-size:12px; color:var(--dawho-gold); font-weight:bold;" id="hotel-summary-tag">成大借宿 + 週日補助折$800</span>
                     </div>
                 </div>
                 <div style="font-size:11px; color:#cbd5e1; line-height:1.5;">
                     💡 臺南振興國旅補助：週日算平日，每房現折 <strong>$800</strong>！<br>
-                    🏠 週六成大朋友家免費借住，現省 <strong>$3,000+</strong> 週末天價！
+                    🏠 週六借住成大朋友家免費，立省週末天價約 <strong>$3,000+</strong>！
                 </div>
             </div>
 
-            <div class="custom-card" style="padding:12px;">
-                <div style="font-weight:800; font-size:13px;">9/19 (六) - 成大朋友家（免費 $0）</div>
-                <div style="font-size:11px; color:#64748b; margin-top:2px;">成大自強校區旁，現省週六週末天價房費約 $3,000！</div>
+            <!-- 住宿選手名單工具列 -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:14px 0 8px;">
+                <div style="font-size:13px; font-weight:800; color:#1e293b;">
+                    🏨 住宿候選名單 (雙人共識投票)
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button type="button" onclick="openHotelModal('add')" class="badge-pill badge-green" style="border:none; cursor:pointer; font-size:11px; font-weight:800; padding:5px 10px;">
+                        ➕ 新增住宿
+                    </button>
+                    <button type="button" onclick="openJsonHub('hotel')" class="badge-pill" style="border:none; cursor:pointer; background:#0f172a; color:#38bdf8; font-size:11px; font-weight:800; padding:5px 10px;">
+                        📦 匯入住宿 JSON
+                    </button>
+                </div>
             </div>
-            <div class="custom-card" style="padding:12px;">
-                <div style="font-weight:800; font-size:13px;">9/20 (日) - 府城商旅 / 路徒行旅成大館</div>
-                <div style="font-size:11px; color:#64748b; margin-top:2px;">週日算平日！國旅平日補助現折 $800，自付只要幾百元！</div>
+
+            <!-- 動態住宿卡片容器 -->
+            <div id="hotel-cards-container"></div>
+
+            <!-- ========================================== -->
+            <!-- 💬 雙人專屬住宿討論留言板 / 備忘區 -->
+            <!-- ========================================== -->
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin:22px 0 8px;">
+                💬 雙人住宿討論與借宿備忘板
             </div>
+
+            <div class="custom-card" style="background:#fffbeb; border:1px solid #fde68a;">
+                <form onsubmit="event.preventDefault(); submitHotelNote();">
+                    <div style="font-size:11px; font-weight:800; color:#92400e; margin-bottom:6px;">
+                        📝 記錄關於飯店、朋友家門禁、浴缸或周邊備忘：
+                    </div>
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="hotel-note-input" required class="form-control" placeholder="例：路徒行旅有大浴缸！或 朋友家借宿已確認有冷氣～" style="font-size:12px;">
+                        <button type="submit" style="background:#d97706; color:white; border:none; padding:8px 14px; border-radius:10px; font-weight:800; font-size:12px; cursor:pointer; flex-shrink:0;">
+                            送出 🚀
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="hotel-notes-list" style="margin-top:10px;"></div>
         </div>
 
         <!-- ==================================================================== -->
@@ -2608,6 +2724,488 @@
             alert("已刪除該天行程！");
         }
     
+        
+        // ==========================================
+        // 🏨 模組化住宿系統 (Dynamic Accommodations & Notes)
+        // ==========================================
+        const defaultHotels = [
+            {
+                id: 'hotel_1',
+                name: '成大朋友家 (免費借住)',
+                date: '9/19 (六)',
+                priceOrig: 3000,
+                priceSubsidy: 0,
+                isFree: true,
+                badge: '🌟 免費借宿省 $3,000+',
+                addr: '成大自強校區周邊 (步行5分鐘)',
+                desc: '自強校區旁步行直達，現省週六天價週末房費！雙人床、冷氣充足！',
+                melonPick: true,
+                cindyPick: true
+            },
+            {
+                id: 'hotel_2',
+                name: '路徒行旅成大館 / 府城商旅',
+                date: '9/20 (日)',
+                priceOrig: 1700,
+                priceSubsidy: 900,
+                isFree: false,
+                badge: '💰 國旅補助現折 $800',
+                addr: '台南市東區大學路西段 (近成大後站)',
+                desc: '週日算平日！國旅平日補助每房折 $800，自付幾百元！有乾濕分離大浴缸！',
+                melonPick: true,
+                cindyPick: false
+            },
+            {
+                id: 'hotel_3',
+                name: '煙波大飯店 台南館',
+                date: '9/20 (日)',
+                priceOrig: 2800,
+                priceSubsidy: 2000,
+                isFree: false,
+                badge: '🏊 露天泳池+三溫暖',
+                addr: '中西區永福路一段268號',
+                desc: '五星享受，平日折$800後超划算，早餐全台南最強buffet！',
+                melonPick: false,
+                cindyPick: true
+            }
+        ];
+
+        let allHotels = JSON.parse(JSON.stringify(defaultHotels));
+        try {
+            const cachedHotels = localStorage.getItem('sinopac_hotels');
+            if (cachedHotels) allHotels = JSON.parse(cachedHotels);
+        } catch(e) {}
+
+        const defaultHotelNotes = [
+            { user: '🍈 Melon', text: '成大朋友自強校區旁客房已敲定，有獨立衛浴與大客廳！', time: '9/15 00:30' },
+            { user: '🍰 Cindy', text: '路徒行旅有大浴缸，逛完走累剛好可以舒服泡澡～', time: '9/15 01:05' }
+        ];
+
+        let hotelNotes = defaultHotelNotes;
+        try {
+            const cachedHNotes = localStorage.getItem('sinopac_hotel_notes');
+            if (cachedHNotes) {
+                const parsed = JSON.parse(cachedHNotes);
+                if (Array.isArray(parsed) && parsed.length > 0) hotelNotes = parsed;
+            }
+        } catch(e) {}
+
+        function renderHotelCards() {
+            const container = document.getElementById('hotel-cards-container');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let totalSaved = 0;
+
+            allHotels.forEach(h => {
+                const isConsensus = h.melonPick && h.cindyPick;
+                const card = document.createElement('div');
+                card.className = `hotel-card ${isConsensus ? 'consensus' : ''}`;
+
+                const origPrice = h.priceOrig || 0;
+                const subPrice = h.priceSubsidy || 0;
+                const saved = Math.max(0, origPrice - subPrice);
+                if (isConsensus) totalSaved += saved;
+
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <div>
+                            <span class="badge-pill ${h.isFree ? 'badge-green' : 'badge-gold'}" style="font-size:10px;">${h.badge || '候選'}</span>
+                            <span style="font-size:10px; color:#64748b; font-weight:700; margin-left:4px;">[${h.date || '未定'}]</span>
+                            <div style="font-weight:900; font-size:14px; color:#0f172a; margin-top:3px;">${h.name}</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="font-size:15px; font-weight:900; color:${h.isFree ? '#10b981' : '#b45309'};">${h.isFree ? '免費 $0' : '$' + subPrice + ' /晚'}</div>
+                            ${origPrice > subPrice ? `<div style="font-size:10px; color:#94a3b8; text-decoration:line-through;">原價 $${origPrice}</div>` : ''}
+                        </div>
+                    </div>
+
+                    <div style="font-size:11px; color:#64748b; margin:6px 0;">📍 ${h.addr || '台南市區'}</div>
+                    <div style="font-size:11px; color:#334155; line-height:1.4;">${h.desc || ''}</div>
+
+                    <!-- 雙人共識投票按鈕與編輯操作 -->
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding-top:8px; border-top:1px solid #f1f5f9;">
+                        <div style="display:flex; gap:6px;">
+                            <button type="button" class="hotel-vote-btn ${h.melonPick ? 'active-melon' : ''}" onclick="toggleHotelPick('${h.id}', 'melon')">
+                                🍈 Melon ${h.melonPick ? '想住 ✓' : '點此選定'}
+                            </button>
+                            <button type="button" class="hotel-vote-btn ${h.cindyPick ? 'active-cindy' : ''}" onclick="toggleHotelPick('${h.id}', 'cindy')">
+                                🍰 Cindy ${h.cindyPick ? '想住 ✓' : '點此選定'}
+                            </button>
+                        </div>
+                        <div style="display:flex; gap:4px;">
+                            <button type="button" onclick="openHotelModal('edit', '${h.id}')" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:10px; padding:2px 6px; cursor:pointer;" title="編輯">✏️</button>
+                            <button type="button" onclick="deleteHotelOption('${h.id}')" style="background:#fee2e2; border:1px solid #fca5a5; border-radius:6px; font-size:10px; padding:2px 6px; cursor:pointer; color:#b91c1c;" title="刪除">🗑️</button>
+                        </div>
+                    </div>
+                    ${isConsensus ? '<div style="margin-top:6px; font-size:10px; font-weight:900; color:#047857; text-align:right;">🎉 雙方皆心動！達成共識住宿</div>' : ''}
+                `;
+                container.appendChild(card);
+            });
+
+            // 更新總省錢數顯示
+            const savedEl = document.getElementById('calc-total-saved');
+            if (savedEl && totalSaved > 0) savedEl.innerText = '$' + totalSaved.toLocaleString();
+            renderHotelNotes();
+        }
+
+        function toggleHotelPick(id, role) {
+            const h = allHotels.find(x => x.id === id);
+            if (!h) return;
+            if (role === 'melon') h.melonPick = !h.melonPick;
+            else h.cindyPick = !h.cindyPick;
+
+            try { localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels)); } catch(e) {}
+            renderHotelCards();
+        }
+
+        function openHotelModal(action, id = null) {
+            const overlay = document.getElementById('hotel-modal-overlay');
+            const titleEl = document.getElementById('hotel-modal-title');
+            const formAction = document.getElementById('hotel-form-action');
+            const formId = document.getElementById('hotel-form-id');
+            const nameEl = document.getElementById('hotel-form-name');
+            const dateEl = document.getElementById('hotel-form-date');
+            const origEl = document.getElementById('hotel-form-orig');
+            const subEl = document.getElementById('hotel-form-subsidy');
+            const badgeEl = document.getElementById('hotel-form-badge');
+            const addrEl = document.getElementById('hotel-form-addr');
+            const descEl = document.getElementById('hotel-form-desc');
+
+            formAction.value = action;
+            formId.value = id || '';
+
+            if (action === 'edit' && id) {
+                const h = allHotels.find(x => x.id === id);
+                if (h) {
+                    titleEl.innerText = '✏️ 編輯住宿選項';
+                    nameEl.value = h.name || '';
+                    dateEl.value = h.date || '';
+                    origEl.value = h.priceOrig || 0;
+                    subEl.value = h.priceSubsidy || 0;
+                    badgeEl.value = h.badge || '';
+                    addrEl.value = h.addr || '';
+                    descEl.value = h.desc || '';
+                }
+            } else {
+                titleEl.innerText = '➕ 新增住宿候選';
+                nameEl.value = '';
+                dateEl.value = '9/20 (日)';
+                origEl.value = '2000';
+                subEl.value = '1200';
+                badgeEl.value = '💰 國旅補助現折$800';
+                addrEl.value = '';
+                descEl.value = '';
+            }
+            overlay.style.display = 'flex';
+        }
+
+        function closeHotelModal() {
+            document.getElementById('hotel-modal-overlay').style.display = 'none';
+        }
+
+        function saveHotelModalForm() {
+            const action = document.getElementById('hotel-form-action').value;
+            const id = document.getElementById('hotel-form-id').value;
+            const name = document.getElementById('hotel-form-name').value.trim();
+            const date = document.getElementById('hotel-form-date').value.trim();
+            const orig = parseInt(document.getElementById('hotel-form-orig').value, 10) || 0;
+            const sub = parseInt(document.getElementById('hotel-form-subsidy').value, 10) || 0;
+            const badge = document.getElementById('hotel-form-badge').value.trim();
+            const addr = document.getElementById('hotel-form-addr').value.trim();
+            const desc = document.getElementById('hotel-form-desc').value.trim();
+
+            if (!name) { alert("請輸入住宿名稱！"); return; }
+
+            if (action === 'edit' && id) {
+                const h = allHotels.find(x => x.id === id);
+                if (h) {
+                    h.name = name;
+                    h.date = date;
+                    h.priceOrig = orig;
+                    h.priceSubsidy = sub;
+                    h.isFree = (sub === 0);
+                    h.badge = badge;
+                    h.addr = addr;
+                    h.desc = desc;
+                }
+            } else {
+                const newH = {
+                    id: 'hotel_' + Date.now(),
+                    name: name,
+                    date: date,
+                    priceOrig: orig,
+                    priceSubsidy: sub,
+                    isFree: (sub === 0),
+                    badge: badge || '自訂住宿',
+                    addr: addr,
+                    desc: desc,
+                    melonPick: false,
+                    cindyPick: false
+                };
+                allHotels.push(newH);
+            }
+
+            try { localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels)); } catch(e) {}
+            closeHotelModal();
+            renderHotelCards();
+            alert("已成功更新住宿候選名單！");
+        }
+
+        function deleteHotelOption(id) {
+            const h = allHotels.find(x => x.id === id);
+            if (!h) return;
+            if (!confirm(`確定要刪除住宿選項【${h.name}】嗎？`)) return;
+            allHotels = allHotels.filter(x => x.id !== id);
+            try { localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels)); } catch(e) {}
+            renderHotelCards();
+        }
+
+        // 住宿留言板功能
+        function renderHotelNotes() {
+            const list = document.getElementById('hotel-notes-list');
+            if (!list) return;
+            list.innerHTML = '';
+            if (hotelNotes.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:11px; padding:10px 0;">目前無住宿備忘，隨時留下記錄！</div>';
+                return;
+            }
+            hotelNotes.forEach(n => {
+                const item = document.createElement('div');
+                item.className = 'wish-item';
+                item.style.borderLeftColor = '#f59e0b';
+                item.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; font-weight:800; font-size:11px; color:#475569; margin-bottom:2px;">
+                        <span>${n.user}</span>
+                        <span style="font-weight:normal; color:#94a3b8;">${n.time || ''}</span>
+                    </div>
+                    <div style="color:#1e293b; font-weight:600; font-size:12px;">${n.text}</div>
+                `;
+                list.appendChild(item);
+            });
+        }
+
+        function submitHotelNote() {
+            const input = document.getElementById('hotel-note-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const newNote = {
+                user: currentUser === 'melon' ? '🍈 Melon' : '🍰 Cindy',
+                text: text,
+                time: new Date().toLocaleDateString('zh-TW', { month: 'numeric', day: 'numeric' }) + ' ' + new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
+            };
+            hotelNotes.unshift(newNote);
+            try { localStorage.setItem('sinopac_hotel_notes', JSON.stringify(hotelNotes)); } catch(e) {}
+            renderHotelNotes();
+            input.value = '';
+            alert("已成功新增住宿備忘留言！");
+        }
+
+        // ==========================================
+        // 📦 模組化 JSON 處理中心 (Edge AI 協作樞紐)
+        // ==========================================
+        function openJsonHub(defaultTarget = 'all') {
+            const overlay = document.getElementById('json-hub-modal-overlay');
+            if (!overlay) return;
+            overlay.style.display = 'flex';
+            if (defaultTarget !== 'all') {
+                const targetSelect = document.getElementById('json-import-target');
+                if (targetSelect) targetSelect.value = defaultTarget;
+            }
+            switchJsonHubTab('import');
+            loadJsonSample();
+            refreshJsonExport();
+        }
+
+        function closeJsonHub() {
+            const overlay = document.getElementById('json-hub-modal-overlay');
+            if (overlay) overlay.style.display = 'none';
+        }
+
+        function switchJsonHubTab(tabKey) {
+            document.getElementById('tab-btn-json-import').className = `json-tab-btn ${tabKey === 'import' ? 'active' : ''}`;
+            document.getElementById('tab-btn-json-export').className = `json-tab-btn ${tabKey === 'export' ? 'active' : ''}`;
+            document.getElementById('tab-btn-json-prompt').className = `json-tab-btn ${tabKey === 'prompt' ? 'active' : ''}`;
+
+            document.getElementById('json-panel-import').style.display = tabKey === 'import' ? 'block' : 'none';
+            document.getElementById('json-panel-export').style.display = tabKey === 'export' ? 'block' : 'none';
+            document.getElementById('json-panel-prompt').style.display = tabKey === 'prompt' ? 'block' : 'none';
+
+            if (tabKey === 'export') refreshJsonExport();
+        }
+
+        function loadJsonSample() {
+            const target = document.getElementById('json-import-target').value;
+            const input = document.getElementById('json-input-content');
+            if (target === 'spot') {
+                input.value = JSON.stringify([
+                    { "name": "邱家小卷米粉", "cat": "food", "time": "11:00-17:00", "addr": "中西區國華街三段5號", "melon": "湯頭鮮甜滿滿小卷！", "cindy": "國華街必吃！", "full": 15 },
+                    { "name": "台南市美術館二館", "cat": "spot", "time": "10:00-18:00", "addr": "中西區忠義路二段1號", "melon": "純白五角建築超好拍！", "cindy": "美照拍好拍滿！", "full": -10 }
+                ], null, 2);
+            } else if (target === 'hotel') {
+                input.value = JSON.stringify([
+                    { "name": "友愛街旅館 U.I.J Hotel", "date": "9/20 (日)", "priceOrig": 2400, "priceSubsidy": 1600, "badge": "文青設計旅店", "addr": "中西區友愛街115巷5號", "desc": "黑膠唱片、共享廚房，步行到海安路宵夜超方便！" }
+                ], null, 2);
+            } else if (target === 'transit') {
+                input.value = JSON.stringify([
+                    { "type": "outbound", "group": "sat", "date": "9/19 (六)", "name": "新自強 473次", "dep": "07:15", "arr": "09:05", "duration": "1時50分", "price": 487, "badge": "備選直達", "desc": "若371沒買到可改搭此班" }
+                ], null, 2);
+            } else {
+                input.value = JSON.stringify({ "spots": [ { "name": "範例景點", "time": "12:00" } ] }, null, 2);
+            }
+        }
+
+        function clearJsonInput() {
+            document.getElementById('json-input-content').value = '';
+        }
+
+        function executeJsonImport() {
+            const raw = document.getElementById('json-input-content').value.trim();
+            const target = document.getElementById('json-import-target').value;
+            if (!raw) { alert("請先貼上 JSON 內容！"); return; }
+
+            let parsed;
+            try {
+                parsed = JSON.parse(raw);
+            } catch(e) {
+                alert("❌ JSON 格式解析失敗！請確認格式是否正確（包含括號引號逗號等）\n錯誤訊息：" + e.message);
+                return;
+            }
+
+            const items = Array.isArray(parsed) ? parsed : [parsed];
+
+            if (target === 'spot') {
+                let addCount = 0;
+                items.forEach(item => {
+                    const newId = (allSpots.length > 0 ? Math.max(...allSpots.map(s => s.id || 0)) : 100) + 1 + addCount;
+                    const newSpot = {
+                        id: newId,
+                        name: item.name || '自訂景點',
+                        cat: item.cat || 'food',
+                        time: item.time || '自由安排',
+                        addr: item.addr || '台南市',
+                        map: item.map || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((item.name || '') + ' 台南')}`,
+                        melon: item.melon || 'Edge AI 推薦好店！',
+                        cindy: item.cindy || '⭐⭐⭐⭐⭐ (加入清單)',
+                        full: typeof item.full === 'number' ? item.full : 15
+                    };
+                    allSpots.push(newSpot);
+                    addCount++;
+                });
+                try { localStorage.setItem('sinopac_spots', JSON.stringify(allSpots)); } catch(e) {}
+                renderShelfItems();
+                renderItinerary();
+                alert(`🎉 成功匯入 ${addCount} 個景點！已轉化為模組化卡片，隨時可拖入每天的行程！`);
+                closeJsonHub();
+            } else if (target === 'hotel') {
+                let addCount = 0;
+                items.forEach(item => {
+                    const newH = {
+                        id: 'hotel_' + Date.now() + '_' + addCount,
+                        name: item.name || '自訂住宿',
+                        date: item.date || '9/20 (日)',
+                        priceOrig: item.priceOrig || 2000,
+                        priceSubsidy: item.priceSubsidy || 1200,
+                        isFree: (item.priceSubsidy === 0),
+                        badge: item.badge || 'AI推薦',
+                        addr: item.addr || '',
+                        desc: item.desc || '',
+                        melonPick: false,
+                        cindyPick: false
+                    };
+                    allHotels.push(newH);
+                    addCount++;
+                });
+                try { localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels)); } catch(e) {}
+                renderHotelCards();
+                alert(`🎉 成功匯入 ${addCount} 間住宿選項！已加入比價候選名單！`);
+                closeJsonHub();
+            } else if (target === 'transit') {
+                let addCount = 0;
+                items.forEach(item => {
+                    const isRet = (item.type === 'return' || (item.name && item.name.includes('回程')));
+                    const newT = {
+                        id: (isRet ? 'ret_' : 'out_') + Date.now() + '_' + addCount,
+                        group: item.group || 'sat',
+                        date: item.date || '9/19 (六)',
+                        name: item.name || '自訂班次',
+                        dep: item.dep || '07:00',
+                        arr: item.arr || '08:50',
+                        duration: item.duration || '1時50分',
+                        price: item.price || 487,
+                        badge: item.badge || 'AI班次',
+                        badgeClass: 'badge-gold',
+                        desc: item.desc || ''
+                    };
+                    if (isRet) allTransitOptions.returnList.push(newT);
+                    else allTransitOptions.outbound.push(newT);
+                    addCount++;
+                });
+                try { localStorage.setItem('sinopac_transit_options', JSON.stringify(allTransitOptions)); } catch(e) {}
+                renderTransitCards();
+                alert(`🎉 成功匯入 ${addCount} 個車次班次！`);
+                closeJsonHub();
+            } else {
+                // All / Full backup
+                if (parsed.spots) allSpots = parsed.spots;
+                if (parsed.hotels) allHotels = parsed.hotels;
+                if (parsed.transit) allTransitOptions = parsed.transit;
+                if (parsed.plans) planModesData = parsed.plans;
+                try {
+                    localStorage.setItem('sinopac_spots', JSON.stringify(allSpots));
+                    localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels));
+                    localStorage.setItem('sinopac_transit_options', JSON.stringify(allTransitOptions));
+                } catch(e) {}
+                renderShelfItems();
+                renderItinerary();
+                renderHotelCards();
+                renderTransitCards();
+                alert("🎉 全套模組化資料已成功合併匯入！");
+                closeJsonHub();
+            }
+        }
+
+        function refreshJsonExport() {
+            const target = document.getElementById('json-export-target').value;
+            const output = document.getElementById('json-export-content');
+            let data;
+            if (target === 'spot') data = allSpots;
+            else if (target === 'hotel') data = { hotels: allHotels, notes: hotelNotes };
+            else if (target === 'transit') data = allTransitOptions;
+            else if (target === 'plan') data = planModesData;
+            else data = { spots: allSpots, hotels: allHotels, transit: allTransitOptions, plans: planModesData, hotelNotes: hotelNotes };
+
+            output.value = JSON.stringify(data, null, 2);
+        }
+
+        function copyExportedJson() {
+            const content = document.getElementById('json-export-content').value;
+            navigator.clipboard.writeText(content).then(() => {
+                alert("📋 JSON 代碼已成功複製到剪貼簿！可直接貼給 Edge AI 分析使用～");
+            }).catch(() => {
+                alert("請手動選取並複製文字框中的 JSON。");
+            });
+        }
+
+        function downloadJsonFile() {
+            const content = document.getElementById('json-export-content').value;
+            const blob = new Blob([content], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `tainan_travel_modular_${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function copyPromptSample() {
+            const prompt = document.getElementById('json-prompt-sample').value;
+            navigator.clipboard.writeText(prompt).then(() => {
+                alert("📋 Edge AI 提示詞已複製！可直接貼給本地大模型 (Ollama / LLM) 生成旅遊資料～");
+            });
+        }
+    
         // 初始化：先從 localStorage 秒載快取資料 (0毫秒開屏)
         try {
             const cachedSpots = localStorage.getItem('sinopac_spots');
@@ -2630,8 +3228,11 @@
         switchUserRole(currentUser);
         renderItinerary();
         renderTimetable();
+        renderTransitCards();
+        renderHotelCards();
         renderWishes();
         updateTransitConsensusUI();
+        updatePlanModeButtonsUI();
         
         // 立即啟動非同步抓取與心跳循環
         fetchCloudData(false);
@@ -2795,5 +3396,158 @@
         </div>
     </div>
 
+
+    <!-- 🏨 自訂住宿選項 Modal (新增與編輯) -->
+    <div id="hotel-modal-overlay" class="login-modal-overlay" style="display:none;" onclick="if(event.target === this) closeHotelModal()">
+        <div class="card-modal-box" style="max-width:390px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:16px; font-weight:900; color:#1e293b;" id="hotel-modal-title">➕ 新增住宿候選選項</div>
+                <button type="button" style="border:none; background:transparent; font-size:24px; color:#94a3b8; cursor:pointer;" onclick="closeHotelModal()">×</button>
+            </div>
+            <form onsubmit="event.preventDefault(); saveHotelModalForm();">
+                <input type="hidden" id="hotel-form-id" value="">
+                <input type="hidden" id="hotel-form-action" value="add">
+
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">住宿名稱 / 朋友家稱呼</label>
+                    <input type="text" id="hotel-form-name" class="form-control" required placeholder="例：路徒行旅成大館、煙波飯店、成大朋友家">
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">入住日期</label>
+                        <input type="text" id="hotel-form-date" class="form-control" required placeholder="例：9/19 (六) 或 9/20 (日)">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">補助前原價 ($)</label>
+                        <input type="number" id="hotel-form-orig" class="form-control" placeholder="例：2800 (免費填0)">
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">實付金額 ($)</label>
+                        <input type="number" id="hotel-form-subsidy" class="form-control" required placeholder="例：900 (免費填0)">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">特色標籤</label>
+                        <input type="text" id="hotel-form-badge" class="form-control" placeholder="例：💰 現折$800、大浴缸">
+                    </div>
+                </div>
+
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">地點 / 離成大距離</label>
+                    <input type="text" id="hotel-form-addr" class="form-control" placeholder="例：東區大學路西段 (成大後站步行5分)">
+                </div>
+
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">特色亮點 / 備忘說明</label>
+                    <textarea id="hotel-form-desc" class="form-control" rows="2" placeholder="例：週日平日補助現折$800，乾濕分離有浴缸，走整天剛好放鬆！"></textarea>
+                </div>
+
+                <button type="submit" class="btn-login-submit" style="margin-top:8px;">
+                    💾 儲存並更新住宿名單
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 📦 模組化 JSON 處理中心 (Edge AI 協作樞紐) -->
+    <div id="json-hub-modal-overlay" class="login-modal-overlay" style="display:none;" onclick="if(event.target === this) closeJsonHub()">
+        <div class="card-modal-box" style="max-width:440px; text-align:left;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                <div>
+                    <div style="font-size:16px; font-weight:900; color:#0f172a;">📦 模組化 JSON 處理中心</div>
+                    <div style="font-size:10px; color:#64748b;">支援一鍵解析生成卡片 ‧ 完美對接 Edge AI / 本地大模型</div>
+                </div>
+                <button type="button" style="border:none; background:transparent; font-size:24px; color:#94a3b8; cursor:pointer;" onclick="closeJsonHub()">×</button>
+            </div>
+
+            <!-- JSON 功能分頁切換 -->
+            <div class="json-tabs">
+                <button type="button" id="tab-btn-json-import" class="json-tab-btn active" onclick="switchJsonHubTab('import')">📥 匯入 JSON</button>
+                <button type="button" id="tab-btn-json-export" class="json-tab-btn" onclick="switchJsonHubTab('export')">📤 匯出 JSON</button>
+                <button type="button" id="tab-btn-json-prompt" class="json-tab-btn" onclick="switchJsonHubTab('prompt')">🤖 AI Prompt 範本</button>
+            </div>
+
+            <!-- 1. 匯入區塊 -->
+            <div id="json-panel-import">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:11px; font-weight:800; color:#475569;">1. 選擇匯入目標類型：</span>
+                    <select id="json-import-target" class="form-control" style="width:auto; padding:4px 8px; font-size:11px; font-weight:800;" onchange="loadJsonSample()">
+                        <option value="spot">🍱 景點卡片 (轉為可拖曳卡片)</option>
+                        <option value="hotel">🏨 住宿名單 (轉為候選住宿)</option>
+                        <option value="transit">🚆 交通車次 (轉為自訂班次)</option>
+                        <option value="all">🌟 完整備份 (所有行程全套)</option>
+                    </select>
+                </div>
+
+                <div style="position:relative; margin-bottom:8px;">
+                    <textarea id="json-input-content" class="json-editor-area" placeholder="請在此貼上 JSON 陣列或物件..."></textarea>
+                </div>
+
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                    <button type="button" onclick="loadJsonSample()" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:8px; padding:5px 10px; font-size:11px; font-weight:700; color:#475569; cursor:pointer;">
+                        📋 填入範例 JSON
+                    </button>
+                    <button type="button" onclick="clearJsonInput()" style="background:none; border:none; color:#94a3b8; font-size:11px; cursor:pointer;">
+                        清空內容
+                    </button>
+                </div>
+
+                <button type="button" class="btn-login-submit" onclick="executeJsonImport()">
+                    🚀 解析 JSON 並自動生成模組卡片
+                </button>
+            </div>
+
+            <!-- 2. 匯出區塊 -->
+            <div id="json-panel-export" style="display:none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span style="font-size:11px; font-weight:800; color:#475569;">選擇匯出範圍：</span>
+                    <select id="json-export-target" class="form-control" style="width:auto; padding:4px 8px; font-size:11px; font-weight:800;" onchange="refreshJsonExport()">
+                        <option value="all">🌟 全部模組資料</option>
+                        <option value="spot">🍱 景點庫 (allSpots)</option>
+                        <option value="hotel">🏨 住宿清單與討論</option>
+                        <option value="transit">🚆 車次清單</option>
+                        <option value="plan">🗺️ 目前天數方案</option>
+                    </select>
+                </div>
+
+                <textarea id="json-export-content" readonly class="json-editor-area" style="background:#f1f5f9;"></textarea>
+
+                <div style="display:flex; gap:8px; margin-top:10px;">
+                    <button type="button" class="btn-login-submit" style="flex:1;" onclick="copyExportedJson()">
+                        📋 一鍵複製 JSON
+                    </button>
+                    <button type="button" class="btn-login-submit" style="background:#334155; flex:1;" onclick="downloadJsonFile()">
+                        💾 下載 .json 檔
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3. AI Prompt 區塊 -->
+            <div id="json-panel-prompt" style="display:none;">
+                <div style="font-size:11px; color:#475569; margin-bottom:8px; line-height:1.4;">
+                    💡 複製以下 Prompt 直接餵給本機 <strong>Edge AI / Ollama / 本地 LLM</strong>，生成的 JSON 貼回上方「📥 匯入 JSON」即可秒轉卡片：
+                </div>
+                <textarea id="json-prompt-sample" readonly class="json-editor-area" style="height:140px; background:#f8fafc; font-size:10px;">請擔任台南旅遊與美食精算專家，請推薦3個台南私房景點/美食，並嚴格只輸出合法 JSON 陣列（不帶任何額外解說或 markdown 標籤）：
+[
+  {
+    "name": "店名或景點名稱",
+    "cat": "food 或 dessert 或 spot 或 night",
+    "time": "營業時間 (如 11:30-20:00)",
+    "addr": "中西區或安平區詳細地址",
+    "melon": "男友Melon簡短評語 (20字內)",
+    "cindy": "女友Cindy推薦理由 (20字內)",
+    "full": 15
+  }
+]</textarea>
+                <button type="button" class="btn-login-submit" style="margin-top:10px;" onclick="copyPromptSample()">
+                    📋 複製 Edge AI 提示詞
+                </button>
+            </div>
+        </div>
+    </div>
+    
 </body>
 </html>
