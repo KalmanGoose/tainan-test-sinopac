@@ -20,6 +20,7 @@
             --primary-green-light: #e6f7ef;
             --accent-red: #ff4d4f;
             --accent-blue: #2563eb;
+            --accent-purple: #7c3aed;
             --bg-light: #f6f7fb;
             --card-bg: #ffffff;
             --text-main: #1f2937;
@@ -44,7 +45,7 @@
             color: var(--text-main);
         }
 
-        /* 響應式外框：電腦為精美 iPhone 框，手機為 100% 全螢幕 */
+        /* 響應式外框：電腦為精美手機框，手機為 100% 全螢幕 */
         .app-container {
             width: 100%;
             max-width: 440px;
@@ -67,7 +68,7 @@
         /* 頂部 Header & 身分切換 */
         .app-header {
             background: #ffffff;
-            padding: 16px 14px 10px;
+            padding: 14px 14px 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -107,7 +108,7 @@
             display: inline-block;
         }
 
-        /* 身分切換膠囊按鈕 */
+        /* 身分切換按鈕 */
         .role-switch-box {
             display: flex;
             background: #f1f5f9;
@@ -140,9 +141,9 @@
         /* 飽足感與調情 Dashboard */
         .status-widget {
             background: linear-gradient(135deg, #1c1c1e 0%, #2c2c2e 100%);
-            margin: 10px 14px 6px;
-            border-radius: 18px;
-            padding: 12px 16px;
+            margin: 8px 14px 6px;
+            border-radius: 16px;
+            padding: 12px 14px;
             color: white;
             box-shadow: 0 6px 16px rgba(0,0,0,0.12);
         }
@@ -163,7 +164,7 @@
         }
 
         .status-val {
-            font-size: 32px;
+            font-size: 30px;
             font-weight: 800;
             color: var(--primary-green);
             transition: color 0.3s;
@@ -186,13 +187,13 @@
 
         .action-row {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             margin-top: 8px;
         }
 
         .btn-action {
             flex: 1;
-            padding: 6px 10px;
+            padding: 6px 8px;
             border-radius: 10px;
             font-size: 11px;
             font-weight: 700;
@@ -222,20 +223,27 @@
             box-shadow: 0 2px 6px rgba(0,0,0,0.04);
         }
 
-        /* 主分頁切換 */
+        /* 主分頁切換 (可水平滑動的膠囊列) */
+        .main-tabs-wrapper {
+            overflow-x: auto;
+            margin: 4px 14px 6px;
+            padding-bottom: 2px;
+        }
+        .main-tabs-wrapper::-webkit-scrollbar { display: none; }
+
         .main-tabs {
-            display: flex;
+            display: inline-flex;
             background: #ffffff;
-            margin: 6px 14px;
             padding: 3px;
             border-radius: 14px;
             border: 1px solid #e5e7eb;
             box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+            gap: 2px;
+            min-width: 100%;
         }
 
         .tab-btn {
-            flex: 1;
-            padding: 8px 1px;
+            padding: 6px 8px;
             text-align: center;
             font-size: 11px;
             font-weight: 700;
@@ -244,11 +252,13 @@
             cursor: pointer;
             transition: all 0.2s ease;
             display: flex;
-            flex-direction: column;
             align-items: center;
-            gap: 2px;
+            justify-content: center;
+            gap: 4px;
             border: none;
             background: transparent;
+            white-space: nowrap;
+            flex: 1;
         }
 
         .tab-btn.active {
@@ -272,7 +282,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 卡片共用風格 */
+        /* 卡片風格 */
         .custom-card {
             background: #ffffff;
             border-radius: 16px;
@@ -314,65 +324,17 @@
             border-top: 1px solid #334155;
         }
 
-        /* 交通班次卡片 */
-        .train-option-card {
-            background: #ffffff;
-            border-radius: 14px;
-            padding: 12px 14px;
-            margin-bottom: 10px;
-            border: 2px solid transparent;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-            cursor: pointer;
-            transition: all 0.2s;
-            position: relative;
-        }
-        .train-option-card.selected {
-            border-color: var(--primary-green);
-            background: #f0fdf4;
-        }
-        .train-option-card.selected::after {
-            content: "✓ 目前選擇";
-            position: absolute;
-            top: 10px;
-            right: 12px;
-            font-size: 10px;
-            font-weight: 800;
-            color: var(--primary-green);
-            background: #dcfce7;
-            padding: 2px 6px;
-            border-radius: 6px;
-        }
-
-        .train-time-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-top: 4px;
-        }
-        .train-time {
-            font-size: 17px;
-            font-weight: 800;
-            color: #111827;
-        }
-        .train-arrow { color: #9ca3af; font-size: 14px; }
-        .train-meta-tag {
-            font-size: 11px;
-            color: #6b7280;
-            margin-top: 4px;
-            line-height: 1.4;
-        }
-
-        /* 模式切換按鈕 */
+        /* 模式切換按鈕 (3 個方案：六日一 / 五天 / Cindy心動方案) */
         .plan-mode-switcher {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 6px;
             margin-bottom: 8px;
         }
         .plan-btn {
-            padding: 9px 8px;
+            padding: 8px 4px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 800;
             border: 2px solid #e2e8f0;
             background: #ffffff;
@@ -380,34 +342,59 @@
             cursor: pointer;
             text-align: center;
             transition: all 0.2s;
+            line-height: 1.3;
         }
         .plan-btn.active {
             border-color: var(--dawho-gold);
             background: #fdfaf3;
             color: #855d1d;
         }
+        .plan-btn.active-cindy-plan {
+            border-color: #f43f5e;
+            background: #fff1f2;
+            color: #be123c;
+        }
 
-        /* 自訂行程工具列 */
-        .itinerary-toolbar {
+        /* 景點卡片庫抽屜 / 貨架 */
+        .library-shelf {
+            background: #ffffff;
+            border-radius: 14px;
+            border: 1px solid #e2e8f0;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .shelf-header {
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            gap: 8px;
-            margin: 6px 0 10px;
-        }
-        .btn-add-card {
-            background: linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%);
-            color: white;
-            padding: 7px 12px;
-            border-radius: 10px;
-            font-size: 11px;
-            font-weight: 800;
-            border: none;
-            cursor: pointer;
-            display: flex;
             align-items: center;
-            gap: 4px;
+            cursor: pointer;
         }
+        .shelf-items-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 8px 2px 4px;
+        }
+        .shelf-items-scroll::-webkit-scrollbar { height: 4px; }
+        .shelf-items-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        
+        .shelf-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 8px;
+            min-width: 150px;
+            max-width: 150px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            cursor: grab;
+            user-select: none;
+            transition: transform 0.15s, border-color 0.15s;
+        }
+        .shelf-card:hover { border-color: var(--primary-green); transform: translateY(-2px); }
+        .shelf-card:active { cursor: grabbing; }
 
         /* 行程任務卡片 */
         .spot-card {
@@ -420,7 +407,13 @@
             flex-direction: column;
             gap: 6px;
             position: relative;
+            transition: border-color 0.2s;
         }
+        .spot-card.drag-over {
+            border: 2px dashed var(--primary-green);
+            background: #f0fdf4;
+        }
+
         .spot-top-row {
             display: flex;
             align-items: flex-start;
@@ -503,35 +496,89 @@
             border-radius: 6px;
         }
 
-        /* 卡片底部工具欄 */
-        .spot-bottom-toolbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-top: 1px dashed #edf2f7;
-            padding-top: 6px;
-        }
-        .map-btn {
-            color: var(--primary-green);
-            font-size: 11px;
-            font-weight: 700;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 2px;
-            background: var(--primary-green-light);
-            padding: 2px 7px;
-            border-radius: 6px;
-        }
-        .btn-card-tool {
-            background: #f8fafc;
+        /* 課表儀表板 (Timetable Grid) 專用樣式 */
+        .timetable-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 12px;
             border: 1px solid #e2e8f0;
-            padding: 3px 6px;
+            overflow-x: auto;
+            margin-bottom: 12px;
+        }
+        .timetable-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            min-width: 320px;
+        }
+        .timetable-table th {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 8px 4px;
+            font-weight: 800;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+        .timetable-table td {
+            border: 1px solid #e2e8f0;
+            padding: 6px 4px;
+            vertical-align: top;
+            height: 65px;
+            width: 30%;
+        }
+        .time-col {
+            width: 55px;
+            background: #f8fafc;
+            font-weight: 700;
+            color: #64748b;
+            text-align: center;
+            vertical-align: middle !important;
+            font-size: 10px;
+            line-height: 1.2;
+        }
+
+        /* 課表內的色塊課程 */
+        .course-block {
             border-radius: 6px;
+            padding: 4px 6px;
+            margin-bottom: 4px;
             font-size: 10px;
             font-weight: 700;
-            color: #475569;
+            line-height: 1.3;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .course-traffic { background: #eff6ff; border-left: 3px solid #3b82f6; color: #1e40af; }
+        .course-contest { background: #fef2f2; border-left: 3px solid #ef4444; color: #991b1b; }
+        .course-class { background: #ecfdf5; border-left: 3px solid #10b981; color: #065f46; }
+        .course-food { background: #fffbeb; border-left: 3px solid #f59e0b; color: #92400e; }
+        .course-spot { background: #fdf2f8; border-left: 3px solid #ec4899; color: #9d174d; }
+
+        /* 交通卡片 */
+        .train-option-card {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
             cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .train-option-card.selected {
+            border-color: var(--primary-green);
+            background: #f0fdf4;
+        }
+        .train-time-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 4px;
+        }
+        .train-time {
+            font-size: 17px;
+            font-weight: 800;
+            color: #111827;
         }
 
         /* 許願留言板 */
@@ -542,14 +589,6 @@
             margin-bottom: 8px;
             border-left: 3px solid var(--dawho-gold);
             font-size: 12px;
-        }
-        .wish-author {
-            font-weight: 800;
-            font-size: 11px;
-            display: flex;
-            justify-content: space-between;
-            color: #475569;
-            margin-bottom: 3px;
         }
 
         /* 滿版親親 Overlay */
@@ -586,7 +625,6 @@
             max-height: 88vh;
             overflow-y: auto;
             animation: slideUp 0.25s ease-out;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.25);
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
         .form-group { margin-bottom: 12px; }
@@ -607,7 +645,7 @@
                     <span id="sync-text">試算表雲端連線</span>
                 </div>
             </div>
-            <!-- 身分切換開關 -->
+            <!-- 身分切換按鈕 -->
             <div class="role-switch-box">
                 <button id="role-melon" class="role-btn active-melon" onclick="switchUserRole('melon')">🍈 Melon</button>
                 <button id="role-cindy" class="role-btn" onclick="switchUserRole('cindy')">🍰 Cindy</button>
@@ -630,42 +668,138 @@
             <div class="action-row">
                 <button onclick="triggerKiss()" class="btn-action btn-kiss">💋 補魔力親親</button>
                 <button onclick="flirt()" class="btn-action btn-flirt">💖 男友調情一下</button>
-                <button onclick="fetchCloudData(true)" class="btn-action" style="background:#334155; color:white; flex:0.7;">🔄 同步</button>
+                <button onclick="fetchCloudData(true)" class="btn-action" style="background:#334155; color:white; flex:0.6;">🔄 同步</button>
             </div>
         </div>
 
         <!-- 浮動對話通知框 -->
         <div id="dialogue-box"></div>
 
-        <!-- 主要功能分頁 (5大協調分頁) -->
-        <div class="main-tabs">
-            <button class="tab-btn active" onclick="switchTab('transit', this)">
-                <span style="font-size:16px;">🚆</span>
-                <span>車次共識</span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('itinerary', this)">
-                <span style="font-size:16px;">🗺️</span>
-                <span>雙人行程</span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('wishes', this)">
-                <span style="font-size:16px;">💌</span>
-                <span>許願留言</span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('hotel', this)">
-                <span style="font-size:16px;">🏨</span>
-                <span>住宿試算</span>
-            </button>
-            <button class="tab-btn" onclick="switchTab('contest', this)">
-                <span style="font-size:16px;">🏆</span>
-                <span>比賽指南</span>
-            </button>
+        <!-- 主導航 (支援滑動的 6 大分頁) -->
+        <div class="main-tabs-wrapper">
+            <div class="main-tabs">
+                <button class="tab-btn active" onclick="switchTab('itinerary', this)">
+                    <span>🗺️ 行程安排</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('timetable', this)">
+                    <span>📅 課表對齊</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('transit', this)">
+                    <span>🚆 車次共識</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('wishes', this)">
+                    <span>💌 許願留言</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('hotel', this)">
+                    <span>🏨 住宿試算</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('contest', this)">
+                    <span>🏆 專利賽程</span>
+                </button>
+            </div>
         </div>
 
         <!-- ==================================================================== -->
-        <!-- TAB 1: 🚆 車次共識箱 (即時記錄雙方偏好，比對共識) -->
+        <!-- TAB 1: 🗺️ 雙人行程 (支援方案三 Cindy版、卡片庫拖曳加入) -->
         <!-- ==================================================================== -->
-        <div id="tab-transit" class="tab-content active">
-            <!-- 雙方協調共識卡 -->
+        <div id="tab-itinerary" class="tab-content active">
+            <!-- 模式切換：方案一(六日一) / 方案二(五天) / 方案三(Cindy心動版) -->
+            <div class="plan-mode-switcher">
+                <button id="btn-mode-3day" class="plan-btn active" onclick="switchPlanMode('3day')">
+                    🌟 方案一<br>六日一(Melon)
+                </button>
+                <button id="btn-mode-5day" class="plan-btn" onclick="switchPlanMode('5day')">
+                    🎒 方案二<br>五天深度遊
+                </button>
+                <button id="btn-mode-cindy" class="plan-btn" onclick="switchPlanMode('cindy')">
+                    🍰 方案三<br>Cindy 心動版
+                </button>
+            </div>
+
+            <!-- 天數切換 Tab -->
+            <div id="day-subtabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:6px;"></div>
+
+            <!-- 📚 景點卡片庫 / 快速挑選貨架 (可拖曳或一鍵加入) -->
+            <div class="library-shelf">
+                <div class="shelf-header" onclick="toggleShelf()">
+                    <span style="font-size:12px; font-weight:800; color:#1e293b;">📚 景點卡片庫 (挑選加入或拖進行程)</span>
+                    <span id="shelf-arrow" style="font-size:12px; color:#94a3b8;">▼ 展開</span>
+                </div>
+                <div id="shelf-body" style="display:none; margin-top:8px;">
+                    <div style="font-size:10px; color:#64748b; margin-bottom:6px;">
+                        💡 點擊「+加入今天」，或按住卡片直接拖到下方行程清單中！
+                    </div>
+                    <div class="shelf-items-scroll" id="shelf-items-list"></div>
+                </div>
+            </div>
+
+            <!-- 自訂行程操作工具列 -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin:8px 0;">
+                <div id="itinerary-title" style="font-size:13px; font-weight:800; color:#1e293b;"></div>
+                <button class="badge-pill badge-gold" style="border:none; cursor:pointer;" onclick="openAddCardModal()">
+                    ➕ 手動寫新卡片
+                </button>
+            </div>
+
+            <!-- 放置區 / 行程清單 (支援 HTML5 Drag & Drop) -->
+            <div id="itinerary-dropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
+                <div id="itinerary-list"></div>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 2: 📅 課表對齊儀表板 (Timetable Grid - 專為學生對齊時間設計) -->
+        <!-- ==================================================================== -->
+        <div id="tab-timetable" class="tab-content">
+            <div class="custom-card" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:white; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:11px; color:var(--dawho-gold); font-weight:800;">📅 專利與民法物權時間對齊課表</div>
+                        <div style="font-size:15px; font-weight:900; margin-top:2px;">六日一行程 ➔ 週一準時入座</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <span class="badge-pill badge-green">🛡️ 全勤守護 100%</span>
+                    </div>
+                </div>
+                <div style="font-size:11px; color:#cbd5e1; margin-top:8px; line-height:1.5;">
+                    🎓 <strong>週一安心保證：</strong>搭 07:41 高鐵 ➔ 08:34 烏日 ➔ 機車雙載 <strong>09:05 到教室</strong>，比 10:10 鐘響整整提前 65 分鐘！
+                </div>
+            </div>
+
+            <!-- 課表切換檢視方案 -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+                <button id="tt-btn-3day" onclick="switchTimetablePlan('3day')" class="badge-pill badge-gold" style="border:none; cursor:pointer;">🌟 方案一 (Melon六日一)</button>
+                <button id="tt-btn-cindy" onclick="switchTimetablePlan('cindy')" class="badge-pill" style="border:none; cursor:pointer; background:#e2e8f0; color:#475569;">🍰 方案三 (Cindy心動版)</button>
+            </div>
+
+            <!-- 大學課表式 Grid -->
+            <div class="timetable-card">
+                <table class="timetable-table">
+                    <thead>
+                        <tr>
+                            <th class="time-col">節次/時段</th>
+                            <th id="th-day1">9/19 (六)<br><span style="font-size:9px; font-weight:normal;">專利決賽</span></th>
+                            <th id="th-day2">9/20 (日)<br><span style="font-size:9px; font-weight:normal;">慢活吃台南</span></th>
+                            <th id="th-day3">9/21 (一)<br><span style="font-size:9px; font-weight:normal;">返校民法課</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-tbody"></tbody>
+                </table>
+            </div>
+
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; font-size:10px;">
+                <span class="course-block course-traffic">🚆 交通班次</span>
+                <span class="course-block course-contest">🏆 專利大戰</span>
+                <span class="course-block course-class">📚 10:10民法物權</span>
+                <span class="course-block course-food">🍜 府城必吃</span>
+                <span class="course-block course-spot">🏖️ 甜點散步</span>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
+        <!-- TAB 3: 🚆 車次共識箱 -->
+        <!-- ==================================================================== -->
+        <div id="tab-transit" class="tab-content">
             <div class="consensus-box">
                 <div style="display:flex; justify-content:space-between; align-items:center;">
                     <span style="font-size:11px; color:var(--dawho-gold); font-weight:800;">✨ 雙人交通協調共識箱</span>
@@ -674,7 +808,7 @@
                 
                 <div class="consensus-row">
                     <div>🍈 <strong>Melon 偏好：</strong></div>
-                    <div id="melon-transit-pref" style="color:#4ade80;">自強371次 ➜ 高鐵0806次</div>
+                    <div id="melon-transit-pref" style="color:#4ade80;">自強371次 ➔ 高鐵0806次</div>
                 </div>
                 <div class="consensus-row">
                     <div>🍰 <strong>Cindy 偏好：</strong></div>
@@ -692,79 +826,40 @@
                 ① 選擇【去程車次】(臺中 ➔ 臺南)
             </div>
 
-            <!-- 去程分類切換 -->
-            <div style="display:flex; gap:6px; margin-bottom:10px;">
-                <button id="btn-dep-sat" onclick="switchDepGroup('sat')" class="badge-pill badge-green" style="border:none; cursor:pointer; padding:6px 12px; font-size:11px;">☀️ 9/19 週六早班 (直衝報到)</button>
-                <button id="btn-dep-eve" onclick="switchDepGroup('eve')" class="badge-pill" style="border:none; cursor:pointer; padding:6px 12px; font-size:11px; background:#e2e8f0; color:#475569;">🌙 9/17或9/18 傍晚班次</button>
+            <!-- 去程車次選項 -->
+            <div class="train-option-card selected" onclick="selectOutbound(this, '自強(3000) 371次 (06:57➜08:47)', 487)">
+                <div style="display:flex; justify-content:space-between;">
+                    <span class="badge-pill badge-green">★ 官方最推薦首選</span>
+                    <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
+                </div>
+                <div class="train-time-row">
+                    <span class="train-time">06:57</span>
+                    <span class="train-arrow">➔</span>
+                    <span class="train-time">08:47</span>
+                    <span style="font-size:12px; color:#64748b;">(1時50分)</span>
+                </div>
+                <div style="font-size:11px; color:#64748b; margin-top:4px;">直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！</div>
             </div>
 
-            <!-- 週六早班車次 -->
-            <div id="dep-group-sat">
-                <div class="train-option-card selected" onclick="selectOutbound(this, '自強(3000) 371次 (06:57➜08:47)', 487)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-green">★ 官方最推薦首選</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">06:57</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">08:47</span>
-                        <span style="font-size:12px; color:#64748b;">(1時50分)</span>
-                    </div>
-                    <div class="train-meta-tag"><strong>自強(3000) 371次</strong> | 直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！</div>
+            <div class="train-option-card" onclick="selectOutbound(this, '自強號 101次 (05:30➜07:44)', 244)">
+                <div style="display:flex; justify-content:space-between;">
+                    <span class="badge-pill badge-gold">💰 大學生 5 折只要 $244</span>
+                    <span style="font-size:12px; font-weight:800; color:#b45309;">$244 / 人</span>
                 </div>
-
-                <div class="train-option-card" onclick="selectOutbound(this, '自強號 101次 (05:30➜07:44)', 244)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-gold">💰 大學生 5 折只要 $244</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$244 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">05:30</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">07:44</span>
-                        <span style="font-size:12px; color:#64748b;">(2時14分)</span>
-                    </div>
-                    <div class="train-meta-tag"><strong>自強號 101次</strong> | 省錢首選！先去喝一碗美鮮牛肉湯再進場！</div>
+                <div class="train-time-row">
+                    <span class="train-time">05:30</span>
+                    <span class="train-arrow">➔</span>
+                    <span class="train-time">07:44</span>
+                    <span style="font-size:12px; color:#64748b;">(2時14分)</span>
                 </div>
+                <div style="font-size:11px; color:#64748b; margin-top:4px;">超早出發省一半！先去喝一碗牛肉湯再進場！</div>
             </div>
 
-            <!-- 傍晚班次 -->
-            <div id="dep-group-eve" style="display:none;">
-                <div class="train-option-card" onclick="selectOutbound(this, '自強(3000) 143次 (19:54➜21:34)', 487)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-green">⚡ 最速 100 分鐘直達</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">19:54</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">21:34</span>
-                        <span style="font-size:12px; color:#64748b;">(1時40分)</span>
-                    </div>
-                    <div class="train-meta-tag"><strong>自強(3000) 143次</strong> | 下課吃飽出發，21:34 抵達台南直奔宵夜！</div>
-                </div>
-
-                <div class="train-option-card" onclick="selectOutbound(this, '自強號 141次 (19:47➜21:52)', 390)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-gold">🎓 大學生 8 折</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$390 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">19:47</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">21:52</span>
-                        <span style="font-size:12px; color:#64748b;">(2時05分)</span>
-                    </div>
-                    <div class="train-meta-tag"><strong>自強號 141次</strong> | 平價學生優惠車次。</div>
-                </div>
-            </div>
-
-            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 18px 0 8px;">
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 16px 0 8px;">
                 ② 選擇【9/21 (一) 回程晨車】(奔赴 10:10 民法物權)
             </div>
 
-            <!-- 回程車次 -->
+            <!-- 回程車次選項 -->
             <div class="train-option-card selected" onclick="selectReturn(this, '高鐵 0806次 (07:41➜08:34)', 570)">
                 <div style="display:flex; justify-content:space-between;">
                     <span class="badge-pill badge-green">★ 貼心首選 (提前65分到)</span>
@@ -776,10 +871,7 @@
                     <span class="train-time">08:34</span>
                     <span style="font-size:12px; color:#64748b;">(53分)</span>
                 </div>
-                <div class="train-meta-tag">
-                    🚄 <strong>高鐵 0806次</strong> ➔ 台中高鐵牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>。<br>
-                    ☕ Cindy 還可以悠閒喝燕麥拿鐵看書，行李 Melon 全扛！
-                </div>
+                <div style="font-size:11px; color:#64748b; margin-top:4px;">08:34 抵烏日 ➔ 牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>！</div>
             </div>
 
             <div class="train-option-card" onclick="selectReturn(this, '高鐵 0810次 (08:41➜09:34)', 485)">
@@ -793,49 +885,18 @@
                     <span class="train-time">09:34</span>
                     <span style="font-size:12px; color:#64748b;">(53分)</span>
                 </div>
-                <div class="train-meta-tag">
-                    🚄 <strong>高鐵 0810次</strong> ➔ 09:45 牽機車出發 ➔ <strong>10:05 抵達系館</strong>。<br>
-                    ⏱️ 10:10 上課剛剛好入座，週日可多睡 1 小時！
-                </div>
+                <div style="font-size:11px; color:#64748b; margin-top:4px;">09:45 牽車 ➔ <strong>10:05 抵系館</strong>，壓線準時入座！</div>
             </div>
         </div>
 
         <!-- ==================================================================== -->
-        <!-- TAB 2: 🗺️ 雙人行程 (支援投票、自訂卡片、雲端雙向同步) -->
-        <!-- ==================================================================== -->
-        <div id="tab-itinerary" class="tab-content">
-            <div class="plan-mode-switcher">
-                <button id="btn-mode-3day" class="plan-btn active" onclick="switchPlanMode('3day')">
-                    🌟 方案一：玩六日一<br><span style="font-size:10px; font-weight:normal;">(精華超值 3天2夜)</span>
-                </button>
-                <button id="btn-mode-5day" class="plan-btn" onclick="switchPlanMode('5day')">
-                    🎒 方案二：五天深度遊<br><span style="font-size:10px; font-weight:normal;">(9/17-9/21 全套吃爆)</span>
-                </button>
-            </div>
-
-            <div id="day-subtabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:6px;"></div>
-
-            <div class="itinerary-toolbar">
-                <button class="btn-add-card" onclick="openAddCardModal()">
-                    <span>➕ 新增自訂行程卡片</span>
-                </button>
-                <div style="display:flex; gap:4px;">
-                    <button class="btn-card-tool" onclick="fetchCloudData(true)">🔄 雲端抓取</button>
-                </div>
-            </div>
-
-            <div id="itinerary-title" style="font-size:14px; font-weight:800; color:#1e293b; margin-bottom:8px;"></div>
-            <div id="itinerary-list"></div>
-        </div>
-
-        <!-- ==================================================================== -->
-        <!-- TAB 3: 💌 兩人許願留言池 (即時儲存至 Google 試算表) -->
+        <!-- TAB 4: 💌 許願留言池 -->
         <!-- ==================================================================== -->
         <div id="tab-wishes" class="tab-content">
             <div class="custom-card" style="background:linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border-color:#fde68a;">
                 <div style="font-size:13px; font-weight:900; color:#92400e; margin-bottom:4px;">💌 CINDY & MELON 悄悄話許願池</div>
                 <div style="font-size:11px; color:#b45309; line-height:1.4;">
-                    任何想吃的甜點、想去的小店，或對行程的期望，在這裡留言會立刻同步到 Google 試算表喔！
+                    任何想吃的甜點、想去的小店，在這邊留言會即時同步到 Google 試算表！
                 </div>
             </div>
 
@@ -850,16 +911,12 @@
                 </form>
             </div>
 
-            <div style="font-size:12px; font-weight:800; color:#475569; margin:10px 0 6px;">
-                📜 歷史願望與備忘清單：
-            </div>
-            <div id="wishes-list">
-                <div style="text-align:center; color:#94a3b8; font-size:12px; padding:20px 0;">正在載入願望中...</div>
-            </div>
+            <div style="font-size:12px; font-weight:800; color:#475569; margin:10px 0 6px;">📜 歷史願望與備忘清單：</div>
+            <div id="wishes-list"></div>
         </div>
 
         <!-- ==================================================================== -->
-        <!-- TAB 4: 🏨 住宿試算器 -->
+        <!-- TAB 5: 🏨 住宿試算器 -->
         <!-- ==================================================================== -->
         <div id="tab-hotel" class="tab-content">
             <div class="custom-card" style="background:linear-gradient(135deg, #2d3748 0%, #1a202c 100%); color:white;">
@@ -870,17 +927,13 @@
                         <span style="font-size:11px; color:#cbd5e1;">總計為您省下</span>
                     </div>
                     <div style="text-align:right;">
-                        <span style="font-size:12px; color:var(--dawho-gold); font-weight:bold;" id="calc-nights-count">住 2 晚 (補助 1 晚 + 免費 1 晚)</span>
+                        <span style="font-size:12px; color:var(--dawho-gold); font-weight:bold;">住 2 晚 (補助 1 晚 + 免費 1 晚)</span>
                     </div>
                 </div>
                 <div style="font-size:11px; color:#cbd5e1; line-height:1.5;">
-                    💡 臺南振興國旅補助：平日（週日至週四）每房現折 <strong>$800</strong>！<br>
+                    💡 臺南振興國旅補助：週日算平日，每房現折 <strong>$800</strong>！<br>
                     🏠 週六成大朋友家免費借住，現省 <strong>$3,000+</strong> 週末天價！
                 </div>
-            </div>
-
-            <div style="font-size:13px; font-weight:800; color:#1e293b; margin:14px 0 8px;">
-                🏨 勾選您要入住的夜晚：
             </div>
 
             <div class="custom-card" style="padding:12px;">
@@ -894,7 +947,7 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- TAB 5: 🏆 專利大戰南區賽程指南 -->
+        <!-- TAB 6: 🏆 專利大戰南區賽程指南 -->
         <!-- ==================================================================== -->
         <div id="tab-contest" class="tab-content">
             <div class="custom-card" style="border-left: 4px solid var(--accent-red);">
@@ -902,11 +955,8 @@
                 <div style="font-size:16px; font-weight:900; margin:4px 0 8px; color:#0f172a;">國立成功大學 自強校區</div>
                 <div style="font-size:12px; color:#475569; line-height:1.6;">
                     📍 <strong>場地：</strong>儀器設備大樓 10 樓 會議室<br>
-                    🚶 <strong>步行：</strong>臺南車站後站出來，沿大學路直行 5~7 分鐘即抵達自強校區！<br>
-                    🎯 <strong>賽制：</strong>三輪積分賽 (初賽、複賽、決賽)，爭奪南區最高榮譽與獎金！
-                </div>
-                <div style="margin-top:10px;">
-                    <a href="https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z" target="_blank" class="map-btn">📍 導航至成大自強校區會場</a>
+                    🚶 <strong>步行：</strong>臺南車站後站出來，沿大學路直行 5~7 分鐘即抵達！<br>
+                    🎯 <strong>賽制：</strong>三輪積分賽 (初賽、複賽、決賽)，爭奪南區最高榮譽！
                 </div>
             </div>
 
@@ -914,7 +964,7 @@
                 ⏱️ 9/19 (六) 當日詳細賽程表：
             </div>
             <div class="custom-card" style="font-size:12px; line-height:1.8;">
-                • <strong>09:00 - 09:25</strong>【選手報到與入座】(自強371次 08:47 到站直奔報到)<br>
+                • <strong>09:00 - 09:25</strong>【選手報到與就座】(自強371次 08:47 到站直奔報到)<br>
                 • <strong>09:30 - 10:00</strong>【競賽規則說明與致詞】<br>
                 • <strong>10:00 - 11:40</strong>【初賽 第一輪桌遊對決】<br>
                 • <strong>11:40 - 13:00</strong>【午餐休息補給】<br>
@@ -949,7 +999,7 @@
 
                     <div class="form-group">
                         <label class="form-label">📌 行程 / 景點 / 店名</label>
-                        <input type="text" id="form-name" required class="form-control" placeholder="例：林百貨、台南市立美術館二館、阿明豬心">
+                        <input type="text" id="form-name" required class="form-control" placeholder="例：林百貨、台南美術館二館、阿明豬心">
                     </div>
 
                     <div class="form-group">
@@ -963,53 +1013,24 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">🗺️ Google 地圖連結 (留空將自動生成搜尋導航)</label>
-                        <input type="text" id="form-map" class="form-control" placeholder="例：https://maps.google.com/...">
-                    </div>
-
-                    <div style="display:flex; gap:8px;" class="form-group">
-                        <div style="flex:1;">
-                            <label class="form-label">🏷️ 類別圖示</label>
-                            <select id="form-cat" class="form-control">
-                                <option value="food">🍱 正餐美食</option>
-                                <option value="dessert">🍧 甜點冰品</option>
-                                <option value="drink">🥤 特色飲品</option>
-                                <option value="night">🍢 深夜宵夜</option>
-                                <option value="snack">🥟 經典小吃</option>
-                                <option value="spot">🏖️ 散步景點</option>
-                                <option value="traffic">🚆 交通班次</option>
-                                <option value="hotel">🏠 住宿借宿</option>
-                                <option value="contest">🎓 專利賽程</option>
-                                <option value="school">📚 返校上課</option>
-                            </select>
-                        </div>
-                        <div style="flex:1;">
-                            <label class="form-label">⚡ 飽足感影響</label>
-                            <select id="form-full" class="form-control">
-                                <option value="20">+20% (大吃一頓)</option>
-                                <option value="15" selected>+15% (剛好飽)</option>
-                                <option value="10">+10% (解饞小點)</option>
-                                <option value="5">+5% (喝杯飲料)</option>
-                                <option value="0">0% (打卡拍照)</option>
-                                <option value="-10">-10% (散步逛街)</option>
-                                <option value="-20">-20% (健走運動)</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">🍈 Melon 筆記 / 調情台詞</label>
-                        <input type="text" id="form-melon" class="form-control" placeholder="例：牽著 Cindy 的手一起去！">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="form-label">🍰 Cindy 期待 / 評語</label>
-                        <input type="text" id="form-cindy" class="form-control" placeholder="例：⭐⭐⭐⭐⭐ (期待好久了！)">
+                        <label class="form-label">🏷️ 類別圖示</label>
+                        <select id="form-cat" class="form-control">
+                            <option value="food">🍱 正餐美食</option>
+                            <option value="dessert">🍧 甜點冰品</option>
+                            <option value="drink">🥤 特色飲品</option>
+                            <option value="night">🍢 深夜宵夜</option>
+                            <option value="snack">🥟 經典小吃</option>
+                            <option value="spot">🏖️ 散步景點</option>
+                            <option value="traffic">🚆 交通班次</option>
+                            <option value="hotel">🏠 住宿借宿</option>
+                            <option value="contest">🎓 專利賽程</option>
+                            <option value="school">📚 返校上課</option>
+                        </select>
                     </div>
 
                     <div style="display:flex; gap:10px; margin-top:16px;">
                         <button type="button" onclick="closeCardModal()" style="flex:1; padding:12px; border-radius:12px; border:1px solid #cbd5e1; background:#f8fafc; font-weight:700; color:#64748b; cursor:pointer;">取消</button>
-                        <button type="submit" style="flex:2; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%); font-weight:800; color:white; cursor:pointer; box-shadow:0 3px 10px rgba(197,160,101,0.35);">💾 儲存並同步雲端</button>
+                        <button type="submit" style="flex:2; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%); font-weight:800; color:white; cursor:pointer;">💾 儲存卡片</button>
                     </div>
                 </form>
             </div>
@@ -1017,68 +1038,47 @@
 
     </div>
 
-    <!-- 腳本區：Google 試算表雲端連線、身分切換與協同作業 -->
+    <!-- 核心腳本區 -->
     <script>
-        // ==========================================
-        // 0. Google Apps Script 後端端點設定
-        // ==========================================
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbw5rtdk99Sk9nhDg3-2vsujap5qJdeip7Gg5KuX-kCDDZYsPHN4eIkqBi0C5j5zc8zCDg/exec";
 
-        // ==========================================
-        // 1. 預設資料庫
-        // ==========================================
+        // 預設景點庫 (36選)
         const defaultSpots = [
-            {"id": 1, "name": "無名羊肉湯-大菜市", "cat": "food", "time": "05:30-13:00 (週二休)", "addr": "中西區府前路二段144號", "map": "https://maps.google.com/?cid=6988823270250232013", "melon": "必搶！米其林推薦完全無羊騷味。", "cindy": "⭐⭐⭐⭐⭐ (快點幫我拍照！)", "full": 20},
-            {"id": 2, "name": "美鮮牛肉湯", "cat": "food", "time": "24小時 (週一二休)", "addr": "南區新興路419號之1", "map": "https://maps.google.com/?cid=2734682962622339755", "melon": "宵夜首選！抵達台南的第一餐。", "cindy": "⭐⭐⭐⭐⭐ (熱湯配肉燥飯超讚)", "full": 20},
-            {"id": 3, "name": "阿財牛肉湯", "cat": "food", "time": "11:30-22:00", "addr": "安平區古堡街5號", "map": "https://maps.google.com/?cid=14531624740468646438", "melon": "安平名店，肉質鮮嫩清甜。", "cindy": "⭐⭐⭐⭐⭐ (安平必吃牛肉湯)", "full": 20},
-            {"id": 4, "name": "下大道蘭米糕", "cat": "food", "time": "09:00-19:00 (週三至五休)", "addr": "中西區康樂街6號", "map": "https://maps.google.com/?cid=3085742664717935776", "melon": "週日限定必吃！米糕配魚鬆超香。", "cindy": "⭐⭐⭐⭐⭐ (週日有開太幸運啦)", "full": 15},
-            {"id": 5, "name": "無名米糕 (中山路)", "cat": "food", "time": "09:30-15:00 (週日休)", "addr": "中西區中山路8巷5號", "map": "https://maps.google.com/?cid=3482488932888708341", "melon": "巷弄裡的傳奇。米糕濕潤度剛好。", "cindy": "⭐⭐⭐⭐⭐ (好有老台南fu)", "full": 15},
-            {"id": 6, "name": "阿龍香腸熟肉", "cat": "food", "time": "10:30-19:00 (週一休)", "addr": "中西區保安路34號", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "台南特有「黑白切」，每樣只要銅板價。", "cindy": "⭐⭐⭐⭐⭐ (黑白切就是藝術)", "full": 15},
-            {"id": 7, "name": "阿鳳浮水虱目魚羹", "cat": "food", "time": "07:30-00:00", "addr": "中西區保安路59號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "每一口羹都咬得到虱目魚肉塊。", "cindy": "⭐⭐⭐⭐ (就在阿龍隔壁)", "full": 15},
-            {"id": 8, "name": "給我咬一口披薩", "cat": "food", "time": "11:30-21:30 (週一二休)", "addr": "中西區赤崁東街46-3號", "map": "https://maps.google.com/?cid=4568156167290177597", "melon": "憑學生證超划算！薄脆現烤披薩。", "cindy": "⭐⭐⭐⭐ (CP值爆表！)", "full": 15},
-            {"id": 9, "name": "蔡家豬血湯", "cat": "food", "time": "10:30-18:30 (週一休)", "addr": "東區中華東路二段41巷", "map": "https://www.google.com/maps/search/?api=1&query=蔡家豬血湯", "melon": "料多到懷疑老闆虧本。", "cindy": "⭐⭐⭐⭐ (料也太多)", "full": 15},
-            {"id": 10, "name": "鐵牛早餐", "cat": "food", "time": "14:00-19:00", "addr": "東區林森路二段166號", "map": "https://maps.google.com/?cid=5511486227572991761", "melon": "成大自強校區旁！罪惡爆漿起司蛋餅。", "cindy": "⭐⭐⭐⭐ (賽前補足戰力！)", "full": 15},
-            {"id": 11, "name": "丹瓦樓", "cat": "night", "time": "17:00-01:30", "addr": "北區海安路三段51號", "map": "https://maps.google.com/?cid=10538179209633656791", "melon": "營業到深夜的質感滷味名店。", "cindy": "⭐⭐⭐⭐ (宵夜良伴)", "full": 15},
-            {"id": 12, "name": "豆奶宗", "cat": "night", "time": "21:40-10:30", "addr": "中西區府前路二段175號", "map": "https://maps.google.com/?cid=13132803753236278417", "melon": "深夜排隊宵夜！沙茶蛋餅與刈包是招牌。", "cindy": "⭐⭐⭐⭐ (經典中的經典)", "full": 15},
-            {"id": 13, "name": "祿記水晶餃", "cat": "snack", "time": "08:00-16:30", "addr": "中西區開山路3巷27號", "map": "https://maps.google.com/?cid=15113525052136485682", "melon": "秒殺級名店！外皮晶瑩剔透爆汁。", "cindy": "⭐⭐⭐⭐⭐ (水晶皮超透Q彈)", "full": 10},
-            {"id": 14, "name": "連得堂餅家", "cat": "snack", "time": "08:00-20:00 (週六至18:00)", "addr": "北區崇安街54號", "map": "https://maps.app.goo.gl/DJBUgafAVXdprV6fA", "melon": "百年古法手工煎餅，每人限購2包！", "cindy": "⭐⭐⭐⭐⭐ (伴手禮get！)", "full": 10},
-            {"id": 15, "name": "灣裡薯條脆肉店", "cat": "snack", "time": "14:30-18:00 (週日休)", "addr": "南區省躬一街58號", "map": "https://maps.google.com/?cid=1498015060232698701", "melon": "炸脆肉酥香無比，神級台南下午茶。", "cindy": "⭐⭐⭐⭐⭐ (騎車也甘願)", "full": 10},
-            {"id": 18, "name": "啾醬 韓式炸雞", "cat": "night", "time": "16:00-23:00", "addr": "北區公園路768號", "map": "https://maps.google.com/?cid=972410313880436814", "melon": "比完賽的慶功宴！韓式炸雞皮脆多汁。", "cindy": "⭐⭐⭐⭐⭐ (賽後吃這個太過癮了！)", "full": 15},
-            {"id": 22, "name": "冰鄉", "cat": "dessert", "time": "12:00-20:00", "addr": "中西區民生路一段160號", "map": "https://maps.google.com/?cid=13397649642501993091", "melon": "一定要領號碼牌！傳統手工豆花與澎湃冰品。", "cindy": "⭐⭐⭐⭐⭐ (布丁豆花超好吃！)", "full": 10},
-            {"id": 24, "name": "豆發王", "cat": "dessert", "time": "14:00-19:00", "addr": "東區崇德路482號", "map": "https://maps.google.com/?cid=12395371052428747014", "melon": "20 元佛心珍珠豆花！成大周邊銅板甜點。", "cindy": "⭐⭐⭐⭐⭐ (20元豆花哪裡找)", "full": 10},
-            {"id": 30, "name": "漁光島 (月牙灣)", "cat": "spot", "time": "24小時開放", "addr": "安平區漁光路", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "美麗的月牙灣沙灘和森林木棧道，看夕陽超浪漫。", "cindy": "⭐⭐⭐⭐⭐ (夕陽美哭，手牽手散步)", "full": -20},
+            {"id": 1, "name": "無名羊肉湯-大菜市", "cat": "food", "time": "05:30-13:00", "addr": "中西區府前路二段144號", "map": "https://maps.google.com/?cid=6988823270250232013", "melon": "米其林推薦無羊騷味。", "cindy": "⭐⭐⭐⭐⭐ (快幫我拍照！)", "full": 20},
+            {"id": 2, "name": "美鮮牛肉湯", "cat": "food", "time": "24小時", "addr": "南區新興路419號之1", "map": "https://maps.google.com/?cid=2734682962622339755", "melon": "宵夜首選！肉質極甜。", "cindy": "⭐⭐⭐⭐⭐ (熱湯配肉燥飯)", "full": 20},
+            {"id": 3, "name": "阿財牛肉湯", "cat": "food", "time": "11:30-22:00", "addr": "安平區古堡街5號", "map": "https://maps.google.com/?cid=14531624740468646438", "melon": "安平名店清甜牛肉湯。", "cindy": "⭐⭐⭐⭐⭐ (安平必吃)", "full": 20},
+            {"id": 4, "name": "下大道蘭米糕", "cat": "food", "time": "09:00-19:00", "addr": "中西區康樂街6號", "map": "https://maps.google.com/?cid=3085742664717935776", "melon": "週日限定必吃米糕！", "cindy": "⭐⭐⭐⭐⭐ (週日有開太讚了)", "full": 15},
+            {"id": 5, "name": "無名米糕 (中山路)", "cat": "food", "time": "09:30-15:00", "addr": "中西區中山路8巷5號", "map": "https://maps.google.com/?cid=3482488932888708341", "melon": "巷弄老店傳奇米糕。", "cindy": "⭐⭐⭐⭐⭐ (好有老台南fu)", "full": 15},
+            {"id": 6, "name": "阿龍香腸熟肉", "cat": "food", "time": "10:30-19:00", "addr": "中西區保安路34號", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "台南黑白切銅板美食。", "cindy": "⭐⭐⭐⭐⭐ (黑白切就是藝術)", "full": 15},
+            {"id": 7, "name": "阿鳳浮水虱目魚羹", "cat": "food", "time": "07:30-00:00", "addr": "中西區保安路59號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "吃得到整塊虱目魚肉！", "cindy": "⭐⭐⭐⭐ (阿龍隔壁順路吃)", "full": 15},
+            {"id": 8, "name": "給我咬一口披薩", "cat": "food", "time": "11:30-21:30", "addr": "中西區赤崁東街46-3號", "map": "https://maps.google.com/?cid=4568156167290177597", "melon": "憑學生證超划算現烤披薩！", "cindy": "⭐⭐⭐⭐ (CP值超高！)", "full": 15},
+            {"id": 10, "name": "鐵牛早餐", "cat": "food", "time": "14:00-19:00", "addr": "東區林森路二段166號", "map": "https://maps.google.com/?cid=5511486227572991761", "melon": "成大旁爆漿起司蛋餅！", "cindy": "⭐⭐⭐⭐ (賽前補戰力！)", "full": 15},
+            {"id": 11, "name": "丹瓦樓", "cat": "night", "time": "17:00-01:30", "addr": "北區海安路三段51號", "map": "https://maps.google.com/?cid=10538179209633656791", "melon": "深夜排隊質感滷味。", "cindy": "⭐⭐⭐⭐ (宵夜良伴)", "full": 15},
+            {"id": 12, "name": "豆奶宗", "cat": "night", "time": "21:40-10:30", "addr": "中西區府前路二段175號", "map": "https://maps.google.com/?cid=13132803753236278417", "melon": "沙茶蛋餅與刈包招牌！", "cindy": "⭐⭐⭐⭐ (經典中的經典)", "full": 15},
+            {"id": 13, "name": "祿記水晶餃", "cat": "snack", "time": "08:00-16:30", "addr": "中西區開山路3巷27號", "map": "https://maps.google.com/?cid=15113525052136485682", "melon": "秒殺級外皮Q彈爆汁。", "cindy": "⭐⭐⭐⭐⭐ (水晶皮超透)", "full": 10},
+            {"id": 14, "name": "連得堂餅家", "cat": "snack", "time": "08:00-20:00", "addr": "北區崇安街54號", "map": "https://maps.app.goo.gl/DJBUgafAVXdprV6fA", "melon": "百年手工煎餅每人限購2包！", "cindy": "⭐⭐⭐⭐⭐ (伴手禮必買！)", "full": 10},
+            {"id": 18, "name": "啾醬 韓式炸雞", "cat": "night", "time": "16:00-23:00", "addr": "北區公園路768號", "map": "https://maps.google.com/?cid=972410313880436814", "melon": "比完賽的慶功宴首選！", "cindy": "⭐⭐⭐⭐⭐ (脆皮炸雞配可樂)", "full": 15},
+            {"id": 22, "name": "冰鄉", "cat": "dessert", "time": "12:00-20:00", "addr": "中西區民生路一段160號", "map": "https://maps.google.com/?cid=13397649642501993091", "melon": "傳統手工布丁豆花與冰品！", "cindy": "⭐⭐⭐⭐⭐ (布丁豆花超好吃！)", "full": 10},
+            {"id": 24, "name": "豆發王", "cat": "dessert", "time": "14:00-19:00", "addr": "東區崇德路482號", "map": "https://maps.google.com/?cid=12395371052428747014", "melon": "20元佛心珍珠豆花！", "cindy": "⭐⭐⭐⭐⭐ (20元去哪找)", "full": 10},
+            {"id": 30, "name": "漁光島 (月牙灣)", "cat": "spot", "time": "24小時開放", "addr": "安平區漁光路", "map": "https://maps.google.com/?cid=17253077583729000409", "melon": "月牙灣沙灘看夕陽超浪漫。", "cindy": "⭐⭐⭐⭐⭐ (夕陽美哭，手牽手)", "full": -20},
             
-            // 賽事與交通專屬節點
-            {"id": 101, "name": "🚆 臺鐵晨班直達 (371次 / 101次)", "cat": "traffic", "time": "06:57➜08:47", "addr": "臺中車站 ➔ 臺南後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "首選自強371次！06:57開車直達台南後站，步行5分抵達自強校區！", "cindy": "⭐⭐⭐⭐⭐ (直達不用換車太舒服了)", "full": 5},
-            {"id": 102, "name": "🎓 專利大戰桌遊競賽 (成大自強校區)", "cat": "contest", "time": "09:00-18:15", "addr": "東區大學路1號 (儀器設備大樓10F)", "map": "https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z", "melon": "全國大專院校專利大戰！三輪總積分賽，Melon 拚拿南區冠軍！", "cindy": "⭐⭐⭐⭐⭐ (Melon 超強！幫你加油第一名！)", "full": -30},
-            {"id": 103, "name": "🏠 成大朋友家 (週六免費小窩)", "cat": "hotel", "time": "18:30 入住", "addr": "成大校區周邊", "map": "https://www.google.com/maps/search/?api=1&query=國立成功大學", "melon": "成大好朋友借住神助攻！現省週六數千元天價房費，晚上一起逛大東夜市！", "cindy": "⭐⭐⭐⭐⭐ (省下來的房費吃爆台南！)", "full": 10},
-            {"id": 104, "name": "🚄 週一晨光高鐵 (台南 ➔ 烏日)", "cat": "traffic", "time": "07:41 / 08:41 出發", "addr": "高鐵台南站", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台南站", "melon": "搭乘大學生優惠車次，40-50分鐘極速飆回台中！", "cindy": "⭐⭐⭐⭐⭐ (車上補眠剛剛好，完全不累)", "full": 5},
-            {"id": 105, "name": "🛵 台中高鐵牽機車雙載", "cat": "traffic", "time": "08:40 / 09:40 牽車", "addr": "高鐵台中站機車停車場", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台中站", "melon": "出站直接牽機車出發！一路順風吹回學校系館！", "cindy": "⭐⭐⭐⭐⭐ (機車雙載兜風最浪漫惹)", "full": 5},
-            {"id": 106, "name": "📚 10:10 民法物權 (準時入座)", "cat": "school", "time": "10:10-12:00", "addr": "法律系系館教室", "map": "https://www.google.com/maps/search/?api=1&query=法律系館", "melon": "提前抵達系館！大件行李 Melon 全扛走，Cindy 優雅入座上課！", "cindy": "⭐⭐⭐⭐⭐ (完全沒遲到！謝謝貼心男友！)", "full": -10}
+            // 賽事與交通專屬
+            {"id": 101, "name": "🚆 臺鐵晨班直達 (371次)", "cat": "traffic", "time": "06:57➜08:47", "addr": "臺中車站 ➔ 臺南後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "08:47抵達後站，步行5分進成大！", "cindy": "⭐⭐⭐⭐⭐ (直達不用換車)", "full": 5},
+            {"id": 102, "name": "🎓 專利大戰桌遊賽 (成大自強)", "cat": "contest", "time": "09:00-18:15", "addr": "東區大學路1號 (儀器設備大樓10F)", "map": "https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z", "melon": "全國大專專利大戰，拚拿南區冠軍！", "cindy": "⭐⭐⭐⭐⭐ (Melon 超強！幫你加油)", "full": -30},
+            {"id": 103, "name": "🏠 成大朋友家 (免費借住)", "cat": "hotel", "time": "18:30 入住", "addr": "成大校區周邊", "map": "https://www.google.com/maps/search/?api=1&query=國立成功大學", "melon": "現省週六數千元天價房費！", "cindy": "⭐⭐⭐⭐⭐ (省下來吃好料！)", "full": 10},
+            {"id": 104, "name": "🚄 週一晨光高鐵 (0806次)", "cat": "traffic", "time": "07:41➜08:34", "addr": "高鐵台南站", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台南站", "melon": "50分鐘飆回台中烏日！", "cindy": "⭐⭐⭐⭐⭐ (車上補眠超舒服)", "full": 5},
+            {"id": 105, "name": "🛵 台中高鐵牽機車雙載", "cat": "traffic", "time": "08:45 牽車", "addr": "高鐵台中站機車停車場", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台中站", "melon": "雙載一路順暢吹風回學校！", "cindy": "⭐⭐⭐⭐⭐ (兜風浪漫)", "full": 5},
+            {"id": 106, "name": "📚 10:10 民法物權 (準時入座)", "cat": "school", "time": "10:10-12:00", "addr": "法律系系館教室", "map": "https://www.google.com/maps/search/?api=1&query=法律系館", "melon": "提前整整65分抵達！行李全包！", "cindy": "⭐⭐⭐⭐⭐ (全勤守護成功！)", "full": -10}
         ];
 
+        // 方案定義：包含方案三 Cindy 心動專屬方案！
         const defaultPlanModes = {
             '3day': {
-                title: '方案一：玩六日一 (3天2夜精華版)',
+                title: '方案一：玩六日一 (Melon推薦精華版)',
                 days: [
-                    {
-                        key: 'day_sat',
-                        label: '9/19 (六) 專利決賽',
-                        title: '9/19 (六) 【成大專利大戰 ‧ 決賽之巔】',
-                        spotIds: [101, 10, 102, 8, 103, 18, 11]
-                    },
-                    {
-                        key: 'day_sun',
-                        label: '9/20 (日) 美食散策',
-                        title: '9/20 (日) 【週日府城慢遊 ‧ 國旅再折$800】',
-                        spotIds: [2, 4, 22, 14, 30, 12]
-                    },
-                    {
-                        key: 'day_mon',
-                        label: '9/21 (一) 晨風返校',
-                        title: '9/21 (一) 【晨光高鐵 ➔ 雙載機車 ➔ 10:10民法物權】',
-                        spotIds: [104, 105, 106]
-                    }
+                    { key: 'day_sat', label: '9/19 (六)', title: '9/19 (六) 【成大專利大戰 ‧ 決賽之巔】', spotIds: [101, 10, 102, 8, 103, 18, 11] },
+                    { key: 'day_sun', label: '9/20 (日)', title: '9/20 (日) 【週日府城慢遊 ‧ 國旅再折$800】', spotIds: [2, 4, 22, 14, 30, 12] },
+                    { key: 'day_mon', label: '9/21 (一)', title: '9/21 (一) 【晨光高鐵 ➔ 雙載機車 ➔ 10:10民法物權】', spotIds: [104, 105, 106] }
                 ]
             },
             '5day': {
@@ -1087,16 +1087,21 @@
                     { key: 'day_thu', label: '9/17 (四)', title: '9/17 (四) 【下課南下 ‧ 府城宵夜入住】', spotIds: [2, 11, 12, 5] },
                     { key: 'day_fri', label: '9/18 (五)', title: '9/18 (五) 【甜蜜約會 ‧ 府城慢活吃透透】', spotIds: [1, 22, 30, 6, 7] },
                     { key: 'day_sat', label: '9/19 (六)', title: '9/19 (六) 【成大專利大戰 ‧ 迎戰南區】', spotIds: [10, 102, 8, 103, 18] },
-                    { key: 'day_sun', label: '9/20 (日)', title: '9/20 (日) 【週日漫遊 ‧ 大東夜市吃爆】', spotIds: [3, 4, 13, 14, 24, 15] },
+                    { key: 'day_sun', label: '9/20 (日)', title: '9/20 (日) 【週日漫遊 ‧ 大東夜市吃爆】', spotIds: [3, 4, 13, 14, 24] },
                     { key: 'day_mon', label: '9/21 (一)', title: '9/21 (一) 【高鐵雙載 ‧ 10:10民法物權】', spotIds: [104, 105, 106] }
+                ]
+            },
+            'cindy': {
+                title: '方案三：🍰 Cindy 的心動專屬行程安排',
+                days: [
+                    { key: 'cindy_sat', label: '9/19 (六)', title: '9/19 (六) 【陪男友打專利大戰 ‧ 晚上吃炸雞慶祝】', spotIds: [101, 10, 102, 103, 18, 11] },
+                    { key: 'cindy_sun', label: '9/20 (日)', title: '9/20 (日) 【Cindy 甜點浪漫漫遊 ‧ 冰鄉夕陽散步】', spotIds: [2, 4, 22, 14, 30, 12] },
+                    { key: 'cindy_mon', label: '9/21 (一)', title: '9/21 (一) 【晨光高鐵安心回校 ‧ 10:10民法物權全勤】', spotIds: [104, 105, 106] }
                 ]
             }
         };
 
-        // ==========================================
-        // 2. 本地狀態
-        // ==========================================
-        let currentUser = localStorage.getItem('sinopac_user') || 'melon'; // 'melon' or 'cindy'
+        let currentUser = localStorage.getItem('sinopac_user') || 'melon';
         let allSpots = JSON.parse(JSON.stringify(defaultSpots));
         let planModesData = JSON.parse(JSON.stringify(defaultPlanModes));
         let cloudWishes = [];
@@ -1104,16 +1109,17 @@
 
         let appState = {
             stomach: 50,
-            activeTab: 'transit',
-            planMode: '3day',
+            activeTab: 'itinerary',
+            planMode: '3day', // '3day', '5day', or 'cindy'
+            timetablePlanMode: '3day',
             activeDayKey: 'day_sat',
             myOutbound: '自強(3000) 371次 (06:57➜08:47)',
             myReturn: '高鐵 0806次 (07:41➜08:34)',
-            checkedSpots: {}
+            shelfOpen: false
         };
 
         // ==========================================
-        // 3. 身分切換 (🍈 Melon / 🍰 Cindy)
+        // 身分切換
         // ==========================================
         function switchUserRole(role) {
             currentUser = role;
@@ -1124,6 +1130,8 @@
             const titleEl = document.getElementById('stomach-title');
             if (role === 'cindy') {
                 titleEl.innerText = '🍰 Cindy 專屬飽足狀態';
+                // 若當前身分是 Cindy，推薦預設切換為方案三
+                if (appState.planMode === '3day') switchPlanMode('cindy');
             } else {
                 titleEl.innerText = '🍈 Melon 的貼心觀測：Cindy 當前飽足狀況';
             }
@@ -1131,7 +1139,7 @@
         }
 
         // ==========================================
-        // 4. 雲端同步 (Google Apps Script API)
+        // 雲端同步 (Google Apps Script API)
         // ==========================================
         async function fetchCloudData(showPrompt) {
             const indicator = document.getElementById('sync-indicator');
@@ -1143,7 +1151,6 @@
                 const res = await fetch(GAS_API_URL + '?t=' + Date.now(), { method: 'GET', redirect: 'follow' });
                 const data = await res.json();
                 
-                // 同步景點自訂資料與投票
                 if (data.spots && data.spots.length > 0) {
                     data.spots.forEach(remoteSpot => {
                         const local = allSpots.find(s => s.id == remoteSpot.id);
@@ -1160,13 +1167,11 @@
                     });
                 }
 
-                // 同步交通
                 if (data.transit) {
                     cloudTransit = data.transit;
                     updateTransitConsensusUI();
                 }
 
-                // 同步許願池
                 if (data.wishes) {
                     cloudWishes = data.wishes;
                     renderWishes();
@@ -1175,6 +1180,7 @@
                 text.innerText = '試算表已同步 ✓';
                 indicator.style.color = '#10b981';
                 renderItinerary();
+                renderTimetable();
 
                 if (showPrompt) alert("已成功與 Google 試算表完成雙向同步！");
             } catch (err) {
@@ -1192,111 +1198,101 @@
                     body: JSON.stringify(payload)
                 });
             } catch (e) {
-                console.error("Cloud post failed:", e);
+                console.error("Cloud post error:", e);
             }
         }
 
         // ==========================================
-        // 5. 交通共識處理
+        // 方案模式切換 (方案一 / 方案二 / 方案三 Cindy版)
         // ==========================================
-        function selectOutbound(el, name, fare) {
-            document.querySelectorAll('#dep-group-sat .train-option-card, #dep-group-eve .train-option-card').forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            appState.myOutbound = name;
-        }
+        function switchPlanMode(mode) {
+            appState.planMode = mode;
+            document.getElementById('btn-mode-3day').className = `plan-btn ${mode === '3day' ? 'active' : ''}`;
+            document.getElementById('btn-mode-5day').className = `plan-btn ${mode === '5day' ? 'active' : ''}`;
+            document.getElementById('btn-mode-cindy').className = `plan-btn ${mode === 'cindy' ? 'active-cindy-plan' : ''}`;
 
-        function selectReturn(el, name, fare) {
-            const parentCards = el.parentElement.querySelectorAll('.train-option-card');
-            parentCards.forEach(c => c.classList.remove('selected'));
-            el.classList.add('selected');
-            appState.myReturn = name;
-        }
-
-        function saveTransitToCloud() {
-            if (currentUser === 'melon') {
-                cloudTransit.melonOutbound = appState.myOutbound;
-                cloudTransit.melonReturn = appState.myReturn;
-            } else {
-                cloudTransit.cindyOutbound = appState.myOutbound;
-                cloudTransit.cindyReturn = appState.myReturn;
-            }
-            updateTransitConsensusUI();
-            postToCloud({
-                action: 'saveTransit',
-                user: currentUser,
-                outbound: appState.myOutbound,
-                returnTrain: appState.myReturn
-            });
-            alert(`已將【${currentUser === 'melon' ? 'Melon' : 'Cindy'}】的偏好車次儲存至 Google 試算表！`);
-        }
-
-        function updateTransitConsensusUI() {
-            const mEl = document.getElementById('melon-transit-pref');
-            const cEl = document.getElementById('cindy-transit-pref');
-            const badge = document.getElementById('consensus-status-badge');
-
-            mEl.innerText = cloudTransit.melonOutbound ? `${cloudTransit.melonOutbound} ➔ ${cloudTransit.melonReturn}` : '(尚未選擇)';
-            cEl.innerText = cloudTransit.cindyOutbound ? `${cloudTransit.cindyOutbound} ➔ ${cloudTransit.cindyReturn}` : '(尚未選擇)';
-
-            if (cloudTransit.melonOutbound && cloudTransit.cindyOutbound &&
-                cloudTransit.melonOutbound === cloudTransit.cindyOutbound &&
-                cloudTransit.melonReturn === cloudTransit.cindyReturn) {
-                badge.className = 'badge-pill badge-green';
-                badge.innerText = '🎉 雙方車次已達成共識！';
-            } else {
-                badge.className = 'badge-pill badge-gold';
-                badge.innerText = '🤝 協調中';
-            }
+            const modeConfig = planModesData[mode];
+            appState.activeDayKey = modeConfig.days[0].key;
+            renderItinerary();
         }
 
         // ==========================================
-        // 6. 許願池留言功能
+        // 景點卡片庫貨架 (可挑選 / 可拖曳)
         // ==========================================
-        function submitWish() {
-            const input = document.getElementById('wish-input');
-            const text = input.value.trim();
-            if (!text) return;
-
-            const newWish = {
-                user: currentUser === 'melon' ? '🍈 Melon' : '🍰 Cindy',
-                text: text,
-                time: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
-            };
-
-            cloudWishes.unshift(newWish);
-            renderWishes();
-            input.value = '';
-
-            postToCloud({
-                action: 'addWish',
-                user: newWish.user,
-                text: newWish.text
-            });
+        function toggleShelf() {
+            appState.shelfOpen = !appState.shelfOpen;
+            document.getElementById('shelf-body').style.display = appState.shelfOpen ? 'block' : 'none';
+            document.getElementById('shelf-arrow').innerText = appState.shelfOpen ? '▲ 收合' : '▼ 展開';
+            if (appState.shelfOpen) renderShelfItems();
         }
 
-        function renderWishes() {
-            const list = document.getElementById('wishes-list');
+        function renderShelfItems() {
+            const list = document.getElementById('shelf-items-list');
             list.innerHTML = '';
-            if (!cloudWishes || cloudWishes.length === 0) {
-                list.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:12px; padding:20px 0;">目前還沒有願望，快留下想吃的美食吧！</div>';
-                return;
-            }
-            cloudWishes.forEach(w => {
+            allSpots.forEach(s => {
+                let icon = '🍱';
+                if (s.cat === 'traffic') icon = '🚆';
+                else if (s.cat === 'contest') icon = '🎓';
+                else if (s.cat === 'hotel') icon = '🏠';
+                else if (s.cat === 'school') icon = '📚';
+                else if (s.cat === 'dessert') icon = '🍧';
+                else if (s.cat === 'spot') icon = '🏖️';
+                else if (s.cat === 'night') icon = '🍢';
+
                 const card = document.createElement('div');
-                card.className = 'wish-item';
+                card.className = 'shelf-card';
+                card.draggable = true;
+                card.ondragstart = (e) => {
+                    e.dataTransfer.setData('text/plain', s.id.toString());
+                };
                 card.innerHTML = `
-                    <div class="wish-author">
-                        <span>${w.user}</span>
-                        <span style="color:#94a3b8; font-weight:normal;">${w.time || ''}</span>
+                    <div>
+                        <div style="font-size:16px;">${icon}</div>
+                        <div style="font-weight:800; font-size:11px; color:#1e293b; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${s.name}</div>
+                        <div style="font-size:9px; color:#64748b; margin-top:2px;">${s.time || ''}</div>
                     </div>
-                    <div style="color:#1e293b; font-weight:600;">${w.text}</div>
+                    <button onclick="addSpotToCurrentDay(${s.id})" style="background:var(--primary-green); color:white; border:none; padding:4px 6px; border-radius:6px; font-size:9px; font-weight:800; cursor:pointer; margin-top:6px;">
+                        + 加入今天
+                    </button>
                 `;
                 list.appendChild(card);
             });
         }
 
+        function addSpotToCurrentDay(spotId) {
+            const modeConfig = planModesData[appState.planMode];
+            const currentDay = modeConfig.days.find(d => d.key === appState.activeDayKey);
+            if (!currentDay) return;
+
+            if (currentDay.spotIds.includes(spotId)) {
+                alert("這項行程已經在今天清單中了！");
+                return;
+            }
+
+            currentDay.spotIds.push(spotId);
+            renderItinerary();
+            renderTimetable();
+            const spot = allSpots.find(s => s.id == spotId);
+            postToCloud({ action: 'addSpot', id: spotId, name: spot.name, time: spot.time, addr: spot.addr, cat: spot.cat, dayKey: appState.activeDayKey });
+        }
+
+        // HTML5 Drag & Drop 處理
+        function handleDragOver(e) {
+            e.preventDefault();
+            document.getElementById('itinerary-dropzone').classList.add('drag-over');
+        }
+        function handleDragLeave(e) {
+            document.getElementById('itinerary-dropzone').classList.remove('drag-over');
+        }
+        function handleDrop(e) {
+            e.preventDefault();
+            document.getElementById('itinerary-dropzone').classList.remove('drag-over');
+            const spotId = parseInt(e.dataTransfer.getData('text/plain'), 10);
+            if (spotId) addSpotToCurrentDay(spotId);
+        }
+
         // ==========================================
-        // 7. 行程渲染與雙人投票
+        // 渲染行程卡片列表
         // ==========================================
         function renderItinerary() {
             const modeConfig = planModesData[appState.planMode];
@@ -1329,6 +1325,11 @@
             titleEl.innerText = currentDay.title;
 
             listEl.innerHTML = '';
+            if (!currentDay.spotIds || currentDay.spotIds.length === 0) {
+                listEl.innerHTML = '<div style="text-align:center; padding:30px; color:#94a3b8; font-size:12px;">今天還沒有行程，請從上方景點庫拖入或點「+加入今天」！</div>';
+                return;
+            }
+
             currentDay.spotIds.forEach((id, index) => {
                 const item = allSpots.find(s => s.id == id);
                 if (!item) return;
@@ -1364,9 +1365,8 @@
                         </div>
                     </div>
 
-                    <!-- 雙人想去投票區 -->
                     <div class="spot-vote-row">
-                        <span style="font-size:11px; color:#64748b; font-weight:700;">想去意願：</span>
+                        <span style="font-size:10px; color:#64748b; font-weight:700;">想去投票：</span>
                         <div class="vote-btn-group">
                             <button class="btn-vote ${item.melonVote === 'yes' ? 'voted-melon' : ''}" onclick="voteSpot(${item.id}, 'melon')">
                                 🍈 Melon ${item.melonVote === 'yes' ? '想去 ❤️' : '可去'}
@@ -1377,8 +1377,8 @@
                         </div>
                     </div>
 
-                    <div class="spot-bottom-toolbar">
-                        <a href="${mapUrl}" target="_blank" class="map-btn">📍 開啟地圖</a>
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-top:1px dashed #edf2f7; padding-top:6px;">
+                        <a href="${mapUrl}" target="_blank" style="color:var(--primary-green); font-size:11px; font-weight:700; text-decoration:none;">📍 地圖</a>
                         <div style="display:flex; gap:4px;">
                             <button class="btn-card-tool" onclick="openEditCardModal(${item.id})">✏️ 改時間</button>
                             <button class="btn-card-tool" onclick="moveCard(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
@@ -1389,6 +1389,160 @@
                 `;
 
                 listEl.appendChild(card);
+            });
+        }
+
+        // ==========================================
+        // 📅 課表儀表板 (Timetable Grid) 核心邏輯
+        // ==========================================
+        function switchTimetablePlan(planKey) {
+            appState.timetablePlanMode = planKey;
+            document.getElementById('tt-btn-3day').className = `badge-pill ${planKey === '3day' ? 'badge-gold' : ''}`;
+            document.getElementById('tt-btn-cindy').className = `badge-pill ${planKey === 'cindy' ? 'badge-pink' : ''}`;
+            if (planKey !== '3day') document.getElementById('tt-btn-3day').style.background = '#e2e8f0';
+            if (planKey !== 'cindy') document.getElementById('tt-btn-cindy').style.background = '#e2e8f0';
+            renderTimetable();
+        }
+
+        function renderTimetable() {
+            const tbody = document.getElementById('timetable-tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            const modeConfig = planModesData[appState.timetablePlanMode] || planModesData['3day'];
+            const days = modeConfig.days.slice(0, 3); // 聚焦六日一
+
+            // 課表標準節次
+            const periods = [
+                { name: '1-2 節<br><span style="font-weight:normal;">07:00-09:00</span>', key: 'morning', test: s => s.time && (s.time.includes('06:') || s.time.includes('07:') || s.time.includes('08:47') || s.name.includes('晨班') || s.name.includes('高鐵')) },
+                { name: '3-4 節<br><span style="font-weight:normal;">09:00-12:00</span>', key: 'forenoon', test: s => s.name.includes('專利') || s.name.includes('物權') || (s.time && (s.time.includes('09:') || s.time.includes('10:') || s.time.includes('11:'))) },
+                { name: '午休實作<br><span style="font-weight:normal;">12:00-13:30</span>', key: 'noon', test: s => s.name.includes('披薩') || s.name.includes('羊肉湯') || s.name.includes('米糕') || (s.time && (s.time.includes('11:30') || s.time.includes('12:'))) },
+                { name: '5-8 節<br><span style="font-weight:normal;">13:30-18:00</span>', key: 'afternoon', test: s => s.name.includes('冰鄉') || s.name.includes('漁光島') || s.name.includes('蛋餅') || s.name.includes('連得堂') || (s.time && (s.time.includes('14:') || s.time.includes('15:') || s.time.includes('16:'))) },
+                { name: '9-10 節<br><span style="font-weight:normal;">18:00-21:00</span>', key: 'evening', test: s => s.name.includes('炸雞') || s.name.includes('朋友家') || s.name.includes('入住') || (s.time && (s.time.includes('18:') || s.time.includes('19:') || s.time.includes('20:'))) },
+                { name: '宵夜加選<br><span style="font-weight:normal;">21:00+</span>', key: 'night', test: s => s.name.includes('豆奶宗') || s.name.includes('丹瓦樓') || (s.time && (s.time.includes('21:') || s.time.includes('22:') || s.time.includes('23:'))) }
+            ];
+
+            periods.forEach(p => {
+                const tr = document.createElement('tr');
+                let rowHtml = `<td class="time-col">${p.name}</td>`;
+
+                days.forEach(day => {
+                    const matchedSpots = day.spotIds.map(id => allSpots.find(s => s.id == id)).filter(Boolean).filter(p.test);
+                    
+                    let cellContent = '';
+                    matchedSpots.forEach(m => {
+                        let cClass = 'course-food';
+                        if (m.cat === 'traffic') cClass = 'course-traffic';
+                        else if (m.cat === 'contest') cClass = 'course-contest';
+                        else if (m.cat === 'school') cClass = 'course-class';
+                        else if (m.cat === 'spot' || m.cat === 'dessert') cClass = 'course-spot';
+
+                        cellContent += `
+                            <div class="course-block ${cClass}">
+                                <div>${m.name}</div>
+                                <div style="font-size:9px; opacity:0.85;">${m.time || ''}</div>
+                            </div>
+                        `;
+                    });
+
+                    rowHtml += `<td>${cellContent || '<span style="color:#e2e8f0;">-</span>'}</td>`;
+                });
+
+                tr.innerHTML = rowHtml;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // ==========================================
+        // 交通與許願留言功能
+        // ==========================================
+        function selectOutbound(el, name, fare) {
+            document.querySelectorAll('#tab-transit .train-option-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            appState.myOutbound = name;
+        }
+
+        function selectReturn(el, name, fare) {
+            el.parentElement.querySelectorAll('.train-option-card').forEach(c => c.classList.remove('selected'));
+            el.classList.add('selected');
+            appState.myReturn = name;
+        }
+
+        function saveTransitToCloud() {
+            if (currentUser === 'melon') {
+                cloudTransit.melonOutbound = appState.myOutbound;
+                cloudTransit.melonReturn = appState.myReturn;
+            } else {
+                cloudTransit.cindyOutbound = appState.myOutbound;
+                cloudTransit.cindyReturn = appState.myReturn;
+            }
+            updateTransitConsensusUI();
+            postToCloud({
+                action: 'saveTransit',
+                user: currentUser,
+                outbound: appState.myOutbound,
+                returnTrain: appState.myReturn
+            });
+            alert(`已同步【${currentUser === 'melon' ? 'Melon' : 'Cindy'}】的車次偏好！`);
+        }
+
+        function updateTransitConsensusUI() {
+            const mEl = document.getElementById('melon-transit-pref');
+            const cEl = document.getElementById('cindy-transit-pref');
+            const badge = document.getElementById('consensus-status-badge');
+
+            if (mEl) mEl.innerText = cloudTransit.melonOutbound ? `${cloudTransit.melonOutbound} ➔ ${cloudTransit.melonReturn}` : '(尚未選擇)';
+            if (cEl) cEl.innerText = cloudTransit.cindyOutbound ? `${cloudTransit.cindyOutbound} ➔ ${cloudTransit.cindyReturn}` : '(尚未選擇)';
+
+            if (badge) {
+                if (cloudTransit.melonOutbound && cloudTransit.cindyOutbound &&
+                    cloudTransit.melonOutbound === cloudTransit.cindyOutbound &&
+                    cloudTransit.melonReturn === cloudTransit.cindyReturn) {
+                    badge.className = 'badge-pill badge-green';
+                    badge.innerText = '🎉 雙方車次已達成共識！';
+                } else {
+                    badge.className = 'badge-pill badge-gold';
+                    badge.innerText = '🤝 協調中';
+                }
+            }
+        }
+
+        function submitWish() {
+            const input = document.getElementById('wish-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            const newWish = {
+                user: currentUser === 'melon' ? '🍈 Melon' : '🍰 Cindy',
+                text: text,
+                time: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
+            };
+            cloudWishes.unshift(newWish);
+            renderWishes();
+            input.value = '';
+
+            postToCloud({ action: 'addWish', user: newWish.user, text: newWish.text });
+        }
+
+        function renderWishes() {
+            const list = document.getElementById('wishes-list');
+            if (!list) return;
+            list.innerHTML = '';
+            if (!cloudWishes || cloudWishes.length === 0) {
+                list.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:12px; padding:20px 0;">目前還沒有留言，隨時許願想吃的美食！</div>';
+                return;
+            }
+            cloudWishes.forEach(w => {
+                const card = document.createElement('div');
+                card.className = 'wish-item';
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; font-weight:800; font-size:11px; color:#475569; margin-bottom:2px;">
+                        <span>${w.user}</span>
+                        <span style="font-weight:normal; color:#94a3b8;">${w.time || ''}</span>
+                    </div>
+                    <div style="color:#1e293b; font-weight:600;">${w.text}</div>
+                `;
+                list.appendChild(card);
             });
         }
 
@@ -1407,7 +1561,7 @@
         }
 
         // ==========================================
-        // 8. 彈窗 Modal 表單操作 (新增/編輯)
+        // 彈窗 Modal
         // ==========================================
         function populateDayOptions(selectedKey) {
             const select = document.getElementById('form-day-key');
@@ -1428,12 +1582,6 @@
             document.getElementById('form-name').value = '';
             document.getElementById('form-time').value = '';
             document.getElementById('form-addr').value = '';
-            document.getElementById('form-map').value = '';
-            document.getElementById('form-cat').value = 'food';
-            document.getElementById('form-full').value = '15';
-            document.getElementById('form-melon').value = '';
-            document.getElementById('form-cindy').value = '';
-            
             populateDayOptions(appState.activeDayKey);
             document.getElementById('card-modal-overlay').style.display = 'flex';
         }
@@ -1447,12 +1595,8 @@
             document.getElementById('form-name').value = item.name || '';
             document.getElementById('form-time').value = item.time || '';
             document.getElementById('form-addr').value = item.addr || '';
-            document.getElementById('form-map').value = item.map || '';
             document.getElementById('form-cat').value = item.cat || 'food';
-            document.getElementById('form-full').value = item.full !== undefined ? item.full : 15;
-            document.getElementById('form-melon').value = item.melon || '';
-            document.getElementById('form-cindy').value = item.cindy || '';
-
+            
             const modeConfig = planModesData[appState.planMode];
             const currentDay = modeConfig.days.find(d => d.spotIds && d.spotIds.includes(item.id));
             populateDayOptions(currentDay ? currentDay.key : appState.activeDayKey);
@@ -1470,14 +1614,9 @@
             const name = document.getElementById('form-name').value.trim();
             const time = document.getElementById('form-time').value.trim();
             const addr = document.getElementById('form-addr').value.trim();
-            const map = document.getElementById('form-map').value.trim();
             const cat = document.getElementById('form-cat').value;
-            const full = parseInt(document.getElementById('form-full').value, 10);
-            const melon = document.getElementById('form-melon').value.trim() || 'Melon 推薦行程！';
-            const cindy = document.getElementById('form-cindy').value.trim() || '⭐⭐⭐⭐⭐ (期待出發！)';
 
             if (!name) { alert("請填寫行程名稱！"); return; }
-
             const modeConfig = planModesData[appState.planMode];
 
             if (idVal) {
@@ -1487,37 +1626,34 @@
                     spot.name = name;
                     spot.time = time;
                     spot.addr = addr;
-                    spot.map = map;
                     spot.cat = cat;
-                    spot.full = full;
-                    spot.melon = melon;
-                    spot.cindy = cindy;
                 }
-                postToCloud({ action: 'updateSpot', id: id, name, time, addr, cat, full, dayKey: targetDayKey });
+                postToCloud({ action: 'updateSpot', id: id, name, time, addr, cat, dayKey: targetDayKey });
             } else {
                 const newId = Date.now();
-                const newSpot = { id: newId, name, time, addr, map, cat, full, melon, cindy, cindyVote: '', melonVote: 'yes' };
+                const newSpot = { id: newId, name, time, addr, cat, full: 15, melon: '推薦行程', cindy: '⭐⭐⭐⭐⭐', cindyVote: '', melonVote: 'yes' };
                 allSpots.push(newSpot);
 
                 const targetDay = modeConfig.days.find(d => d.key === targetDayKey);
                 if (targetDay) targetDay.spotIds.push(newId);
 
-                postToCloud({ action: 'addSpot', id: newId, name, time, addr, cat, full, dayKey: targetDayKey });
+                postToCloud({ action: 'addSpot', id: newId, name, time, addr, cat, full: 15, dayKey: targetDayKey });
             }
 
             appState.activeDayKey = targetDayKey;
             closeCardModal();
             renderItinerary();
+            renderTimetable();
         }
 
         function deleteCard(id) {
-            if (!confirm("確定要將這張卡片從行程中移除嗎？")) return;
+            if (!confirm("確定要將這張卡片從今天行程中移除嗎？")) return;
             const modeConfig = planModesData[appState.planMode];
             const currentDay = modeConfig.days.find(d => d.key === appState.activeDayKey);
             if (currentDay && currentDay.spotIds) {
                 currentDay.spotIds = currentDay.spotIds.filter(spotId => spotId != id);
-                postToCloud({ action: 'deleteSpot', id: id });
                 renderItinerary();
+                renderTimetable();
             }
         }
 
@@ -1533,10 +1669,11 @@
             currentDay.spotIds[index] = currentDay.spotIds[targetIndex];
             currentDay.spotIds[targetIndex] = temp;
             renderItinerary();
+            renderTimetable();
         }
 
         // ==========================================
-        // 9. UI 互動與基礎工具
+        // 互動與生活感工具
         // ==========================================
         function switchTab(tabName, el) {
             appState.activeTab = tabName;
@@ -1548,40 +1685,8 @@
             if (target) target.classList.add('active');
 
             if (tabName === 'itinerary') renderItinerary();
+            if (tabName === 'timetable') renderTimetable();
             if (tabName === 'wishes') renderWishes();
-        }
-
-        function switchPlanMode(mode) {
-            appState.planMode = mode;
-            document.getElementById('btn-mode-3day').classList.toggle('active', mode === '3day');
-            document.getElementById('btn-mode-5day').classList.toggle('active', mode === '5day');
-
-            const modeConfig = planModesData[mode];
-            appState.activeDayKey = modeConfig.days[0].key;
-            renderItinerary();
-        }
-
-        function switchDepGroup(group) {
-            const satGroup = document.getElementById('dep-group-sat');
-            const eveGroup = document.getElementById('dep-group-eve');
-            const btnSat = document.getElementById('btn-dep-sat');
-            const btnEve = document.getElementById('btn-dep-eve');
-
-            if (group === 'sat') {
-                satGroup.style.display = 'block';
-                eveGroup.style.display = 'none';
-                btnSat.style.background = 'var(--primary-green-light)';
-                btnSat.style.color = 'var(--primary-green)';
-                btnEve.style.background = '#e2e8f0';
-                btnEve.style.color = '#475569';
-            } else {
-                satGroup.style.display = 'none';
-                eveGroup.style.display = 'block';
-                btnEve.style.background = 'var(--primary-green-light)';
-                btnEve.style.color = 'var(--primary-green)';
-                btnSat.style.background = '#e2e8f0';
-                btnSat.style.color = '#475569';
-            }
         }
 
         function eatSpot(m) {
@@ -1653,6 +1758,8 @@
 
         // 初始化
         switchUserRole(currentUser);
+        renderItinerary();
+        renderTimetable();
         fetchCloudData(false);
     </script>
 </body>
