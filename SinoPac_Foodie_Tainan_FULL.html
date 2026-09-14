@@ -527,7 +527,16 @@
             padding: 6px 4px;
             vertical-align: top;
             height: 65px;
-            width: 30%;
+            min-width: 95px;
+        }
+        .timetable-table th {
+            background: #f1f5f9;
+            color: #334155;
+            padding: 8px 4px;
+            font-weight: 800;
+            border: 1px solid #e2e8f0;
+            text-align: center;
+            min-width: 95px;
         }
         .time-col {
             width: 55px;
@@ -1255,23 +1264,17 @@
                 </div>
             </div>
 
-            <!-- 課表切換檢視方案 -->
-            <div style="display:flex; gap:6px; margin-bottom:10px;">
-                <button id="tt-btn-3day" onclick="switchTimetablePlan('3day')" class="badge-pill badge-gold" style="border:none; cursor:pointer;">🌟 方案一 (Melon六日一)</button>
-                <button id="tt-btn-cindy" onclick="switchTimetablePlan('cindy')" class="badge-pill" style="border:none; cursor:pointer; background:#e2e8f0; color:#475569;">🍰 方案三 (Cindy心動版)</button>
+            <!-- 課表切換檢視方案 (支援所有方案與動態天數) -->
+            <div style="display:flex; gap:6px; margin-bottom:10px; overflow-x:auto; padding-bottom:4px;">
+                <button id="tt-btn-3day" onclick="switchTimetablePlan('3day')" class="badge-pill badge-gold" style="border:none; cursor:pointer; font-size:11px; font-weight:800; padding:6px 12px; flex-shrink:0;">🌟 方案一 (Melon六日一)</button>
+                <button id="tt-btn-5day" onclick="switchTimetablePlan('5day')" class="badge-pill" style="border:none; cursor:pointer; background:#e2e8f0; color:#475569; font-size:11px; font-weight:800; padding:6px 12px; flex-shrink:0;">🎒 方案二 (五天深度遊)</button>
+                <button id="tt-btn-cindy" onclick="switchTimetablePlan('cindy')" class="badge-pill" style="border:none; cursor:pointer; background:#e2e8f0; color:#475569; font-size:11px; font-weight:800; padding:6px 12px; flex-shrink:0;">🍰 方案三 (Cindy心動版)</button>
             </div>
 
-            <!-- 大學課表式 Grid -->
-            <div class="timetable-card">
+            <!-- 大學課表式 Grid (全自動動態欄位適配) -->
+            <div class="timetable-card" style="overflow-x:auto; -webkit-overflow-scrolling:touch;">
                 <table class="timetable-table">
-                    <thead>
-                        <tr>
-                            <th class="time-col">節次/時段</th>
-                            <th id="th-day1">9/19 (六)<br><span style="font-size:9px; font-weight:normal;">專利決賽</span></th>
-                            <th id="th-day2">9/20 (日)<br><span style="font-size:9px; font-weight:normal;">慢活吃台南</span></th>
-                            <th id="th-day3">9/21 (一)<br><span style="font-size:9px; font-weight:normal;">返校民法課</span></th>
-                        </tr>
-                    </thead>
+                    <thead id="timetable-thead"></thead>
                     <tbody id="timetable-tbody"></tbody>
                 </table>
             </div>
@@ -1790,11 +1793,17 @@
                     <div class="spot-vote-row">
                         <span style="font-size:10px; color:#64748b; font-weight:700;">想去投票：</span>
                         <div class="vote-btn-group">
-                            <button class="btn-vote ${item.melonVote === 'yes' ? 'voted-melon' : ''}" onclick="voteSpot(${item.id}, 'melon')">
-                                🍈 Melon ${item.melonVote === 'yes' ? '想去 ❤️' : '可去'}
+                            <button class="btn-vote ${item.melonVote === 'yes' ? 'voted-melon' : ''}" 
+                                    style="${currentUser === 'melon' ? 'cursor:pointer;' : 'cursor:not-allowed; opacity:0.65;'}"
+                                    title="${currentUser === 'melon' ? '點選我的喜好' : '🔒 需 Melon 本人登入點選'}"
+                                    onclick="voteSpot(${item.id}, 'melon')">
+                                🍈 Melon ${item.melonVote === 'yes' ? '想去 ❤️' : (currentUser === 'melon' ? '想去' : '未表態')}
                             </button>
-                            <button class="btn-vote ${item.cindyVote === 'yes' ? 'voted-cindy' : ''}" onclick="voteSpot(${item.id}, 'cindy')">
-                                🍰 Cindy ${item.cindyVote === 'yes' ? '想去 ❤️' : '可去'}
+                            <button class="btn-vote ${item.cindyVote === 'yes' ? 'voted-cindy' : ''}" 
+                                    style="${currentUser === 'cindy' ? 'cursor:pointer;' : 'cursor:not-allowed; opacity:0.65;'}"
+                                    title="${currentUser === 'cindy' ? '點選我的喜好' : '🔒 需 Cindy 本人登入點選'}"
+                                    onclick="voteSpot(${item.id}, 'cindy')">
+                                🍰 Cindy ${item.cindyVote === 'yes' ? '想去 ❤️' : (currentUser === 'cindy' ? '想去' : '未表態')}
                             </button>
                         </div>
                     </div>
@@ -1819,21 +1828,41 @@
         // ==========================================
         function switchTimetablePlan(planKey) {
             appState.timetablePlanMode = planKey;
-            document.getElementById('tt-btn-3day').className = `badge-pill ${planKey === '3day' ? 'badge-gold' : ''}`;
-            document.getElementById('tt-btn-cindy').className = `badge-pill ${planKey === 'cindy' ? 'badge-pink' : ''}`;
-            if (planKey !== '3day') document.getElementById('tt-btn-3day').style.background = '#e2e8f0';
-            if (planKey !== 'cindy') document.getElementById('tt-btn-cindy').style.background = '#e2e8f0';
+            const b3 = document.getElementById('tt-btn-3day');
+            const b5 = document.getElementById('tt-btn-5day');
+            const bc = document.getElementById('tt-btn-cindy');
+            if (b3) { b3.className = `badge-pill ${planKey === '3day' ? 'badge-gold' : ''}`; b3.style.background = planKey === '3day' ? '' : '#e2e8f0'; b3.style.color = planKey === '3day' ? '#0f172a' : '#475569'; }
+            if (b5) { b5.className = `badge-pill ${planKey === '5day' ? 'badge-gold' : ''}`; b5.style.background = planKey === '5day' ? '' : '#e2e8f0'; b5.style.color = planKey === '5day' ? '#0f172a' : '#475569'; }
+            if (bc) { bc.className = `badge-pill ${planKey === 'cindy' ? 'badge-gold' : ''}`; bc.style.background = planKey === 'cindy' ? '' : '#e2e8f0'; bc.style.color = planKey === 'cindy' ? '#0f172a' : '#475569'; }
             renderTimetable();
-        updateTransitConsensusUI();
+            updateTransitConsensusUI();
         }
 
         function renderTimetable() {
+            const thead = document.getElementById('timetable-thead');
             const tbody = document.getElementById('timetable-tbody');
             if (!tbody) return;
-            tbody.innerHTML = '';
 
             const modeConfig = planModesData[appState.timetablePlanMode] || planModesData['3day'];
-            const days = modeConfig.days.slice(0, 3); // 聚焦六日一
+            const days = modeConfig.days || [];
+
+            // 1. 動態渲染 表頭 (thead) - 完美配合 Cindy 增減修改的任意天數！
+            if (thead) {
+                let thRow = `<tr><th class="time-col" style="min-width:65px;">節次/時段</th>`;
+                days.forEach(d => {
+                    let subText = '精選行程';
+                    if (d.title && d.title.includes('【')) {
+                        const m = d.title.match(/【(.*?)】/);
+                        if (m) subText = m[1].slice(0, 7);
+                    }
+                    thRow += `<th>${d.label}<br><span style="font-size:9px; font-weight:normal; color:#64748b;">${subText}</span></th>`;
+                });
+                thRow += `</tr>`;
+                thead.innerHTML = thRow;
+            }
+
+            // 2. 動態渲染 各節次資料列 (tbody)
+            tbody.innerHTML = '';
 
             // 課表標準節次
             const periods = [
@@ -1850,7 +1879,7 @@
                 let rowHtml = `<td class="time-col">${p.name}</td>`;
 
                 days.forEach(day => {
-                    const matchedSpots = day.spotIds.map(id => allSpots.find(s => s.id == id)).filter(Boolean).filter(p.test);
+                    const matchedSpots = (day.spotIds || []).map(id => allSpots.find(s => s.id == id)).filter(Boolean).filter(p.test);
                     
                     let cellContent = '';
                     matchedSpots.forEach(m => {
@@ -1868,7 +1897,7 @@
                         `;
                     });
 
-                    rowHtml += `<td>${cellContent || '<span style="color:#e2e8f0;">-</span>'}</td>`;
+                    rowHtml += `<td>${cellContent || '<span style="color:#cbd5e1;">-</span>'}</td>`;
                 });
 
                 tr.innerHTML = rowHtml;
@@ -2061,6 +2090,14 @@
         }
 
         function voteSpot(id, userRole) {
+            // 嚴格身分權限驗證：誰登入就只能按自己的按鈕！
+            if (userRole !== currentUser) {
+                const targetName = (userRole === 'cindy' ? '🍰 Cindy' : '🍈 Melon');
+                const myName = (currentUser === 'cindy' ? '🍰 Cindy' : '🍈 Melon');
+                alert(`🔒 身分權限保護！\n您目前是以【${myName}】身分登入。\n不能替【${targetName}】按想去或取消喔！\n請讓 ${targetName} 本人登入後再點選～💖`);
+                return;
+            }
+
             const spot = allSpots.find(s => s.id == id);
             if (!spot) return;
 
@@ -2826,11 +2863,17 @@
                     <!-- 雙人共識投票按鈕與編輯操作 -->
                     <div style="display:flex; justify-content:space-between; align-items:center; margin-top:10px; padding-top:8px; border-top:1px solid #f1f5f9;">
                         <div style="display:flex; gap:6px;">
-                            <button type="button" class="hotel-vote-btn ${h.melonPick ? 'active-melon' : ''}" onclick="toggleHotelPick('${h.id}', 'melon')">
-                                🍈 Melon ${h.melonPick ? '想住 ✓' : '點此選定'}
+                            <button type="button" class="hotel-vote-btn ${h.melonPick ? 'active-melon' : ''}" 
+                                    style="${currentUser === 'melon' ? 'cursor:pointer;' : 'cursor:not-allowed; opacity:0.65;'}"
+                                    title="${currentUser === 'melon' ? '點選我的住宿喜好' : '🔒 需 Melon 本人登入勾選'}"
+                                    onclick="toggleHotelPick('${h.id}', 'melon')">
+                                🍈 Melon ${h.melonPick ? '想住 ✓' : (currentUser === 'melon' ? '點此選定' : '未選定')}
                             </button>
-                            <button type="button" class="hotel-vote-btn ${h.cindyPick ? 'active-cindy' : ''}" onclick="toggleHotelPick('${h.id}', 'cindy')">
-                                🍰 Cindy ${h.cindyPick ? '想住 ✓' : '點此選定'}
+                            <button type="button" class="hotel-vote-btn ${h.cindyPick ? 'active-cindy' : ''}" 
+                                    style="${currentUser === 'cindy' ? 'cursor:pointer;' : 'cursor:not-allowed; opacity:0.65;'}"
+                                    title="${currentUser === 'cindy' ? '點選我的住宿喜好' : '🔒 需 Cindy 本人登入勾選'}"
+                                    onclick="toggleHotelPick('${h.id}', 'cindy')">
+                                🍰 Cindy ${h.cindyPick ? '想住 ✓' : (currentUser === 'cindy' ? '點此選定' : '未選定')}
                             </button>
                         </div>
                         <div style="display:flex; gap:4px;">
@@ -2850,6 +2893,14 @@
         }
 
         function toggleHotelPick(id, role) {
+            // 嚴格身分權限驗證：誰登入就只能勾選自己的住宿！
+            if (role !== currentUser) {
+                const targetName = (role === 'cindy' ? '🍰 Cindy' : '🍈 Melon');
+                const myName = (currentUser === 'cindy' ? '🍰 Cindy' : '🍈 Melon');
+                alert(`🔒 身分權限保護！\n您目前是以【${myName}】身分登入。\n不能替【${targetName}】勾選住宿喜好喔！\n請讓 ${targetName} 本人登入後再點選～💖`);
+                return;
+            }
+
             const h = allHotels.find(x => x.id === id);
             if (!h) return;
             if (role === 'melon') h.melonPick = !h.melonPick;
