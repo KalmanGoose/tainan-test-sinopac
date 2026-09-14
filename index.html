@@ -193,6 +193,11 @@
                 <div class="hotel-card" style="border-left-color: #ff4d4f;">
                     <div style="font-size: 11px; color: #ff4d4f; font-weight: bold; margin-bottom: 4px;">9/19 (六) - 第三晚【成大朋友家 ‧ 免費 $0】</div>
                     <div style="font-size: 16px; font-weight: 800; color: #1a1a1a; margin-bottom: 6px;">成大朋友溫暖小窩（$0 入住）</div>
+                    <div style="font-size: 12px; color: #1e3a8a; background: #eff6ff; padding: 6px 10px; border-radius: 6px; margin-bottom: 8px; line-height: 1.5;">
+                        🚆 <strong>週六去程台鐵直達推薦：</strong><br>
+                        • <strong>自強(3000) 371次：</strong>06:57 臺中 ➜ 08:47 臺南後站（1hr50分），下車 5 分鐘抵達成大自強校區 09:00 報到！<br>
+                        • <strong>自強 101次：</strong>05:30 臺中 ➜ 07:44 臺南，享<strong>大學生 5 折只要 $244</strong>！
+                    </div>
                     <div style="font-size: 12px; color: #555; line-height: 1.6;">
                         📍 <strong>位置：</strong>成大校區周邊，比完賽直接入住。<br>
                         🎉 <strong>神助攻：</strong>現省週六數千元天價房費！<br>
@@ -259,6 +264,7 @@
             {"name": "J.O.X tainan", "time": "14:00-21:00", "addr": "中西區衛民街52號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "質感選物店好逛，來這裡消化一下！", "cindy": "⭐⭐⭐⭐ (錢包守不住啦)", "full": -20},
             
             // 🎯 新增：9/19 專利大戰與 9/21 交通返校行程卡片
+                        {"name": "🚆 臺鐵晨班直達（自強 371次 / 101次）", "time": "06:57➜08:47 / 05:30➜07:44", "addr": "臺中車站 ➔ 臺南車站後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "推薦自強371次！06:57台中開車，08:47直達台南後站，5分鐘到成大自強校區報到！或搭101次享大學生5折只要$244！", "cindy": "⭐⭐⭐⭐⭐ (直達台南後站不用轉車超方便！)", "full": 5},
             {"name": "🎓 專利大戰桌遊競賽（成大自強校區）", "time": "09:00-18:15", "addr": "東區大學路1號 (儀器設備大樓10F)", "map": "https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z", "melon": "全國大專院校專利大戰！三輪總積分賽，Melon 拚拿南區冠軍！", "cindy": "⭐⭐⭐⭐⭐ (Melon 超強！幫你加油第一名！)", "full": -30},
             {"name": "🚄 晨光高鐵（台南 ➔ 台中）", "time": "07:41 / 08:41", "addr": "高鐵台南站", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台南站", "melon": "搭乘大學生 88折/75折 優惠車次，40分鐘直達台中烏日！", "cindy": "⭐⭐⭐⭐⭐ (車上補眠剛剛好，完全不累)", "full": 5},
             {"name": "🛵 台中高鐵牽機車雙載", "time": "08:40 / 09:40", "addr": "高鐵台中站機車停車場", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台中站", "melon": "出站直接牽機車出發！避開塞車，一路順風吹回系館！", "cindy": "⭐⭐⭐⭐⭐ (機車雙載兜風最浪漫惹)", "full": 5},
@@ -267,12 +273,24 @@
         ];
 
         // 依 9/17(四) ~ 9/21(一) 五天行程精準分類
+        // 依 9/17(四) ~ 9/21(一) 五天行程精準分類 (六日一精準支援)
+        const traTrain = allData.find(d => d.name.includes("臺鐵晨班直達"));
+        const patentGame = allData.find(d => d.name.includes("專利大戰"));
+        const tieNiu = allData.find(d => d.name.includes("鐵牛早餐"));
+        const pizza = allData.find(d => d.name.includes("給我咬一口披薩"));
+        const friendHouse = allData.find(d => d.name.includes("成大朋友家"));
+        const chujiang = allData.find(d => d.name.includes("啾醬"));
+
         const missions = {
             "Day 1": [allData[1], allData[10], allData[11], allData[4]],
             "Day 2": [allData[0], allData[25], allData[21], allData[30], allData[29], allData[5], allData[6]],
-            "Day 3": [allData[9], allData[31], allData[7], allData[34], allData[17]],
+            "Day 3": [traTrain, tieNiu, patentGame, pizza, friendHouse, chujiang].filter(Boolean),
             "Day 4": [allData[2], allData[3], allData[12], allData[13], allData[23], allData[28], allData[14]],
-            "Day 5": [allData[32], allData[33], allData[35]],
+            "Day 5": [
+                allData.find(d => d.name.includes("高鐵")),
+                allData.find(d => d.name.includes("機車")),
+                allData.find(d => d.name.includes("民法物權"))
+            ].filter(Boolean),
             "所有景點": allData
         };
 
