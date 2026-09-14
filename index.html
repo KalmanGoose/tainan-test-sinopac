@@ -1278,11 +1278,16 @@
         // ==========================================
         // 雲端同步 (Google Apps Script API)
         // ==========================================
-        async function fetchCloudData(showPrompt) {
+        let isSyncing = false;
+        async function fetchCloudData(showPrompt = false) {
+            if (isSyncing) return;
+            isSyncing = true;
             const indicator = document.getElementById('sync-indicator');
             const text = document.getElementById('sync-text');
-            text.innerText = '同步中...';
-            indicator.style.color = '#eab308';
+            if (showPrompt && text && indicator) {
+                text.innerText = '同步中...';
+                indicator.style.color = '#3b82f6';
+            }
 
             try {
                 const res = await fetch(GAS_API_URL + '?t=' + Date.now(), { method: 'GET', redirect: 'follow' });
@@ -1302,29 +1307,38 @@
                             if (d && !d.spotIds.includes(remoteSpot.id)) d.spotIds.push(remoteSpot.id);
                         }
                     });
+                    try { localStorage.setItem('sinopac_spots', JSON.stringify(allSpots)); } catch(e) {}
                 }
 
                 if (data.transit) {
                     cloudTransit = data.transit;
+                    try { localStorage.setItem('sinopac_transit', JSON.stringify(cloudTransit)); } catch(e) {}
                     updateTransitConsensusUI();
                 }
 
                 if (data.wishes) {
                     cloudWishes = data.wishes;
+                    try { localStorage.setItem('sinopac_wishes', JSON.stringify(cloudWishes)); } catch(e) {}
                     renderWishes();
                 }
 
-                text.innerText = '試算表已同步 ✓';
-                indicator.style.color = '#10b981';
+                if (text && indicator) {
+                    text.innerText = '即時連線中 ✓';
+                    indicator.style.color = '#10b981';
+                }
                 renderItinerary();
                 renderTimetable();
-        updateTransitConsensusUI();
+                updateTransitConsensusUI();
 
                 if (showPrompt) alert("已成功與 Google 試算表完成雙向同步！");
             } catch (err) {
                 console.error("Sync error:", err);
-                text.innerText = '使用離線資料';
-                indicator.style.color = '#94a3b8';
+                if (text && indicator) {
+                    text.innerText = '使用離線資料';
+                    indicator.style.color = '#94a3b8';
+                }
+            } finally {
+                isSyncing = false;
             }
         }
 
@@ -1701,6 +1715,7 @@
                 time: new Date().toLocaleTimeString('zh-TW', { hour: '2-digit', minute: '2-digit' })
             };
             cloudWishes.unshift(newWish);
+            localStorage.setItem('sinopac_wishes', JSON.stringify(cloudWishes));
             renderWishes();
             input.value = '';
 
@@ -1740,6 +1755,7 @@
                 spot.melonVote = spot.melonVote === 'yes' ? 'no' : 'yes';
                 postToCloud({ action: 'voteSpot', id: id, user: 'melon', vote: spot.melonVote, name: spot.name, dayKey: appState.activeDayKey });
             }
+            try { localStorage.setItem('sinopac_spots', JSON.stringify(allSpots)); } catch(e) {}
             renderItinerary();
         }
 
@@ -1943,12 +1959,55 @@
             box.innerHTML = "💌 " + quotes[Math.floor(Math.random() * quotes.length)];
         }
 
-        // 初始化
+        // ==========================================
+        // 🚀 極速靜態同步優化：智慧心跳自動輪詢 (Smart Auto-Polling)
+        // ==========================================
+        let pollingTimer = null;
+        function startAutoSync() {
+            if (pollingTimer) clearInterval(pollingTimer);
+            // 每 3.5 秒背景自動同步一次，讓雙方像聊天室一樣自動接收對方更新
+            pollingTimer = setInterval(() => {
+                if (!document.hidden && !isSyncing) {
+                    fetchCloudData(false);
+                }
+            }, 3500);
+        }
+
+        // 當 Cindy 或 Melon 解鎖手機或切換回本 App 時，立即秒抓最新動態
+        document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) {
+                fetchCloudData(false);
+            }
+        });
+
+        // 初始化：先從 localStorage 秒載快取資料 (0毫秒開屏)
+        try {
+            const cachedSpots = localStorage.getItem('sinopac_spots');
+            if (cachedSpots) {
+                const parsed = JSON.parse(cachedSpots);
+                parsed.forEach(cached => {
+                    const found = allSpots.find(s => s.id == cached.id);
+                    if (found) {
+                        found.melonVote = cached.melonVote;
+                        found.cindyVote = cached.cindyVote;
+                    }
+                });
+            }
+            const cachedWishes = localStorage.getItem('sinopac_wishes');
+            if (cachedWishes) cloudWishes = JSON.parse(cachedWishes);
+            const cachedTransit = localStorage.getItem('sinopac_transit');
+            if (cachedTransit) cloudTransit = JSON.parse(cachedTransit);
+        } catch(e) {}
+
         switchUserRole(currentUser);
         renderItinerary();
         renderTimetable();
+        renderWishes();
         updateTransitConsensusUI();
+        
+        // 立即啟動非同步抓取與心跳循環
         fetchCloudData(false);
+        startAutoSync();
     </script>
 </body>
 </html>
