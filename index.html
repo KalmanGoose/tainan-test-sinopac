@@ -800,98 +800,231 @@
         <!-- TAB 3: 🚆 車次共識箱 -->
         <!-- ==================================================================== -->
         <div id="tab-transit" class="tab-content">
+            <!-- 雙人交通協調共識箱 -->
             <div class="consensus-box">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:11px; color:var(--dawho-gold); font-weight:800;">✨ 雙人交通協調共識箱</span>
-                    <span id="consensus-status-badge" class="badge-pill badge-gold">協調中</span>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                    <span style="font-size:12px; color:var(--dawho-gold); font-weight:800;">✨ 雙人交通協調共識箱</span>
+                    <span id="consensus-status-badge" class="badge-pill badge-gold">🤝 協調中</span>
                 </div>
-                
-                <div class="consensus-row">
-                    <div>🍈 <strong>Melon 偏好：</strong></div>
-                    <div id="melon-transit-pref" style="color:#4ade80;">自強371次 ➔ 高鐵0806次</div>
+
+                <!-- 雙方選擇對照 (清楚條列 去程 & 回程) -->
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-bottom:10px;">
+                    <!-- Melon 偏好 -->
+                    <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:8px 10px; border:1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size:11px; font-weight:800; color:#4ade80; margin-bottom:4px;">
+                            🍈 Melon 的偏好
+                        </div>
+                        <div style="font-size:9px; color:#94a3b8;">去程班次：</div>
+                        <div id="melon-outbound-display" style="font-size:11px; font-weight:800; color:#ffffff; margin-bottom:4px; line-height:1.3;">自強371次 (06:57➜08:47)</div>
+                        <div style="font-size:9px; color:#94a3b8;">回程班次：</div>
+                        <div id="melon-return-display" style="font-size:11px; font-weight:800; color:#ffffff; line-height:1.3;">高鐵0806次 (07:41➜08:34)</div>
+                    </div>
+
+                    <!-- Cindy 偏好 -->
+                    <div style="background:rgba(255,255,255,0.06); border-radius:10px; padding:8px 10px; border:1px solid rgba(255,255,255,0.1);">
+                        <div style="font-size:11px; font-weight:800; color:#fb7185; margin-bottom:4px;">
+                            🍰 Cindy 的偏好
+                        </div>
+                        <div style="font-size:9px; color:#94a3b8;">去程班次：</div>
+                        <div id="cindy-outbound-display" style="font-size:11px; font-weight:800; color:#ffffff; margin-bottom:4px; line-height:1.3;">(尚未選擇)</div>
+                        <div style="font-size:9px; color:#94a3b8;">回程班次：</div>
+                        <div id="cindy-return-display" style="font-size:11px; font-weight:800; color:#ffffff; line-height:1.3;">(尚未選擇)</div>
+                    </div>
                 </div>
-                <div class="consensus-row">
-                    <div>🍰 <strong>Cindy 偏好：</strong></div>
-                    <div id="cindy-transit-pref" style="color:#fb7185;">(尚未選擇)</div>
-                </div>
-                
-                <div style="margin-top:10px; display:flex; justify-content:flex-end;">
-                    <button onclick="saveTransitToCloud()" style="background:var(--dawho-gold); border:none; color:white; padding:6px 12px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer;">
-                        📤 同步我的選擇到試算表
-                    </button>
+
+                <!-- 當前使用者即時選擇與儲存按鈕 -->
+                <div style="background:rgba(0,0,0,0.3); border-radius:10px; padding:10px; border-left:3px solid var(--primary-green);">
+                    <div style="display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:11px; font-weight:800; color:#e2e8f0;">
+                            👉 <span id="current-user-name-display" style="color:var(--dawho-gold);">Melon</span> 當前選定搭配：
+                        </span>
+                        <span id="current-fare-display" style="color:#fbbf24; font-weight:900; font-size:12px;">$2,114 (雙人)</span>
+                    </div>
+                    <div style="font-size:11px; color:#cbd5e1; margin-top:4px; line-height:1.4;" id="current-pair-display">
+                        去程：自強371次 (06:57➜08:47)<br>
+                        回程：高鐵0806次 (07:41➜08:34)
+                    </div>
+                    <div style="margin-top:8px; display:flex; justify-content:flex-end;">
+                        <button onclick="saveTransitToCloud()" style="background:linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%); border:none; color:white; padding:6px 14px; border-radius:8px; font-size:11px; font-weight:800; cursor:pointer; box-shadow:0 2px 6px rgba(197,160,101,0.35);">
+                            💾 儲存並同步我的選擇到試算表
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 12px 0 8px;">
+            <!-- ① 去程車次 -->
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 14px 0 8px;">
                 ① 選擇【去程車次】(臺中 ➔ 臺南)
             </div>
 
-            <!-- 去程車次選項 -->
-            <div class="train-option-card selected" onclick="selectOutbound(this, '自強(3000) 371次 (06:57➜08:47)', 487)">
-                <div style="display:flex; justify-content:space-between;">
-                    <span class="badge-pill badge-green">★ 官方最推薦首選</span>
-                    <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
-                </div>
-                <div class="train-time-row">
-                    <span class="train-time">06:57</span>
-                    <span class="train-arrow">➔</span>
-                    <span class="train-time">08:47</span>
-                    <span style="font-size:12px; color:#64748b;">(1時50分)</span>
-                </div>
-                <div style="font-size:11px; color:#64748b; margin-top:4px;">直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！</div>
+            <!-- 去程分類切換 -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+                <button id="btn-dep-sat" onclick="switchDepGroup('sat')" class="badge-pill badge-green" style="border:none; cursor:pointer; padding:6px 12px; font-size:11px;">☀️ 9/19 週六早班 (直衝報到)</button>
+                <button id="btn-dep-eve" onclick="switchDepGroup('eve')" class="badge-pill" style="border:none; cursor:pointer; padding:6px 12px; font-size:11px; background:#e2e8f0; color:#475569;">🌙 9/17或9/18 傍晚南下</button>
             </div>
 
-            <div class="train-option-card" onclick="selectOutbound(this, '自強號 101次 (05:30➜07:44)', 244)">
-                <div style="display:flex; justify-content:space-between;">
-                    <span class="badge-pill badge-gold">💰 大學生 5 折只要 $244</span>
-                    <span style="font-size:12px; font-weight:800; color:#b45309;">$244 / 人</span>
+            <!-- 週六早班去程清單 -->
+            <div id="dep-group-sat">
+                <div class="train-option-card outbound-train-card selected" onclick="selectOutbound(this, '自強(3000) 371次 (06:57➜08:47)', 487)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-green">★ 官方最推薦首選</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">06:57</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">08:47</span>
+                        <span style="font-size:12px; color:#64748b;">(1時50分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強(3000) 371次</strong> | 直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！</div>
                 </div>
-                <div class="train-time-row">
-                    <span class="train-time">05:30</span>
-                    <span class="train-arrow">➔</span>
-                    <span class="train-time">07:44</span>
-                    <span style="font-size:12px; color:#64748b;">(2時14分)</span>
+
+                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強號 101次 (05:30➜07:44)', 244)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-gold">💰 大學生 5 折只要 $244</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$244 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">05:30</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">07:44</span>
+                        <span style="font-size:12px; color:#64748b;">(2時14分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強號 101次</strong> | 省錢天花板！到站先吃一碗美鮮牛肉湯再進場！</div>
                 </div>
-                <div style="font-size:11px; color:#64748b; margin-top:4px;">超早出發省一半！先去喝一碗牛肉湯再進場！</div>
+
+                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '區間快 3005次 (06:04➜08:21)', 314)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-blue">早安區間快</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$314 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">06:04</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">08:21</span>
+                        <span style="font-size:12px; color:#64748b;">(2時17分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>區間快 3005次</strong> | 臺中至臺南，時間充裕票價親民。</div>
+                </div>
             </div>
 
-            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 16px 0 8px;">
-                ② 選擇【9/21 (一) 回程晨車】(奔赴 10:10 民法物權)
+            <!-- 傍晚班次去程清單 -->
+            <div id="dep-group-eve" style="display:none;">
+                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強(3000) 143次 (19:54➜21:34)', 487)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-green">⚡ 全日最快 100 分鐘直達</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">19:54</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">21:34</span>
+                        <span style="font-size:12px; color:#64748b;">(1時40分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強(3000) 143次</strong> | 下課吃飽搭這班，21:34 抵達台南直奔宵夜！</div>
+                </div>
+
+                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強號 141次 (19:47➜21:52)', 390)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-gold">🎓 大學生 8 折</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$390 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">19:47</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">21:52</span>
+                        <span style="font-size:12px; color:#64748b;">(2時05分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強號 141次</strong> | 學生優惠班次，平價好選擇。</div>
+                </div>
+
+                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強(3000) 167次 (17:45➜19:34)', 487)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-blue">傍晚黃金時段</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">17:45</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">19:34</span>
+                        <span style="font-size:12px; color:#64748b;">(1時49分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強(3000) 167次</strong> | 早早抵達去安平吃阿財牛肉湯！</div>
+                </div>
+
+                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強號 281次 (21:46➜23:44)', 341)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-gold">🌙 大學生 7 折夜貓班</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$341 / 人</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">21:46</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">23:44</span>
+                        <span style="font-size:12px; color:#64748b;">(1時58分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強號 281次</strong> | 夜貓首選！到站直接吃豆奶宗沙茶蛋餅！</div>
+                </div>
             </div>
 
-            <!-- 回程車次選項 -->
-            <div class="train-option-card selected" onclick="selectReturn(this, '高鐵 0806次 (07:41➜08:34)', 570)">
-                <div style="display:flex; justify-content:space-between;">
-                    <span class="badge-pill badge-green">★ 貼心首選 (提前65分到)</span>
-                    <span style="font-size:12px; font-weight:800; color:#b45309;">$570 (88折)</span>
-                </div>
-                <div class="train-time-row">
-                    <span class="train-time">07:41</span>
-                    <span class="train-arrow">➔</span>
-                    <span class="train-time">08:34</span>
-                    <span style="font-size:12px; color:#64748b;">(53分)</span>
-                </div>
-                <div style="font-size:11px; color:#64748b; margin-top:4px;">08:34 抵烏日 ➔ 牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>！</div>
+            <!-- ② 回程車次 -->
+            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 18px 0 8px;">
+                ② 選擇【9/21 (一) 回程晨車】(臺南 ➔ 臺中，奔赴 10:10 民法物權)
             </div>
 
-            <div class="train-option-card" onclick="selectReturn(this, '高鐵 0810次 (08:41➜09:34)', 485)">
-                <div style="display:flex; justify-content:space-between;">
-                    <span class="badge-pill badge-gold">💰 大學生 75 折超划算</span>
-                    <span style="font-size:12px; font-weight:800; color:#b45309;">$485 (75折)</span>
+            <div id="return-cards-container">
+                <div class="train-option-card return-train-card selected" onclick="selectReturn(this, '高鐵 0806次 (07:41➜08:34)', 570)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-green">★ 貼心首選 (提前65分到)</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$570 (88折)</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">07:41</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">08:34</span>
+                        <span style="font-size:12px; color:#64748b;">(53分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
+                        🚄 <strong>高鐵 0806次</strong> ➔ 台中烏日牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>。<br>
+                        ☕ Cindy 悠閒喝燕麥拿鐵看書，行李 Melon 全扛！
+                    </div>
                 </div>
-                <div class="train-time-row">
-                    <span class="train-time">08:41</span>
-                    <span class="train-arrow">➔</span>
-                    <span class="train-time">09:34</span>
-                    <span style="font-size:12px; color:#64748b;">(53分)</span>
+
+                <div class="train-option-card return-train-card" onclick="selectReturn(this, '高鐵 0810次 (08:41➜09:34)', 485)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-gold">💰 大學生 75 折超划算</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$485 (75折)</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">08:41</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">09:34</span>
+                        <span style="font-size:12px; color:#64748b;">(53分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
+                        🚄 <strong>高鐵 0810次</strong> ➔ 09:45 牽機車出發 ➔ <strong>10:05 抵達系館</strong>。<br>
+                        ⏱️ 10:10 上課剛好入座，週日可多睡 1 小時！
+                    </div>
                 </div>
-                <div style="font-size:11px; color:#64748b; margin-top:4px;">09:45 牽車 ➔ <strong>10:05 抵系館</strong>，壓線準時入座！</div>
+
+                <div class="train-option-card return-train-card" onclick="selectReturn(this, '台鐵 自強108次 (06:08➜08:28)', 487)">
+                    <div style="display:flex; justify-content:space-between;">
+                        <span class="badge-pill badge-blue">台鐵直達台中火車站</span>
+                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487</span>
+                    </div>
+                    <div class="train-time-row">
+                        <span class="train-time">06:08</span>
+                        <span class="train-arrow">➔</span>
+                        <span class="train-time">08:28</span>
+                        <span style="font-size:12px; color:#64748b;">(2時20分)</span>
+                    </div>
+                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
+                        <strong>自強號 108次</strong> | 免去高鐵站，臺南市區火車站直接上車。
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ==================================================================== -->
-        <!-- TAB 4: 💌 許願留言池 -->
-        <!-- ==================================================================== -->
         <div id="tab-wishes" class="tab-content">
             <div class="custom-card" style="background:linear-gradient(135deg, #fef3c7 0%, #fffbeb 100%); border-color:#fde68a;">
                 <div style="font-size:13px; font-weight:900; color:#92400e; margin-bottom:4px;">💌 CINDY & MELON 悄悄話許願池</div>
@@ -1122,6 +1255,7 @@
         // 身分切換
         // ==========================================
         function switchUserRole(role) {
+            setTimeout(updateTransitConsensusUI, 10);
             currentUser = role;
             localStorage.setItem('sinopac_user', role);
             document.getElementById('role-melon').className = `role-btn ${role === 'melon' ? 'active-melon' : ''}`;
@@ -1181,6 +1315,7 @@
                 indicator.style.color = '#10b981';
                 renderItinerary();
                 renderTimetable();
+        updateTransitConsensusUI();
 
                 if (showPrompt) alert("已成功與 Google 試算表完成雙向同步！");
             } catch (err) {
@@ -1272,6 +1407,7 @@
             currentDay.spotIds.push(spotId);
             renderItinerary();
             renderTimetable();
+        updateTransitConsensusUI();
             const spot = allSpots.find(s => s.id == spotId);
             postToCloud({ action: 'addSpot', id: spotId, name: spot.name, time: spot.time, addr: spot.addr, cat: spot.cat, dayKey: appState.activeDayKey });
         }
@@ -1402,6 +1538,7 @@
             if (planKey !== '3day') document.getElementById('tt-btn-3day').style.background = '#e2e8f0';
             if (planKey !== 'cindy') document.getElementById('tt-btn-cindy').style.background = '#e2e8f0';
             renderTimetable();
+        updateTransitConsensusUI();
         }
 
         function renderTimetable() {
@@ -1456,16 +1593,37 @@
         // ==========================================
         // 交通與許願留言功能
         // ==========================================
+        let transitFares = {
+            outbound: 487,
+            return: 570
+        };
+
         function selectOutbound(el, name, fare) {
-            document.querySelectorAll('#tab-transit .train-option-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.outbound-train-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             appState.myOutbound = name;
+            transitFares.outbound = fare || 487;
+
+            if (currentUser === 'melon') {
+                cloudTransit.melonOutbound = name;
+            } else {
+                cloudTransit.cindyOutbound = name;
+            }
+            updateTransitConsensusUI();
         }
 
         function selectReturn(el, name, fare) {
-            el.parentElement.querySelectorAll('.train-option-card').forEach(c => c.classList.remove('selected'));
+            document.querySelectorAll('.return-train-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             appState.myReturn = name;
+            transitFares.return = fare || 570;
+
+            if (currentUser === 'melon') {
+                cloudTransit.melonReturn = name;
+            } else {
+                cloudTransit.cindyReturn = name;
+            }
+            updateTransitConsensusUI();
         }
 
         function saveTransitToCloud() {
@@ -1476,6 +1634,7 @@
                 cloudTransit.cindyOutbound = appState.myOutbound;
                 cloudTransit.cindyReturn = appState.myReturn;
             }
+            localStorage.setItem('sinopac_transit', JSON.stringify(cloudTransit));
             updateTransitConsensusUI();
             postToCloud({
                 action: 'saveTransit',
@@ -1483,26 +1642,47 @@
                 outbound: appState.myOutbound,
                 returnTrain: appState.myReturn
             });
-            alert(`已同步【${currentUser === 'melon' ? 'Melon' : 'Cindy'}】的車次偏好！`);
+            alert(`已將【${currentUser === 'melon' ? 'Melon' : 'Cindy'}】的去程與回程偏好同步到 Google 試算表！`);
         }
 
         function updateTransitConsensusUI() {
-            const mEl = document.getElementById('melon-transit-pref');
-            const cEl = document.getElementById('cindy-transit-pref');
+            const mOut = document.getElementById('melon-outbound-display');
+            const mRet = document.getElementById('melon-return-display');
+            const cOut = document.getElementById('cindy-outbound-display');
+            const cRet = document.getElementById('cindy-return-display');
+            const currentName = document.getElementById('current-user-name-display');
+            const currentPair = document.getElementById('current-pair-display');
+            const currentFare = document.getElementById('current-fare-display');
             const badge = document.getElementById('consensus-status-badge');
 
-            if (mEl) mEl.innerText = cloudTransit.melonOutbound ? `${cloudTransit.melonOutbound} ➔ ${cloudTransit.melonReturn}` : '(尚未選擇)';
-            if (cEl) cEl.innerText = cloudTransit.cindyOutbound ? `${cloudTransit.cindyOutbound} ➔ ${cloudTransit.cindyReturn}` : '(尚未選擇)';
+            if (mOut) mOut.innerText = cloudTransit.melonOutbound || '自強371次 (06:57➜08:47)';
+            if (mRet) mRet.innerText = cloudTransit.melonReturn || '高鐵0806次 (07:41➜08:34)';
+            if (cOut) cOut.innerText = cloudTransit.cindyOutbound || '(尚未選擇)';
+            if (cRet) cRet.innerText = cloudTransit.cindyReturn || '(尚未選擇)';
+
+            if (currentName) currentName.innerText = currentUser === 'melon' ? 'Melon' : 'Cindy';
+            if (currentPair) currentPair.innerHTML = `去程：${appState.myOutbound}<br>回程：${appState.myReturn}`;
+            
+            const totalFare = (transitFares.outbound + transitFares.return) * 2;
+            if (currentFare) currentFare.innerText = `$${totalFare.toLocaleString()} (雙人)`;
 
             if (badge) {
-                if (cloudTransit.melonOutbound && cloudTransit.cindyOutbound &&
-                    cloudTransit.melonOutbound === cloudTransit.cindyOutbound &&
-                    cloudTransit.melonReturn === cloudTransit.cindyReturn) {
-                    badge.className = 'badge-pill badge-green';
-                    badge.innerText = '🎉 雙方車次已達成共識！';
+                const mO = cloudTransit.melonOutbound || '自強371次 (06:57➜08:47)';
+                const mR = cloudTransit.melonReturn || '高鐵0806次 (07:41➜08:34)';
+                const cO = cloudTransit.cindyOutbound;
+                const cR = cloudTransit.cindyReturn;
+
+                if (cO && cR) {
+                    if (mO === cO && mR === cR) {
+                        badge.className = 'badge-pill badge-green';
+                        badge.innerText = '🎉 雙方車次已達成共識！';
+                    } else {
+                        badge.className = 'badge-pill badge-gold';
+                        badge.innerText = '🤝 協調中 (車次尚未一致)';
+                    }
                 } else {
                     badge.className = 'badge-pill badge-gold';
-                    badge.innerText = '🤝 協調中';
+                    badge.innerText = '🤝 協調中 (等待Cindy點選)';
                 }
             }
         }
@@ -1644,6 +1824,7 @@
             closeCardModal();
             renderItinerary();
             renderTimetable();
+        updateTransitConsensusUI();
         }
 
         function deleteCard(id) {
@@ -1654,6 +1835,7 @@
                 currentDay.spotIds = currentDay.spotIds.filter(spotId => spotId != id);
                 renderItinerary();
                 renderTimetable();
+        updateTransitConsensusUI();
             }
         }
 
@@ -1670,6 +1852,7 @@
             currentDay.spotIds[targetIndex] = temp;
             renderItinerary();
             renderTimetable();
+        updateTransitConsensusUI();
         }
 
         // ==========================================
@@ -1686,6 +1869,7 @@
 
             if (tabName === 'itinerary') renderItinerary();
             if (tabName === 'timetable') renderTimetable();
+        updateTransitConsensusUI();
             if (tabName === 'wishes') renderWishes();
         }
 
@@ -1760,6 +1944,7 @@
         switchUserRole(currentUser);
         renderItinerary();
         renderTimetable();
+        updateTransitConsensusUI();
         fetchCloudData(false);
     </script>
 </body>
