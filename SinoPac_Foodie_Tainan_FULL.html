@@ -842,14 +842,11 @@
             <div class="wish-badge-count" id="quick-wish-count">4則 ➔</div>
         </div>
 
-        <!-- 主導航 (支援滑動的 6 大分頁) -->
+        <!-- 主導航 (支援滑動的 6 大分頁，儀表板依要求移至最後) -->
         <div class="main-tabs-wrapper">
             <div class="main-tabs">
                 <button class="tab-btn active" onclick="switchTab('itinerary', this)">
                     <span>🗺️ 行程安排</span>
-                </button>
-                <button class="tab-btn" onclick="switchTab('timetable', this)">
-                    <span>📅 儀表板</span>
                 </button>
                 <button class="tab-btn" onclick="switchTab('transit', this)">
                     <span>🚆 車次共識</span>
@@ -863,6 +860,9 @@
                 </button>
                 <button class="tab-btn" onclick="switchTab('contest', this)">
                     <span>🏆 專利賽程</span>
+                </button>
+                <button class="tab-btn" onclick="switchTab('timetable', this)">
+                    <span>📅 儀表板</span>
                 </button>
             </div>
         </div>
@@ -886,6 +886,24 @@
 
             <!-- 天數切換 Tab -->
             <div id="day-subtabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:6px;"></div>
+
+            <!-- 🍰 Cindy 專屬彈性行程天數增刪修改工具列 (僅在 Cindy 身分且為方案三時顯示) -->
+            <div id="cindy-day-tools-bar" style="display:none; justify-content:space-between; align-items:center; background:#fff1f2; border:1.5px dashed #fda4af; border-radius:12px; padding:8px 12px; margin-bottom:10px;">
+                <div style="font-size:11px; font-weight:800; color:#e11d48;">
+                    🍰 Cindy 的自由天數規劃台
+                </div>
+                <div style="display:flex; gap:6px;">
+                    <button type="button" onclick="openDayModal('add')" class="badge-pill" style="background:#ffe4e6; color:#be123c; border:1px solid #fecdd3; cursor:pointer; font-size:11px; font-weight:800; padding:4px 10px;">
+                        ➕ 增加一天
+                    </button>
+                    <button type="button" onclick="openDayModal('edit')" class="badge-pill" style="background:#f1f5f9; color:#475569; border:1px solid #cbd5e1; cursor:pointer; font-size:11px; font-weight:800; padding:4px 10px;">
+                        ✏️ 修改此天
+                    </button>
+                    <button type="button" onclick="deleteCurrentDay()" class="badge-pill" style="background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; cursor:pointer; font-size:11px; font-weight:800; padding:4px 10px;">
+                        🗑️ 刪除此天
+                    </button>
+                </div>
+            </div>
 
             <!-- 📚 景點卡片庫 / 快速挑選貨架 (可拖曳或一鍵加入) -->
             <div class="library-shelf">
@@ -928,54 +946,6 @@
 
         <!-- ==================================================================== -->
         <!-- TAB 2: 📅 行程對齊儀表板 (Timetable Grid - 專為學生對齊時間設計) -->
-        <!-- ==================================================================== -->
-        <div id="tab-timetable" class="tab-content">
-            <div class="custom-card" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:white; margin-bottom:10px;">
-                <div style="display:flex; justify-content:space-between; align-items:center;">
-                    <div>
-                        <div style="font-size:11px; color:var(--dawho-gold); font-weight:800;">📊 專利與民法物權行程對齊儀表板</div>
-                        <div style="font-size:15px; font-weight:900; margin-top:2px;">六日一行程 ➔ 週一準時入座</div>
-                    </div>
-                    <div style="text-align:right;">
-                        <span class="badge-pill badge-green">🛡️ 全勤守護 100%</span>
-                    </div>
-                </div>
-                <div style="font-size:11px; color:#cbd5e1; margin-top:8px; line-height:1.5;">
-                    🎓 <strong>週一安心保證：</strong>搭 07:41 高鐵 ➔ 08:34 烏日 ➔ 機車雙載 <strong>09:05 到教室</strong>，比 10:10 鐘響整整提前 65 分鐘！
-                </div>
-            </div>
-
-            <!-- 課表切換檢視方案 -->
-            <div style="display:flex; gap:6px; margin-bottom:10px;">
-                <button id="tt-btn-3day" onclick="switchTimetablePlan('3day')" class="badge-pill badge-gold" style="border:none; cursor:pointer;">🌟 方案一 (Melon六日一)</button>
-                <button id="tt-btn-cindy" onclick="switchTimetablePlan('cindy')" class="badge-pill" style="border:none; cursor:pointer; background:#e2e8f0; color:#475569;">🍰 方案三 (Cindy心動版)</button>
-            </div>
-
-            <!-- 大學課表式 Grid -->
-            <div class="timetable-card">
-                <table class="timetable-table">
-                    <thead>
-                        <tr>
-                            <th class="time-col">節次/時段</th>
-                            <th id="th-day1">9/19 (六)<br><span style="font-size:9px; font-weight:normal;">專利決賽</span></th>
-                            <th id="th-day2">9/20 (日)<br><span style="font-size:9px; font-weight:normal;">慢活吃台南</span></th>
-                            <th id="th-day3">9/21 (一)<br><span style="font-size:9px; font-weight:normal;">返校民法課</span></th>
-                        </tr>
-                    </thead>
-                    <tbody id="timetable-tbody"></tbody>
-                </table>
-            </div>
-
-            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; font-size:10px;">
-                <span class="course-block course-traffic">🚆 交通班次</span>
-                <span class="course-block course-contest">🏆 專利大戰</span>
-                <span class="course-block course-class">📚 10:10民法物權</span>
-                <span class="course-block course-food">🍜 府城必吃</span>
-                <span class="course-block course-spot">🏖️ 甜點散步</span>
-            </div>
-        </div>
-
-        <!-- ==================================================================== -->
         <!-- TAB 3: 🚆 車次共識箱 -->
         <!-- ==================================================================== -->
         <div id="tab-transit" class="tab-content">
@@ -1032,8 +1002,13 @@
             </div>
 
             <!-- ① 去程車次 -->
-            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 14px 0 8px;">
-                ① 選擇【去程車次】(臺中 ➔ 臺南)
+            <div style="display:flex; justify-content:space-between; align-items:center; margin: 14px 0 8px;">
+                <div style="font-size:13px; font-weight:800; color:#1e293b;">
+                    ① 選擇【去程車次】(臺中 ➔ 臺南)
+                </div>
+                <button onclick="openTransitModal('add', 'outbound')" class="badge-pill badge-green" style="border:none; cursor:pointer; font-size:11px; font-weight:800; padding:5px 10px;">
+                    ➕ 新增去程班次
+                </button>
             </div>
 
             <!-- 去程分類切換 -->
@@ -1043,165 +1018,21 @@
             </div>
 
             <!-- 週六早班去程清單 -->
-            <div id="dep-group-sat">
-                <div class="train-option-card outbound-train-card selected" onclick="selectOutbound(this, '自強(3000) 371次 (06:57➜08:47)', 487)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-green">★ 官方最推薦首選</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">06:57</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">08:47</span>
-                        <span style="font-size:12px; color:#64748b;">(1時50分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強(3000) 371次</strong> | 直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！</div>
-                </div>
-
-                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強號 101次 (05:30➜07:44)', 244)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-gold">💰 大學生 5 折只要 $244</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$244 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">05:30</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">07:44</span>
-                        <span style="font-size:12px; color:#64748b;">(2時14分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強號 101次</strong> | 省錢天花板！到站先吃一碗美鮮牛肉湯再進場！</div>
-                </div>
-
-                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '區間快 3005次 (06:04➜08:21)', 314)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-blue">早安區間快</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$314 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">06:04</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">08:21</span>
-                        <span style="font-size:12px; color:#64748b;">(2時17分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>區間快 3005次</strong> | 臺中至臺南，時間充裕票價親民。</div>
-                </div>
-            </div>
-
-            <!-- 傍晚班次去程清單 -->
-            <div id="dep-group-eve" style="display:none;">
-                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強(3000) 143次 (19:54➜21:34)', 487)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-green">⚡ 全日最快 100 分鐘直達</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">19:54</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">21:34</span>
-                        <span style="font-size:12px; color:#64748b;">(1時40分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強(3000) 143次</strong> | 下課吃飽搭這班，21:34 抵達台南直奔宵夜！</div>
-                </div>
-
-                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強號 141次 (19:47➜21:52)', 390)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-gold">🎓 大學生 8 折</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$390 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">19:47</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">21:52</span>
-                        <span style="font-size:12px; color:#64748b;">(2時05分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強號 141次</strong> | 學生優惠班次，平價好選擇。</div>
-                </div>
-
-                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強(3000) 167次 (17:45➜19:34)', 487)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-blue">傍晚黃金時段</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">17:45</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">19:34</span>
-                        <span style="font-size:12px; color:#64748b;">(1時49分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強(3000) 167次</strong> | 早早抵達去安平吃阿財牛肉湯！</div>
-                </div>
-
-                <div class="train-option-card outbound-train-card" onclick="selectOutbound(this, '自強號 281次 (21:46➜23:44)', 341)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-gold">🌙 大學生 7 折夜貓班</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$341 / 人</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">21:46</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">23:44</span>
-                        <span style="font-size:12px; color:#64748b;">(1時58分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;"><strong>自強號 281次</strong> | 夜貓首選！到站直接吃豆奶宗沙茶蛋餅！</div>
-                </div>
-            </div>
+            <!-- 動態去程車次列表容器 -->
+            <div id="outbound-cards-container"></div>
 
             <!-- ② 回程車次 -->
-            <div style="font-size:13px; font-weight:800; color:#1e293b; margin: 18px 0 8px;">
-                ② 選擇【9/21 (一) 回程晨車】(臺南 ➔ 臺中，奔赴 10:10 民法物權)
+            <div style="display:flex; justify-content:space-between; align-items:center; margin: 18px 0 8px;">
+                <div style="font-size:13px; font-weight:800; color:#1e293b;">
+                    ② 選擇【回程車次】(臺南 ➔ 臺中，奔赴 10:10 民法物權)
+                </div>
+                <button onclick="openTransitModal('add', 'return')" class="badge-pill badge-gold" style="border:none; cursor:pointer; font-size:11px; font-weight:800; padding:5px 10px;">
+                    ➕ 新增回程班次
+                </button>
             </div>
 
-            <div id="return-cards-container">
-                <div class="train-option-card return-train-card selected" onclick="selectReturn(this, '高鐵 0806次 (07:41➜08:34)', 570)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-green">★ 貼心首選 (提前65分到)</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$570 (88折)</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">07:41</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">08:34</span>
-                        <span style="font-size:12px; color:#64748b;">(53分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
-                        🚄 <strong>高鐵 0806次</strong> ➔ 台中烏日牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>。<br>
-                        ☕ Cindy 悠閒喝燕麥拿鐵看書，行李 Melon 全扛！
-                    </div>
-                </div>
-
-                <div class="train-option-card return-train-card" onclick="selectReturn(this, '高鐵 0810次 (08:41➜09:34)', 485)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-gold">💰 大學生 75 折超划算</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$485 (75折)</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">08:41</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">09:34</span>
-                        <span style="font-size:12px; color:#64748b;">(53分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
-                        🚄 <strong>高鐵 0810次</strong> ➔ 09:45 牽機車出發 ➔ <strong>10:05 抵達系館</strong>。<br>
-                        ⏱️ 10:10 上課剛好入座，週日可多睡 1 小時！
-                    </div>
-                </div>
-
-                <div class="train-option-card return-train-card" onclick="selectReturn(this, '台鐵 自強108次 (06:08➜08:28)', 487)">
-                    <div style="display:flex; justify-content:space-between;">
-                        <span class="badge-pill badge-blue">台鐵直達台中火車站</span>
-                        <span style="font-size:12px; font-weight:800; color:#b45309;">$487</span>
-                    </div>
-                    <div class="train-time-row">
-                        <span class="train-time">06:08</span>
-                        <span class="train-arrow">➔</span>
-                        <span class="train-time">08:28</span>
-                        <span style="font-size:12px; color:#64748b;">(2時20分)</span>
-                    </div>
-                    <div style="font-size:11px; color:#64748b; margin-top:4px;">
-                        <strong>自強號 108次</strong> | 免去高鐵站，臺南市區火車站直接上車。
-                    </div>
-                </div>
-            </div>
+            <!-- 動態回程車次列表容器 -->
+            <div id="return-cards-container"></div>
         </div>
 
         <div id="tab-wishes" class="tab-content">
@@ -1285,6 +1116,60 @@
                 • <strong>17:00 - 18:15</strong>【頒獎典禮、大合照與榮耀歸程】
             </div>
         </div>
+
+        
+
+        <!-- ==================================================================== -->
+        <!-- TAB 6: 📅 儀表板 (已移至最後) -->
+        <!-- ==================================================================== -->
+        <!-- ==================================================================== -->
+        <div id="tab-timetable" class="tab-content">
+            <div class="custom-card" style="background:linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color:white; margin-bottom:10px;">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <div style="font-size:11px; color:var(--dawho-gold); font-weight:800;">📊 專利與民法物權行程對齊儀表板</div>
+                        <div style="font-size:15px; font-weight:900; margin-top:2px;">六日一行程 ➔ 週一準時入座</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <span class="badge-pill badge-green">🛡️ 全勤守護 100%</span>
+                    </div>
+                </div>
+                <div style="font-size:11px; color:#cbd5e1; margin-top:8px; line-height:1.5;">
+                    🎓 <strong>週一安心保證：</strong>搭 07:41 高鐵 ➔ 08:34 烏日 ➔ 機車雙載 <strong>09:05 到教室</strong>，比 10:10 鐘響整整提前 65 分鐘！
+                </div>
+            </div>
+
+            <!-- 課表切換檢視方案 -->
+            <div style="display:flex; gap:6px; margin-bottom:10px;">
+                <button id="tt-btn-3day" onclick="switchTimetablePlan('3day')" class="badge-pill badge-gold" style="border:none; cursor:pointer;">🌟 方案一 (Melon六日一)</button>
+                <button id="tt-btn-cindy" onclick="switchTimetablePlan('cindy')" class="badge-pill" style="border:none; cursor:pointer; background:#e2e8f0; color:#475569;">🍰 方案三 (Cindy心動版)</button>
+            </div>
+
+            <!-- 大學課表式 Grid -->
+            <div class="timetable-card">
+                <table class="timetable-table">
+                    <thead>
+                        <tr>
+                            <th class="time-col">節次/時段</th>
+                            <th id="th-day1">9/19 (六)<br><span style="font-size:9px; font-weight:normal;">專利決賽</span></th>
+                            <th id="th-day2">9/20 (日)<br><span style="font-size:9px; font-weight:normal;">慢活吃台南</span></th>
+                            <th id="th-day3">9/21 (一)<br><span style="font-size:9px; font-weight:normal;">返校民法課</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="timetable-tbody"></tbody>
+                </table>
+            </div>
+
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; font-size:10px;">
+                <span class="course-block course-traffic">🚆 交通班次</span>
+                <span class="course-block course-contest">🏆 專利大戰</span>
+                <span class="course-block course-class">📚 10:10民法物權</span>
+                <span class="course-block course-food">🍜 府城必吃</span>
+                <span class="course-block course-spot">🏖️ 甜點散步</span>
+            </div>
+        </div>
+
+        <!-- ==================================================================== -->
 
         <!-- 滿版親親 Overlay -->
         <div id="kiss-overlay" onclick="closeKiss()">
@@ -1416,6 +1301,41 @@
         let currentUser = localStorage.getItem('sinopac_user') || 'melon';
         let allSpots = JSON.parse(JSON.stringify(defaultSpots));
         let planModesData = JSON.parse(JSON.stringify(defaultPlanModes));
+
+        // 讀取 Cindy 自訂天數
+        try {
+            const cachedCindyDays = localStorage.getItem('sinopac_cindy_days');
+            if (cachedCindyDays) {
+                const parsed = JSON.parse(cachedCindyDays);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    planModesData['cindy'].days = parsed;
+                }
+            }
+        } catch(e) {}
+
+        // 交通車次自訂清單 (可彈性新增、編輯、刪除)
+        const defaultTransitOptions = {
+            outbound: [
+                { id: 'out_1', group: 'sat', date: '9/19 (六)', name: '自強(3000) 371次', dep: '06:57', arr: '08:47', duration: '1時50分', price: 487, badge: '★ 官方最推薦首選', badgeClass: 'badge-green', desc: '直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！' },
+                { id: 'out_2', group: 'sat', date: '9/19 (六)', name: '自強號 101次', dep: '05:30', arr: '07:44', duration: '2時14分', price: 244, badge: '💰 大學生 5 折只要 $244', badgeClass: 'badge-gold', desc: '省錢天花板！到站先吃一碗美鮮牛肉湯再進場！' },
+                { id: 'out_3', group: 'sat', date: '9/19 (六)', name: '區間快 3005次', dep: '06:04', arr: '08:21', duration: '2時17分', price: 314, badge: '早安區間快', badgeClass: 'badge-blue', desc: '臺中至臺南，時間充裕票價親民。' },
+                { id: 'out_4', group: 'eve', date: '9/17或9/18 傍晚', name: '自強(3000) 143次', dep: '19:54', arr: '21:34', duration: '1時40分', price: 487, badge: '⚡ 全日最快 100 分鐘直達', badgeClass: 'badge-green', desc: '下課吃飽搭這班，21:34 抵達台南直奔宵夜！' },
+                { id: 'out_5', group: 'eve', date: '9/17或9/18 傍晚', name: '自強號 141次', dep: '19:47', arr: '21:52', duration: '2時05分', price: 390, badge: '🎓 大學生 8 折', badgeClass: 'badge-gold', desc: '學生優惠班次，平價好選擇。' },
+                { id: 'out_6', group: 'eve', date: '9/17或9/18 傍晚', name: '自強(3000) 167次', dep: '17:45', arr: '19:34', duration: '1時49分', price: 487, badge: '傍晚黃金時段', badgeClass: 'badge-blue', desc: '早早抵達去安平吃阿財牛肉湯！' },
+                { id: 'out_7', group: 'eve', date: '9/17或9/18 傍晚', name: '自強號 281次', dep: '21:46', arr: '23:44', duration: '1時58分', price: 341, badge: '🌙 大學生 7 折夜貓班', badgeClass: 'badge-gold', desc: '夜貓首選！到站直接吃豆奶宗沙茶蛋餅！' }
+            ],
+            returnList: [
+                { id: 'ret_1', date: '9/21 (一)', name: '高鐵 0806次', dep: '07:41', arr: '08:34', duration: '53分', price: 570, badge: '★ 貼心首選 (提前65分到)', badgeClass: 'badge-green', desc: '🚄 <strong>高鐵 0806次</strong> ➔ 台中烏日牽機車 08:45 出發 ➔ <strong>09:05 抵達系館</strong>。<br>☕ Cindy 悠閒喝燕麥拿鐵看書，行李 Melon 全扛！' },
+                { id: 'ret_2', date: '9/21 (一)', name: '高鐵 0810次', dep: '08:41', arr: '09:34', duration: '53分', price: 485, badge: '💰 大學生 75 折超划算', badgeClass: 'badge-gold', desc: '🚄 <strong>高鐵 0810次</strong> ➔ 09:45 牽機車出發 ➔ <strong>10:05 抵達系館</strong>。<br>⏱️ 10:10 上課剛好入座，週日可多睡 1 小時！' },
+                { id: 'ret_3', date: '9/21 (一)', name: '台鐵 自強108次', dep: '06:08', arr: '08:28', duration: '2時20分', price: 487, badge: '台鐵直達台中火車站', badgeClass: 'badge-blue', desc: '<strong>自強號 108次</strong> | 免去高鐵站，臺南市區火車站直接上車。' }
+            ]
+        };
+
+        let allTransitOptions = JSON.parse(JSON.stringify(defaultTransitOptions));
+        try {
+            const cachedTransitOpts = localStorage.getItem('sinopac_transit_options');
+            if (cachedTransitOpts) allTransitOptions = JSON.parse(cachedTransitOpts);
+        } catch(e) {}
                 // 初始預設留言（確保任何新裝置/無快取開屏 0.00 秒絕對能看見歷史留言，絕不反白或遺漏）
         const initialDefaultWishes = [
             { user: '🍈 Melon', text: '真的很想跟你一起看夕陽，台南需要看夕陽', time: '9/15 00:20' },
@@ -1441,7 +1361,8 @@
             activeDayKey: 'day_sat',
             myOutbound: '自強(3000) 371次 (06:57➜08:47)',
             myReturn: '高鐵 0806次 (07:41➜08:34)',
-            shelfOpen: false
+            shelfOpen: false,
+            depGroup: 'sat'
         };
 
         // ==========================================
@@ -1472,8 +1393,12 @@
                 if (appState.planMode === '3day') switchPlanMode('cindy');
             } else {
                 if (titleEl) titleEl.innerText = '🍈 Melon 的貼心觀測：Cindy 當前飽足狀況';
+                // 若是 Melon 且目前在方案三，切換回方案一
+                if (appState.planMode === 'cindy') switchPlanMode('3day');
             }
+            updatePlanModeButtonsUI();
             renderItinerary();
+            renderTransitCards();
         }
 
         // ==========================================
@@ -1559,14 +1484,35 @@
         // 方案模式切換 (方案一 / 方案二 / 方案三 Cindy版)
         // ==========================================
         function switchPlanMode(mode) {
+            if (mode === 'cindy' && currentUser !== 'cindy') {
+                alert("🔒 方案三為 🍰 Cindy 專屬特權行程！\n只有 Cindy 本人登入才有權限切換與自由規劃喔～💖\n(Melon 若想體驗，請於右上角切換登入為 Cindy 身分)");
+                return;
+            }
             appState.planMode = mode;
-            document.getElementById('btn-mode-3day').className = `plan-btn ${mode === '3day' ? 'active' : ''}`;
-            document.getElementById('btn-mode-5day').className = `plan-btn ${mode === '5day' ? 'active' : ''}`;
-            document.getElementById('btn-mode-cindy').className = `plan-btn ${mode === 'cindy' ? 'active-cindy-plan' : ''}`;
+            const b3 = document.getElementById('btn-mode-3day');
+            const b5 = document.getElementById('btn-mode-5day');
+            const bc = document.getElementById('btn-mode-cindy');
+            if (b3) b3.className = `plan-btn ${mode === '3day' ? 'active' : ''}`;
+            if (b5) b5.className = `plan-btn ${mode === '5day' ? 'active' : ''}`;
+            if (bc) bc.className = `plan-btn ${mode === 'cindy' ? 'active-cindy-plan' : ''}`;
 
             const modeConfig = planModesData[mode];
-            appState.activeDayKey = modeConfig.days[0].key;
+            if (modeConfig && modeConfig.days && modeConfig.days.length > 0) {
+                appState.activeDayKey = modeConfig.days[0].key;
+            }
+            updatePlanModeButtonsUI();
             renderItinerary();
+        }
+
+        function updatePlanModeButtonsUI() {
+            const btnCindy = document.getElementById('btn-mode-cindy');
+            if (btnCindy) {
+                if (currentUser === 'cindy') {
+                    btnCindy.innerHTML = `🍰 方案三<br>Cindy 心動專屬版 ✨`;
+                } else {
+                    btnCindy.innerHTML = `🍰 方案三<br>Cindy 專屬 (限Cindy) 🔒`;
+                }
+            }
         }
 
         // ==========================================
@@ -1651,6 +1597,12 @@
         function renderItinerary() {
             const modeConfig = planModesData[appState.planMode];
             const subtabs = document.getElementById('day-subtabs');
+            
+            // 控制 Cindy 專屬天數工具列之顯示
+            const toolsBar = document.getElementById('cindy-day-tools-bar');
+            if (toolsBar) {
+                toolsBar.style.display = (appState.planMode === 'cindy' && currentUser === 'cindy') ? 'flex' : 'none';
+            }
             const titleEl = document.getElementById('itinerary-title');
             const listEl = document.getElementById('itinerary-list');
 
@@ -1981,10 +1933,8 @@
         }
 
         function goToWishesTab() {
-            const tabs = document.querySelectorAll('.tab-btn');
-            if (tabs && tabs.length >= 4) {
-                switchTab('wishes', tabs[3]);
-            }
+            const wishesBtn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick') && b.getAttribute('onclick').includes("'wishes'"));
+            if (wishesBtn) switchTab('wishes', wishesBtn);
             const input = document.getElementById('wish-input');
             if (input) {
                 setTimeout(() => {
@@ -2326,6 +2276,338 @@
             }
         }
     
+        
+        // ==========================================
+        // 🚆 彈性車次班次管理 (可自由新增、修改、刪除)
+        // ==========================================
+        function switchDepGroup(group) {
+            appState.depGroup = group;
+            const btnSat = document.getElementById('btn-dep-sat');
+            const btnEve = document.getElementById('btn-dep-eve');
+            if (btnSat) {
+                btnSat.className = `badge-pill ${group === 'sat' ? 'badge-green' : ''}`;
+                btnSat.style.background = group === 'sat' ? '' : '#e2e8f0';
+                btnSat.style.color = group === 'sat' ? 'white' : '#475569';
+            }
+            if (btnEve) {
+                btnEve.className = `badge-pill ${group === 'eve' ? 'badge-green' : ''}`;
+                btnEve.style.background = group === 'eve' ? '' : '#e2e8f0';
+                btnEve.style.color = group === 'eve' ? 'white' : '#475569';
+            }
+            renderTransitCards();
+        }
+
+        function renderTransitCards() {
+            const outContainer = document.getElementById('outbound-cards-container');
+            const retContainer = document.getElementById('return-cards-container');
+            if (!outContainer || !retContainer) return;
+
+            // 渲染去程班次
+            outContainer.innerHTML = '';
+            const outList = allTransitOptions.outbound.filter(t => {
+                if (appState.depGroup === 'sat') return t.group === 'sat' || !t.group || t.group === 'all';
+                if (appState.depGroup === 'eve') return t.group === 'eve' || !t.group || t.group === 'all';
+                return true;
+            });
+
+            if (outList.length === 0) {
+                outContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8; font-size:12px;">此時段暫無班次，點擊上方「➕ 新增去程班次」自訂！</div>';
+            } else {
+                outList.forEach(t => {
+                    const card = document.createElement('div');
+                    const fullTrainStr = `${t.name} (${t.dep}➜${t.arr})`;
+                    const isSelected = (appState.myOutbound === fullTrainStr);
+                    card.className = `train-option-card outbound-train-card ${isSelected ? 'selected' : ''}`;
+                    card.onclick = () => selectOutbound(card, fullTrainStr, t.price);
+                    
+                    const badgeHtml = t.badge ? `<span class="badge-pill ${t.badgeClass || 'badge-green'}">${t.badge}</span>` : `<span></span>`;
+                    const dateTag = t.date ? `<span style="font-size:10px; color:#64748b; font-weight:700; margin-left:4px;">[${t.date}]</span>` : '';
+
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>${badgeHtml} ${dateTag}</div>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span style="font-size:12px; font-weight:800; color:#b45309;">$${t.price} / 人</span>
+                                <button type="button" onclick="event.stopPropagation(); openTransitModal('edit', 'outbound', '${t.id}')" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:10px; padding:2px 6px; cursor:pointer; color:#475569;" title="編輯此車次">✏️</button>
+                                <button type="button" onclick="event.stopPropagation(); deleteTransitOption('outbound', '${t.id}')" style="background:#fee2e2; border:1px solid #fca5a5; border-radius:6px; font-size:10px; padding:2px 6px; cursor:pointer; color:#b91c1c;" title="刪除此車次">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="train-time-row">
+                            <span class="train-time">${t.dep}</span>
+                            <span class="train-arrow">➔</span>
+                            <span class="train-time">${t.arr}</span>
+                            <span style="font-size:12px; color:#64748b;">(${t.duration || '直達'})</span>
+                        </div>
+                        <div style="font-size:11px; color:#64748b; margin-top:4px;">
+                            ${t.name.includes('高鐵') ? '🚄 ' : ''}<strong>${t.name}</strong> ${t.desc ? '| ' + t.desc : ''}
+                        </div>
+                    `;
+                    outContainer.appendChild(card);
+                });
+            }
+
+            // 渲染回程班次
+            retContainer.innerHTML = '';
+            const retList = allTransitOptions.returnList;
+            if (retList.length === 0) {
+                retContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8; font-size:12px;">暫無回程班次，點擊上方「➕ 新增回程班次」自訂！</div>';
+            } else {
+                retList.forEach(t => {
+                    const card = document.createElement('div');
+                    const fullTrainStr = `${t.name} (${t.dep}➜${t.arr})`;
+                    const isSelected = (appState.myReturn === fullTrainStr);
+                    card.className = `train-option-card return-train-card ${isSelected ? 'selected' : ''}`;
+                    card.onclick = () => selectReturn(card, fullTrainStr, t.price);
+
+                    const badgeHtml = t.badge ? `<span class="badge-pill ${t.badgeClass || 'badge-green'}">${t.badge}</span>` : `<span></span>`;
+                    const dateTag = t.date ? `<span style="font-size:10px; color:#64748b; font-weight:700; margin-left:4px;">[${t.date}]</span>` : '';
+
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>${badgeHtml} ${dateTag}</div>
+                            <div style="display:flex; align-items:center; gap:6px;">
+                                <span style="font-size:12px; font-weight:800; color:#b45309;">$${t.price} / 人</span>
+                                <button type="button" onclick="event.stopPropagation(); openTransitModal('edit', 'return', '${t.id}')" style="background:#f1f5f9; border:1px solid #cbd5e1; border-radius:6px; font-size:10px; padding:2px 6px; cursor:pointer; color:#475569;" title="編輯此車次">✏️</button>
+                                <button type="button" onclick="event.stopPropagation(); deleteTransitOption('return', '${t.id}')" style="background:#fee2e2; border:1px solid #fca5a5; border-radius:6px; font-size:10px; padding:2px 6px; cursor:pointer; color:#b91c1c;" title="刪除此車次">🗑️</button>
+                            </div>
+                        </div>
+                        <div class="train-time-row">
+                            <span class="train-time">${t.dep}</span>
+                            <span class="train-arrow">➔</span>
+                            <span class="train-time">${t.arr}</span>
+                            <span style="font-size:12px; color:#64748b;">(${t.duration || '直達'})</span>
+                        </div>
+                        <div style="font-size:11px; color:#64748b; margin-top:4px;">
+                            ${t.name.includes('高鐵') ? '🚄 ' : ''}<strong>${t.name}</strong> ${t.desc ? '| ' + t.desc : ''}
+                        </div>
+                    `;
+                    retContainer.appendChild(card);
+                });
+            }
+        }
+
+        function openTransitModal(action, type = 'outbound', id = null) {
+            const overlay = document.getElementById('transit-modal-overlay');
+            const titleEl = document.getElementById('transit-modal-title');
+            const formAction = document.getElementById('transit-form-action');
+            const formId = document.getElementById('transit-form-id');
+            const formType = document.getElementById('transit-form-type');
+            const formGroup = document.getElementById('transit-form-group');
+            const formName = document.getElementById('transit-form-name');
+            const formDep = document.getElementById('transit-form-dep');
+            const formArr = document.getElementById('transit-form-arr');
+            const formDuration = document.getElementById('transit-form-duration');
+            const formPrice = document.getElementById('transit-form-price');
+            const formBadge = document.getElementById('transit-form-badge');
+            const formDesc = document.getElementById('transit-form-desc');
+
+            formAction.value = action;
+            formId.value = id || '';
+            formType.value = type;
+
+            if (action === 'edit' && id) {
+                const list = (type === 'outbound' ? allTransitOptions.outbound : allTransitOptions.returnList);
+                const item = list.find(t => t.id === id);
+                if (item) {
+                    titleEl.innerText = '✏️ 編輯交通班次';
+                    formGroup.value = item.group || (type === 'outbound' ? 'sat' : 'mon');
+                    formName.value = item.name || '';
+                    formDep.value = item.dep || '';
+                    formArr.value = item.arr || '';
+                    formDuration.value = item.duration || '';
+                    formPrice.value = item.price || 487;
+                    formBadge.value = item.badge || '';
+                    formDesc.value = (item.desc || '').replace(/<[^>]*>/g, '');
+                }
+            } else {
+                titleEl.innerText = type === 'outbound' ? '➕ 新增去程班次' : '➕ 新增回程班次';
+                formGroup.value = (type === 'outbound' ? appState.depGroup : 'mon');
+                formName.value = '';
+                formDep.value = '';
+                formArr.value = '';
+                formDuration.value = '';
+                formPrice.value = type === 'outbound' ? 487 : 570;
+                formBadge.value = '';
+                formDesc.value = '';
+            }
+
+            overlay.style.display = 'flex';
+        }
+
+        function closeTransitModal() {
+            document.getElementById('transit-modal-overlay').style.display = 'none';
+        }
+
+        function saveTransitModalForm() {
+            const action = document.getElementById('transit-form-action').value;
+            const id = document.getElementById('transit-form-id').value;
+            const type = document.getElementById('transit-form-type').value;
+            const group = document.getElementById('transit-form-group').value;
+            const name = document.getElementById('transit-form-name').value.trim();
+            const dep = document.getElementById('transit-form-dep').value.trim();
+            const arr = document.getElementById('transit-form-arr').value.trim();
+            const duration = document.getElementById('transit-form-duration').value.trim() || '直達';
+            const price = parseInt(document.getElementById('transit-form-price').value, 10) || 0;
+            const badge = document.getElementById('transit-form-badge').value.trim();
+            const desc = document.getElementById('transit-form-desc').value.trim();
+
+            if (!name || !dep || !arr) {
+                alert("請填寫完整的車次名稱、出發與抵達時間！");
+                return;
+            }
+
+            const list = (type === 'outbound' ? allTransitOptions.outbound : allTransitOptions.returnList);
+
+            if (action === 'edit' && id) {
+                const item = list.find(t => t.id === id);
+                if (item) {
+                    item.name = name;
+                    item.dep = dep;
+                    item.arr = arr;
+                    item.duration = duration;
+                    item.price = price;
+                    item.badge = badge;
+                    item.desc = desc;
+                    item.group = group;
+                }
+            } else {
+                const newId = (type === 'outbound' ? 'out_' : 'ret_') + Date.now();
+                const newItem = {
+                    id: newId,
+                    group: group,
+                    name: name,
+                    dep: dep,
+                    arr: arr,
+                    duration: duration,
+                    price: price,
+                    badge: badge || '自訂班次',
+                    badgeClass: 'badge-gold',
+                    desc: desc
+                };
+                list.push(newItem);
+            }
+
+            try {
+                localStorage.setItem('sinopac_transit_options', JSON.stringify(allTransitOptions));
+            } catch(e) {}
+
+            closeTransitModal();
+            renderTransitCards();
+            alert("已成功儲存交通車次！");
+        }
+
+        function deleteTransitOption(type, id) {
+            const list = (type === 'outbound' ? allTransitOptions.outbound : allTransitOptions.returnList);
+            const item = list.find(t => t.id === id);
+            if (!item) return;
+
+            if (!confirm(`確定要刪除車次【${item.name} (${item.dep}➜${item.arr})】嗎？`)) return;
+
+            if (type === 'outbound') {
+                allTransitOptions.outbound = allTransitOptions.outbound.filter(t => t.id !== id);
+            } else {
+                allTransitOptions.returnList = allTransitOptions.returnList.filter(t => t.id !== id);
+            }
+
+            try {
+                localStorage.setItem('sinopac_transit_options', JSON.stringify(allTransitOptions));
+            } catch(e) {}
+
+            renderTransitCards();
+        }
+
+        // ==========================================
+        // 🍰 Cindy 專屬彈性天數管理 (增加 / 修改 / 刪除)
+        // ==========================================
+        function openDayModal(action) {
+            const overlay = document.getElementById('day-modal-overlay');
+            const titleEl = document.getElementById('day-modal-title');
+            const formAction = document.getElementById('day-modal-action');
+            const labelInput = document.getElementById('day-modal-label');
+            const titleInput = document.getElementById('day-modal-title-input');
+
+            formAction.value = action;
+            if (action === 'edit') {
+                titleEl.innerText = '✏️ 修改當前天數資訊';
+                const currentDay = planModesData['cindy'].days.find(d => d.key === appState.activeDayKey);
+                if (currentDay) {
+                    labelInput.value = currentDay.label;
+                    titleInput.value = currentDay.title;
+                }
+            } else {
+                titleEl.innerText = '➕ 增加行程天數';
+                const nextDayNum = planModesData['cindy'].days.length + 1;
+                labelInput.value = `第 ${nextDayNum} 天`;
+                titleInput.value = `第 ${nextDayNum} 天 【Cindy 自訂精彩延伸行程】`;
+            }
+            overlay.style.display = 'flex';
+        }
+
+        function closeDayModal() {
+            document.getElementById('day-modal-overlay').style.display = 'none';
+        }
+
+        function saveDayModalForm() {
+            const action = document.getElementById('day-modal-action').value;
+            const label = document.getElementById('day-modal-label').value.trim();
+            const title = document.getElementById('day-modal-title-input').value.trim();
+
+            if (!label || !title) {
+                alert("請填寫天數簡稱與當日標題！");
+                return;
+            }
+
+            if (action === 'edit') {
+                const currentDay = planModesData['cindy'].days.find(d => d.key === appState.activeDayKey);
+                if (currentDay) {
+                    currentDay.label = label;
+                    currentDay.title = title;
+                }
+            } else {
+                const newKey = 'cindy_day_' + Date.now();
+                const newDay = {
+                    key: newKey,
+                    label: label,
+                    title: title,
+                    spotIds: []
+                };
+                planModesData['cindy'].days.push(newDay);
+                appState.activeDayKey = newKey;
+            }
+
+            try {
+                localStorage.setItem('sinopac_cindy_days', JSON.stringify(planModesData['cindy'].days));
+            } catch(e) {}
+
+            closeDayModal();
+            renderItinerary();
+            renderTimetable();
+            alert("已成功更新行程天數！");
+        }
+
+        function deleteCurrentDay() {
+            if (currentUser !== 'cindy' || appState.planMode !== 'cindy') return;
+            const days = planModesData['cindy'].days;
+            if (days.length <= 1) {
+                alert("至少要保留一天行程喔！不能全部刪除～");
+                return;
+            }
+
+            const currentDay = days.find(d => d.key === appState.activeDayKey) || days[0];
+            if (!confirm(`確定要刪除【${currentDay.label}】嗎？當天的卡片安排將會一併移除喔！`)) return;
+
+            planModesData['cindy'].days = days.filter(d => d.key !== currentDay.key);
+            appState.activeDayKey = planModesData['cindy'].days[0].key;
+
+            try {
+                localStorage.setItem('sinopac_cindy_days', JSON.stringify(planModesData['cindy'].days));
+            } catch(e) {}
+
+            renderItinerary();
+            renderTimetable();
+            alert("已刪除該天行程！");
+        }
+    
         // 初始化：先從 localStorage 秒載快取資料 (0毫秒開屏)
         try {
             const cachedSpots = localStorage.getItem('sinopac_spots');
@@ -2409,6 +2691,107 @@
             <div class="login-footer-hint">
                 🔒 密碼備忘：Melon 生日是 <strong>0520</strong>，Cindy 生日是 <strong>0423</strong> ❤️
             </div>
+        </div>
+    </div>
+
+
+    <!-- 🚆 自訂車次班次 Modal (支援新增與編輯) -->
+    <div id="transit-modal-overlay" class="login-modal-overlay" style="display:none;" onclick="if(event.target === this) closeTransitModal()">
+        <div class="card-modal-box" style="max-width:390px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:16px; font-weight:900; color:#1e293b;" id="transit-modal-title">➕ 新增自訂交通班次</div>
+                <button type="button" style="border:none; background:transparent; font-size:24px; color:#94a3b8; cursor:pointer;" onclick="closeTransitModal()">×</button>
+            </div>
+            <form onsubmit="event.preventDefault(); saveTransitModalForm();">
+                <input type="hidden" id="transit-form-id" value="">
+                <input type="hidden" id="transit-form-action" value="add">
+                
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">班次方向</label>
+                        <select id="transit-form-type" class="form-control" style="font-weight:700;">
+                            <option value="outbound">去程 (臺中➜臺南)</option>
+                            <option value="return">回程 (臺南➜臺中)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">日期/時段群組</label>
+                        <select id="transit-form-group" class="form-control" style="font-weight:700;">
+                            <option value="sat">☀️ 9/19 週六早班</option>
+                            <option value="eve">🌙 9/17-18 傍晚班</option>
+                            <option value="mon">🌅 9/21 週一回程</option>
+                            <option value="custom">📅 自訂其他時段</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">車次名稱 (例：高鐵 0806次、普悠瑪 111次、自強(3000) 371次)</label>
+                    <input type="text" id="transit-form-name" class="form-control" required placeholder="例：高鐵 0806次">
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">出發時間</label>
+                        <input type="text" id="transit-form-dep" class="form-control" required placeholder="07:41">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">抵達時間</label>
+                        <input type="text" id="transit-form-arr" class="form-control" required placeholder="08:34">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">行車耗時</label>
+                        <input type="text" id="transit-form-duration" class="form-control" placeholder="53分">
+                    </div>
+                </div>
+
+                <div style="display:grid; grid-template-columns:1fr 1.2fr; gap:8px;">
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">單人票價 ($)</label>
+                        <input type="number" id="transit-form-price" class="form-control" required placeholder="570">
+                    </div>
+                    <div class="form-group" style="text-align:left;">
+                        <label class="form-label">標籤特色</label>
+                        <input type="text" id="transit-form-badge" class="form-control" placeholder="例：★ 貼心首選、💰 75折">
+                    </div>
+                </div>
+
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">備註說明 (接駁、行程配合提示)</label>
+                    <textarea id="transit-form-desc" class="form-control" rows="2" placeholder="例：下課吃飽直奔高鐵，出站先喝熱湯..."></textarea>
+                </div>
+
+                <button type="submit" class="btn-login-submit" style="margin-top:8px;">
+                    💾 儲存並更新班次列表
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 📅 Cindy 彈性天數管理 Modal -->
+    <div id="day-modal-overlay" class="login-modal-overlay" style="display:none;" onclick="if(event.target === this) closeDayModal()">
+        <div class="card-modal-box" style="max-width:360px;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                <div style="font-size:15px; font-weight:900; color:#be123c;" id="day-modal-title">➕ 增加行程天數</div>
+                <button type="button" style="border:none; background:transparent; font-size:24px; color:#94a3b8; cursor:pointer;" onclick="closeDayModal()">×</button>
+            </div>
+            <form onsubmit="event.preventDefault(); saveDayModalForm();">
+                <input type="hidden" id="day-modal-action" value="add">
+                
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">天數簡稱 (例：9/22 (二)、Day 4 或 延長天數)</label>
+                    <input type="text" id="day-modal-label" class="form-control" required placeholder="例：9/22 (二)">
+                </div>
+
+                <div class="form-group" style="text-align:left;">
+                    <label class="form-label">當日主題名稱</label>
+                    <input type="text" id="day-modal-title-input" class="form-control" required placeholder="例：9/22 (二) 【加碼安平慢遊 ‧ 買伴手禮回程】">
+                </div>
+
+                <button type="submit" class="btn-login-submit cindy-theme" style="margin-top:10px;">
+                    💖 儲存天數設定
+                </button>
+            </form>
         </div>
     </div>
 
