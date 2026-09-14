@@ -634,6 +634,159 @@
         .form-label { font-size: 11px; font-weight: 800; color: #475569; margin-bottom: 4px; display: block; }
         .form-control { width: 100%; padding: 10px 12px; border-radius: 10px; border: 1px solid #cbd5e1; font-size: 13px; outline: none; }
         .form-control:focus { border-color: var(--primary-green); }
+    
+        /* 雙人專屬身分與登入系統 */
+        .role-auth-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .auth-user-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            user-select: none;
+        }
+        .auth-user-badge.melon {
+            background: #ecfdf5;
+            color: #047857;
+            border: 1.5px solid #a7f3d0;
+        }
+        .auth-user-badge.cindy {
+            background: #fff1f2;
+            color: #be123c;
+            border: 1.5px solid #fecdd3;
+        }
+        .auth-switch-tag {
+            font-size: 10px;
+            font-weight: 600;
+            opacity: 0.8;
+            background: rgba(0, 0, 0, 0.08);
+            padding: 2px 6px;
+            border-radius: 8px;
+        }
+
+        /* 雙人登入 Modal */
+        .login-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.82);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 99999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .login-modal-box {
+            background: #ffffff;
+            width: 100%;
+            max-width: 380px;
+            border-radius: 26px;
+            padding: 26px 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            text-align: center;
+            animation: popIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .login-avatar-glow { font-size: 36px; margin-bottom: 6px; }
+        .login-title { font-size: 19px; font-weight: 900; color: #0f172a; }
+        .login-subtitle { font-size: 11px; color: #64748b; margin-top: 2px; }
+        .login-role-selector {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 14px 0;
+        }
+        .login-select-btn {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 14px;
+            padding: 10px 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-align: left;
+            transition: all 0.18s;
+        }
+        .login-select-btn.active-melon {
+            border-color: #10b981;
+            background: #ecfdf5;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+        }
+        .login-select-btn.active-cindy {
+            border-color: #f43f5e;
+            background: #fff1f2;
+            box-shadow: 0 0 0 2px rgba(244, 63, 94, 0.2);
+        }
+        .login-role-emoji { font-size: 24px; }
+        .role-nm { font-weight: 800; font-size: 13px; color: #1e293b; }
+        .role-desc { font-size: 9px; color: #64748b; }
+        .login-error {
+            background: #fee2e2;
+            color: #b91c1c;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: left;
+            line-height: 1.4;
+        }
+        .btn-login-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+            transition: all 0.2s;
+        }
+        .btn-login-submit:active { transform: scale(0.98); }
+        .btn-login-submit.cindy-theme {
+            background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%);
+            box-shadow: 0 4px 14px rgba(244, 63, 94, 0.35);
+        }
+        .login-footer-hint { font-size: 11px; color: #94a3b8; margin-top: 14px; line-height: 1.4; }
+
+        /* 即時悄悄話快報條 */
+        .quick-wish-bar {
+            background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+            border: 1px solid #fde68a;
+            border-radius: 14px;
+            padding: 9px 12px;
+            margin: 10px 0 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+        .quick-wish-bar:active { transform: scale(0.99); }
+        .wish-bell-icon { font-size: 18px; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+        .wish-ticker-content { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+        .wish-ticker-tag { font-size: 9px; font-weight: 900; color: #d97706; text-transform: uppercase; letter-spacing: 0.5px; }
+        .wish-ticker-text { font-size: 11px; font-weight: 700; color: #78350f; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .wish-badge-count { font-size: 11px; font-weight: 800; color: #b45309; background: #fef08a; padding: 2px 8px; border-radius: 10px; flex-shrink: 0; }
+    
     </style>
 </head>
 <body>
@@ -648,10 +801,12 @@
                     <span id="sync-text">試算表雲端連線</span>
                 </div>
             </div>
-            <!-- 身分切換按鈕 -->
-            <div class="role-switch-box">
-                <button id="role-melon" class="role-btn active-melon" onclick="switchUserRole('melon')">🍈 Melon</button>
-                <button id="role-cindy" class="role-btn" onclick="switchUserRole('cindy')">🍰 Cindy</button>
+            <!-- 身分認證徽章 (點擊可切換身分或重新登入) -->
+            <div class="role-auth-wrapper">
+                <div id="auth-user-badge" class="auth-user-badge melon" onclick="promptLogin()" title="點擊切換身分或重新登入">
+                    <span id="auth-user-name">🍈 Melon</span>
+                    <span class="auth-switch-tag">切換 ▾</span>
+                </div>
             </div>
         </div>
 
@@ -677,6 +832,15 @@
 
         <!-- 浮動對話通知框 -->
         <div id="dialogue-box"></div>
+        <!-- 💌 即時悄悄話許願快報條 (保證任何手機/分頁都一眼看到留言，點擊直達留言池) -->
+        <div id="quick-wish-bar" class="quick-wish-bar" onclick="goToWishesTab()">
+            <div class="wish-bell-icon">💌</div>
+            <div class="wish-ticker-content">
+                <span class="wish-ticker-tag">即時悄悄話快報</span>
+                <span id="quick-wish-text" class="wish-ticker-text">🍈 Melon：「真的很想跟你一起看夕陽...」</span>
+            </div>
+            <div class="wish-badge-count" id="quick-wish-count">4則 ➔</div>
+        </div>
 
         <!-- 主導航 (支援滑動的 6 大分頁) -->
         <div class="main-tabs-wrapper">
@@ -692,6 +856,7 @@
                 </button>
                 <button class="tab-btn" onclick="switchTab('wishes', this)">
                     <span>💌 許願留言</span>
+                    <span id="wishes-tab-badge" style="background:#f43f5e; color:white; font-size:10px; padding:1px 6px; border-radius:10px; margin-left:3px; font-weight:800;">4</span>
                 </button>
                 <button class="tab-btn" onclick="switchTab('hotel', this)">
                     <span>🏨 住宿試算</span>
@@ -747,6 +912,17 @@
             <!-- 放置區 / 行程清單 (支援 HTML5 Drag & Drop) -->
             <div id="itinerary-dropzone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
                 <div id="itinerary-list"></div>
+            </div>
+
+            <!-- 底部悄悄話快速入口 (讓行程檢視時也絕不漏看留言) -->
+            <div class="custom-card" style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border: 1.5px dashed #f59e0b; margin-top: 16px; cursor: pointer;" onclick="goToWishesTab()">
+                <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <div style="font-weight:900; font-size:13px; color:#92400e;">💌 兩人悄悄話許願池 (<span id="itinerary-wish-count">4</span>則)</div>
+                    <span style="font-size:11px; color:#b45309; font-weight:800;">查看全部/發布 ➔</span>
+                </div>
+                <div id="itinerary-wish-snippet" style="font-size:11px; color:#78350f; margin-top:6px; font-weight:600;">
+                    🍈 Melon：「真的很想跟你一起看夕陽...」
+                </div>
             </div>
         </div>
 
@@ -1240,7 +1416,21 @@
         let currentUser = localStorage.getItem('sinopac_user') || 'melon';
         let allSpots = JSON.parse(JSON.stringify(defaultSpots));
         let planModesData = JSON.parse(JSON.stringify(defaultPlanModes));
-        let cloudWishes = [];
+                // 初始預設留言（確保任何新裝置/無快取開屏 0.00 秒絕對能看見歷史留言，絕不反白或遺漏）
+        const initialDefaultWishes = [
+            { user: '🍈 Melon', text: '真的很想跟你一起看夕陽，台南需要看夕陽', time: '9/15 00:20' },
+            { user: '🍈 Melon', text: '寶寶我真的很想跟你一起去看夕陽', time: '9/15 00:42' },
+            { user: '🍈 Melon', text: '乾', time: '9/15 01:18' },
+            { user: '🍈 Melon', text: '安妞', time: '9/15 01:21' }
+        ];
+        let cloudWishes = initialDefaultWishes;
+        try {
+            const cachedWishes = localStorage.getItem('sinopac_wishes');
+            if (cachedWishes) {
+                const parsed = JSON.parse(cachedWishes);
+                if (Array.isArray(parsed) && parsed.length > 0) cloudWishes = parsed;
+            }
+        } catch(e) {}
         let cloudTransit = { melonOutbound: '', melonReturn: '', cindyOutbound: '', cindyReturn: '' };
 
         let appState = {
@@ -1261,16 +1451,27 @@
             setTimeout(updateTransitConsensusUI, 10);
             currentUser = role;
             localStorage.setItem('sinopac_user', role);
-            document.getElementById('role-melon').className = `role-btn ${role === 'melon' ? 'active-melon' : ''}`;
-            document.getElementById('role-cindy').className = `role-btn ${role === 'cindy' ? 'active-cindy' : ''}`;
+            
+            const rMelon = document.getElementById('role-melon');
+            const rCindy = document.getElementById('role-cindy');
+            if (rMelon) rMelon.className = `role-btn ${role === 'melon' ? 'active-melon' : ''}`;
+            if (rCindy) rCindy.className = `role-btn ${role === 'cindy' ? 'active-cindy' : ''}`;
+
+            // 更新 Header 身分認證徽章
+            const authBadge = document.getElementById('auth-user-badge');
+            const authName = document.getElementById('auth-user-name');
+            if (authBadge && authName) {
+                authBadge.className = `auth-user-badge ${role}`;
+                authName.innerText = role === 'cindy' ? '🍰 Cindy' : '🍈 Melon';
+            }
             
             const titleEl = document.getElementById('stomach-title');
             if (role === 'cindy') {
-                titleEl.innerText = '🍰 Cindy 專屬飽足狀態';
+                if (titleEl) titleEl.innerText = '🍰 Cindy 專屬飽足狀態';
                 // 若當前身分是 Cindy，推薦預設切換為方案三
                 if (appState.planMode === '3day') switchPlanMode('cindy');
             } else {
-                titleEl.innerText = '🍈 Melon 的貼心觀測：Cindy 當前飽足狀況';
+                if (titleEl) titleEl.innerText = '🍈 Melon 的貼心觀測：Cindy 當前飽足狀況';
             }
             renderItinerary();
         }
@@ -1722,26 +1923,75 @@
             postToCloud({ action: 'addWish', user: newWish.user, text: newWish.text });
         }
 
+        function formatWishTime(timeStr) {
+            if (!timeStr) return '';
+            try {
+                const d = new Date(timeStr);
+                if (isNaN(d.getTime())) return timeStr;
+                return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+            } catch(e) {
+                return timeStr;
+            }
+        }
+
         function renderWishes() {
             const list = document.getElementById('wishes-list');
-            if (!list) return;
-            list.innerHTML = '';
-            if (!cloudWishes || cloudWishes.length === 0) {
-                list.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:12px; padding:20px 0;">目前還沒有留言，隨時許願想吃的美食！</div>';
-                return;
+            if (list) {
+                list.innerHTML = '';
+                if (!cloudWishes || cloudWishes.length === 0) {
+                    list.innerHTML = '<div style="text-align:center; color:#94a3b8; font-size:12px; padding:20px 0;">目前還沒有留言，隨時許願想吃的美食！</div>';
+                } else {
+                    cloudWishes.forEach(w => {
+                        const card = document.createElement('div');
+                        card.className = 'wish-item';
+                        const timeText = formatWishTime(w.time);
+                        card.innerHTML = `
+                            <div style="display:flex; justify-content:space-between; font-weight:800; font-size:11px; color:#475569; margin-bottom:2px;">
+                                <span>${w.user}</span>
+                                <span style="font-weight:normal; color:#94a3b8;">${timeText}</span>
+                            </div>
+                            <div style="color:#1e293b; font-weight:600; font-size:13px; margin-top:2px;">${w.text}</div>
+                        `;
+                        list.appendChild(card);
+                    });
+                }
             }
-            cloudWishes.forEach(w => {
-                const card = document.createElement('div');
-                card.className = 'wish-item';
-                card.innerHTML = `
-                    <div style="display:flex; justify-content:space-between; font-weight:800; font-size:11px; color:#475569; margin-bottom:2px;">
-                        <span>${w.user}</span>
-                        <span style="font-weight:normal; color:#94a3b8;">${w.time || ''}</span>
-                    </div>
-                    <div style="color:#1e293b; font-weight:600;">${w.text}</div>
-                `;
-                list.appendChild(card);
-            });
+
+            // 同步更新頂部快報條與底部分頁徽章
+            const count = cloudWishes ? cloudWishes.length : 0;
+            const topBadge = document.getElementById('wishes-tab-badge');
+            const quickText = document.getElementById('quick-wish-text');
+            const quickCount = document.getElementById('quick-wish-count');
+            const itinCount = document.getElementById('itinerary-wish-count');
+            const itinSnippet = document.getElementById('itinerary-wish-snippet');
+
+            if (topBadge) topBadge.innerText = count;
+            if (quickCount) quickCount.innerText = `${count}則 ➔`;
+            if (itinCount) itinCount.innerText = count;
+
+            if (count > 0) {
+                const latest = cloudWishes[0];
+                const snippetText = `${latest.user}：「${latest.text}」`;
+                if (quickText) quickText.innerText = snippetText;
+                if (itinSnippet) itinSnippet.innerText = snippetText;
+            } else {
+                if (quickText) quickText.innerText = '目前尚無留言，隨時許願想吃的小店！';
+                if (itinSnippet) itinSnippet.innerText = '目前尚無留言，隨時許願想吃的小店！';
+            }
+        }
+
+        function goToWishesTab() {
+            const tabs = document.querySelectorAll('.tab-btn');
+            if (tabs && tabs.length >= 4) {
+                switchTab('wishes', tabs[3]);
+            }
+            const input = document.getElementById('wish-input');
+            if (input) {
+                setTimeout(() => {
+                    input.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    input.focus();
+                }, 150);
+            }
         }
 
         function voteSpot(id, userRole) {
@@ -1980,6 +2230,102 @@
             }
         });
 
+        
+        // ==========================================
+        // 🔐 雙人專屬登入與身分管理 (Melon: 0520, Cindy: 0423)
+        // ==========================================
+        const AUTH_USERS = {
+            'melon': { name: 'Melon', password: '0520', role: 'melon', hint: '0520' },
+            'cindy': { name: 'Cindy', password: '0423', role: 'cindy', hint: '0423' }
+        };
+
+        function selectLoginRole(role) {
+            const btnMelon = document.getElementById('btn-select-melon');
+            const btnCindy = document.getElementById('btn-select-cindy');
+            const userInput = document.getElementById('login-username');
+            const passInput = document.getElementById('login-password');
+            const submitBtn = document.querySelector('.btn-login-submit');
+            const hintLabel = document.getElementById('pwd-hint-label');
+
+            if (role === 'cindy') {
+                if (btnCindy) btnCindy.className = 'login-select-btn active-cindy';
+                if (btnMelon) btnMelon.className = 'login-select-btn';
+                if (userInput) userInput.value = 'cindy';
+                if (submitBtn) submitBtn.className = 'btn-login-submit cindy-theme';
+                if (hintLabel) hintLabel.innerText = '(Cindy 生日 0423)';
+            } else {
+                if (btnMelon) btnMelon.className = 'login-select-btn active-melon';
+                if (btnCindy) btnCindy.className = 'login-select-btn';
+                if (userInput) userInput.value = 'melon';
+                if (submitBtn) submitBtn.className = 'btn-login-submit';
+                if (hintLabel) hintLabel.innerText = '(Melon 生日 0520)';
+            }
+            if (passInput) {
+                passInput.value = '';
+                passInput.focus();
+            }
+        }
+
+        function togglePasswordVisibility() {
+            const p = document.getElementById('login-password');
+            if (!p) return;
+            p.type = p.type === 'password' ? 'text' : 'password';
+        }
+
+        function showLoginModal(selectedRole = 'melon') {
+            const overlay = document.getElementById('login-overlay');
+            if (!overlay) return;
+            overlay.style.display = 'flex';
+            selectLoginRole(selectedRole);
+            const errEl = document.getElementById('login-error-msg');
+            if (errEl) errEl.style.display = 'none';
+        }
+
+        function promptLogin() {
+            showLoginModal(currentUser === 'cindy' ? 'melon' : 'cindy');
+        }
+
+        function handleLoginSubmit() {
+            const u = (document.getElementById('login-username').value || '').trim().toLowerCase();
+            const p = (document.getElementById('login-password').value || '').trim();
+            const errEl = document.getElementById('login-error-msg');
+
+            const target = AUTH_USERS[u];
+            if (!target) {
+                if (errEl) {
+                    errEl.innerText = '⚠️ 帳號不正確！請輸入 melon 或 cindy';
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            if (target.password !== p) {
+                if (errEl) {
+                    errEl.innerText = `⚠️ 密碼錯誤！提示：${target.name} 的生日是 ${target.password} 喔～`;
+                    errEl.style.display = 'block';
+                }
+                return;
+            }
+
+            // 驗證通過
+            localStorage.setItem('tainan_auth_user', u);
+            const overlay = document.getElementById('login-overlay');
+            if (overlay) overlay.style.display = 'none';
+            switchUserRole(u);
+            alert(`🎉 歡迎回來，${target.name}！已成功驗證身分～`);
+        }
+
+        function checkAuthOnBoot() {
+            const authUser = localStorage.getItem('tainan_auth_user');
+            if (authUser && AUTH_USERS[authUser]) {
+                currentUser = authUser;
+                switchUserRole(authUser);
+            } else {
+                // 初次開啟或未登入，強制彈出驗證視窗
+                showLoginModal(currentUser || 'melon');
+            }
+        }
+    
         // 初始化：先從 localStorage 秒載快取資料 (0毫秒開屏)
         try {
             const cachedSpots = localStorage.getItem('sinopac_spots');
@@ -2008,6 +2354,63 @@
         // 立即啟動非同步抓取與心跳循環
         fetchCloudData(false);
         startAutoSync();
+        checkAuthOnBoot();
     </script>
+    <!-- 雙人專屬登入遮罩 / 密碼鎖 (Melon: 0520, Cindy: 0423) -->
+    <div id="login-overlay" class="login-modal-overlay" style="display: none;">
+        <div class="login-modal-box">
+            <div class="login-avatar-glow">🍈 ❤️ 🍰</div>
+            <div class="login-title">哈蜜呱不翹課金控</div>
+            <div class="login-subtitle">雙人台南協調系統 ‧ 專屬驗證</div>
+            
+            <div style="margin: 16px 0 12px;">
+                <div style="font-size: 11px; font-weight: 800; color: #64748b; margin-bottom: 8px; text-align: left;">1. 快速選擇身分：</div>
+                <div class="login-role-selector">
+                    <button type="button" id="btn-select-melon" class="login-select-btn active-melon" onclick="selectLoginRole('melon')">
+                        <span class="login-role-emoji">🍈</span>
+                        <div class="login-role-meta">
+                            <div class="role-nm">Melon</div>
+                            <div class="role-desc">成大專利 ‧ 男友</div>
+                        </div>
+                    </button>
+                    <button type="button" id="btn-select-cindy" class="login-select-btn" onclick="selectLoginRole('cindy')">
+                        <span class="login-role-emoji">🍰</span>
+                        <div class="login-role-meta">
+                            <div class="role-nm">Cindy</div>
+                            <div class="role-desc">物權全勤 ‧ 女友</div>
+                        </div>
+                    </button>
+                </div>
+            </div>
+
+            <form onsubmit="event.preventDefault(); handleLoginSubmit();">
+                <div class="form-group" style="text-align: left;">
+                    <label class="form-label" for="login-username">登入帳號 (名稱)</label>
+                    <input type="text" id="login-username" class="form-control" value="melon" placeholder="melon 或 cindy" required autocomplete="username">
+                </div>
+
+                <div class="form-group" style="text-align: left;">
+                    <label class="form-label" for="login-password">
+                        專屬密碼 <span id="pwd-hint-label" style="font-weight:normal; color:#94a3b8; font-size:10px;">(4碼生日)</span>
+                    </label>
+                    <div style="position:relative;">
+                        <input type="password" id="login-password" class="form-control" placeholder="請輸入 4 碼生日" required autocomplete="current-password" inputmode="numeric">
+                        <button type="button" onclick="togglePasswordVisibility()" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); background:none; border:none; color:#64748b; cursor:pointer; font-size:15px;" title="顯示/隱藏密碼">👁️</button>
+                    </div>
+                </div>
+
+                <div id="login-error-msg" class="login-error" style="display:none;"></div>
+
+                <button type="submit" class="btn-login-submit">
+                    💖 驗證並進入行程
+                </button>
+            </form>
+
+            <div class="login-footer-hint">
+                🔒 密碼備忘：Melon 生日是 <strong>0520</strong>，Cindy 生日是 <strong>0423</strong> ❤️
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
