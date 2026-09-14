@@ -38,7 +38,7 @@
             color: var(--text-main);
         }
 
-        /* 響應式手機外框：電腦為精美 iPhone 框，手機為 100% 全螢幕 */
+        /* 響應式外框：電腦為精美 iPhone 框，手機為 100% 全螢幕 */
         .app-container {
             width: 100%;
             max-width: 440px;
@@ -61,7 +61,7 @@
         /* 頂部 Header */
         .app-header {
             background: #ffffff;
-            padding: 20px 16px 12px;
+            padding: 18px 16px 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -342,7 +342,7 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
-            margin-bottom: 14px;
+            margin-bottom: 10px;
         }
         .plan-btn {
             padding: 10px 8px;
@@ -363,24 +363,66 @@
             box-shadow: 0 3px 10px rgba(197, 160, 101, 0.2);
         }
 
-        /* 行程任務清單 */
+        /* 自訂行程工具列 */
+        .itinerary-toolbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin: 6px 0 10px;
+        }
+        .btn-add-card {
+            background: linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 2px 6px rgba(197, 160, 101, 0.35);
+        }
+        .btn-reset-itinerary {
+            background: #f1f5f9;
+            color: #64748b;
+            padding: 7px 10px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 600;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+
+        /* 行程任務卡片 */
         .spot-card {
             background: #ffffff;
             border-radius: 14px;
-            padding: 12px;
+            padding: 12px 14px;
             margin-bottom: 10px;
             border: 1px solid #f1f5f9;
             display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            cursor: pointer;
+            flex-direction: column;
+            gap: 8px;
             transition: transform 0.15s, box-shadow 0.15s;
+            position: relative;
         }
         .spot-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
         .spot-card.completed {
             opacity: 0.65;
             background: #f8fafc;
+        }
+        .spot-card.completed .spot-name-text {
             text-decoration: line-through;
+            color: #94a3b8;
+        }
+        .spot-top-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
         }
         .spot-icon-box {
             width: 38px;
@@ -403,17 +445,35 @@
             align-items: center;
             gap: 6px;
         }
+        .spot-time-badge {
+            font-size: 10px;
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
         .spot-meta {
             font-size: 11px;
             color: #64748b;
             margin-top: 3px;
             line-height: 1.4;
         }
-        .spot-actions {
+        
+        /* 卡片底部操作工具欄 (編輯時間、上下移動、刪除) */
+        .spot-bottom-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed #edf2f7;
+            padding-top: 6px;
+            margin-top: 2px;
+        }
+        .spot-actions-left {
             display: flex;
             align-items: center;
-            gap: 8px;
-            margin-top: 6px;
+            gap: 6px;
         }
         .map-btn {
             color: var(--primary-green);
@@ -424,9 +484,30 @@
             align-items: center;
             gap: 2px;
             background: var(--primary-green-light);
-            padding: 2px 8px;
+            padding: 2px 7px;
             border-radius: 6px;
         }
+        .spot-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .btn-card-tool {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 3px 6px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+        .btn-card-tool:active { background: #e2e8f0; }
+        .btn-card-del { color: #dc2626; }
+        .btn-card-del:hover { background: #fee2e2; }
 
         /* 住宿試算器 Checkbox Item */
         .subsidy-item {
@@ -500,37 +581,50 @@
         .kiss-count { font-size: 72px; font-weight: 900; animation: pulse 0.5s infinite alternate; }
         @keyframes pulse { from {transform: scale(1);} to {transform: scale(1.15);} }
 
-        /* 底部固定導航 */
-        .bottom-nav {
+        /* 新增/編輯卡片彈窗 */
+        #card-modal-overlay {
             position: fixed;
-            bottom: 0;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2000;
+        }
+        .card-modal-box {
+            background: #ffffff;
             width: 100%;
             max-width: 440px;
-            height: 65px;
-            background: #ffffff;
-            border-top: 1px solid #e5e7eb;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.04);
+            border-radius: 24px 24px 0 0;
+            padding: 20px 18px 30px;
+            max-height: 88vh;
+            overflow-y: auto;
+            animation: slideUp 0.25s ease-out;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.25);
         }
-        .nav-link {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 10px;
-            color: #94a3b8;
-            text-decoration: none;
-            cursor: pointer;
-            flex: 1;
-            font-weight: 600;
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
-        .nav-link.active {
-            color: var(--primary-green);
+        .form-group { margin-bottom: 12px; }
+        .form-label {
+            font-size: 11px;
             font-weight: 800;
+            color: #475569;
+            margin-bottom: 4px;
+            display: block;
         }
-        .nav-link-icon { font-size: 18px; margin-bottom: 2px; }
+        .form-control {
+            width: 100%;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid #cbd5e1;
+            font-size: 13px;
+            color: #1e293b;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .form-control:focus { border-color: var(--primary-green); }
     </style>
 </head>
 <body>
@@ -577,7 +671,7 @@
             </button>
             <button class="tab-btn" onclick="switchTab('itinerary', this)">
                 <span style="font-size:16px;">🗺️</span>
-                <span>行程模式</span>
+                <span>自訂行程</span>
             </button>
             <button class="tab-btn" onclick="switchTab('hotel', this)">
                 <span style="font-size:16px;">🏨</span>
@@ -773,7 +867,7 @@
         </div>
 
         <!-- ==================================================================== -->
-        <!-- TAB 2: 🗺️ 行程模式自由排 (六日一 vs 五天完整 vs 景點清單) -->
+        <!-- TAB 2: 🗺️ 自訂行程 (支援新增卡片、修改時間、上下調整、刪除) -->
         <!-- ==================================================================== -->
         <div id="tab-itinerary" class="tab-content">
             <!-- 模式切換按鈕 -->
@@ -787,7 +881,17 @@
             </div>
 
             <!-- 天數切換 Tab (動態生成) -->
-            <div id="day-subtabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:10px;"></div>
+            <div id="day-subtabs" style="display:flex; gap:6px; overflow-x:auto; padding-bottom:6px; margin-bottom:6px;"></div>
+
+            <!-- 自訂行程操作列 -->
+            <div class="itinerary-toolbar">
+                <button class="btn-add-card" onclick="openAddCardModal()">
+                    <span>➕ 新增自訂行程卡片</span>
+                </button>
+                <button class="btn-reset-itinerary" onclick="resetDefaultItinerary()">
+                    <span>↺ 恢復預設行程</span>
+                </button>
+            </div>
 
             <div id="itinerary-title" style="font-size:14px; font-weight:800; color:#1e293b; margin-bottom:10px;"></div>
 
@@ -961,14 +1065,97 @@
             <div style="font-size:12px; margin-top:16px;">(體力恢復 +20%，隨時充滿愛意)</div>
         </div>
 
+        <!-- 新增/編輯卡片 Modal Sheet -->
+        <div id="card-modal-overlay" onclick="if(event.target === this) closeCardModal()">
+            <div class="card-modal-box">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                    <div style="font-size:16px; font-weight:900; color:#0f172a;" id="modal-title">➕ 新增自訂行程卡片</div>
+                    <button style="border:none; background:transparent; font-size:24px; color:#94a3b8; cursor:pointer;" onclick="closeCardModal()">×</button>
+                </div>
+                <form id="card-form" onsubmit="event.preventDefault(); saveCardForm();">
+                    <input type="hidden" id="form-spot-id" value="">
+                    
+                    <div class="form-group">
+                        <label class="form-label">📅 所屬天數</label>
+                        <select id="form-day-key" class="form-control" style="font-weight:700;"></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📌 行程 / 景點 / 店名</label>
+                        <input type="text" id="form-name" required class="form-control" placeholder="例：林百貨、台南市立美術館二館、阿明豬心">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">⏰ 自訂時間安排</label>
+                        <input type="text" id="form-time" required class="form-control" placeholder="例：11:30 - 13:00、15:00 或 宵夜時段">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">📍 地點 / 地址</label>
+                        <input type="text" id="form-addr" class="form-control" placeholder="例：中西區忠義路二段63號 或 成大自強校區周邊">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🗺️ Google 地圖連結 (留空將自動生成搜尋導航)</label>
+                        <input type="text" id="form-map" class="form-control" placeholder="例：https://maps.google.com/...">
+                    </div>
+
+                    <div style="display:flex; gap:8px;" class="form-group">
+                        <div style="flex:1;">
+                            <label class="form-label">🏷️ 類別圖示</label>
+                            <select id="form-cat" class="form-control">
+                                <option value="food">🍱 正餐美食</option>
+                                <option value="dessert">🍧 甜點冰品</option>
+                                <option value="drink">🥤 特色飲品</option>
+                                <option value="night">🍢 深夜宵夜</option>
+                                <option value="snack">🥟 經典小吃</option>
+                                <option value="spot">🏖️ 散步景點</option>
+                                <option value="traffic">🚆 交通班次</option>
+                                <option value="hotel">🏠 住宿借宿</option>
+                                <option value="contest">🎓 專利賽程</option>
+                                <option value="school">📚 返校上課</option>
+                            </select>
+                        </div>
+                        <div style="flex:1;">
+                            <label class="form-label">⚡ 飽足感影響</label>
+                            <select id="form-full" class="form-control">
+                                <option value="20">+20% (大飽口福)</option>
+                                <option value="15" selected>+15% (剛剛好飽)</option>
+                                <option value="10">+10% (解饞小吃)</option>
+                                <option value="5">+5% (喝杯飲料)</option>
+                                <option value="0">0% (純打卡拍照)</option>
+                                <option value="-10">-10% (逛街消化)</option>
+                                <option value="-20">-20% (運動散步)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🍈 Melon 筆記 / 調情台詞</label>
+                        <input type="text" id="form-melon" class="form-control" placeholder="例：牽著 Cindy 的手一起散步拍照！">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">🍰 Cindy 期待 / 評語</label>
+                        <input type="text" id="form-cindy" class="form-control" placeholder="例：⭐⭐⭐⭐⭐ (期待好久了！快幫我拍照)">
+                    </div>
+
+                    <div style="display:flex; gap:10px; margin-top:16px;">
+                        <button type="button" onclick="closeCardModal()" style="flex:1; padding:12px; border-radius:12px; border:1px solid #cbd5e1; background:#f8fafc; font-weight:700; color:#64748b; cursor:pointer;">取消</button>
+                        <button type="submit" style="flex:2; padding:12px; border-radius:12px; border:none; background:linear-gradient(135deg, var(--dawho-gold) 0%, #b38b4d 100%); font-weight:800; color:white; cursor:pointer; box-shadow:0 3px 10px rgba(197,160,101,0.35);">💾 儲存行程卡片</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
     </div>
 
-    <!-- 腳本區：資料驅動與完整客製功能 -->
+    <!-- 腳本區：完整自訂、資料持久化與即時操作 -->
     <script>
         // ==========================================
-        // 1. 全域資料庫 (景點、美食、專利賽事)
+        // 1. 預設全域資料庫 (景點、美食、專利賽事)
         // ==========================================
-        const allSpots = [
+        const defaultSpots = [
             {"id": 1, "name": "無名羊肉湯-大菜市", "cat": "food", "time": "05:30-13:00 (週二休)", "addr": "中西區府前路二段144號", "map": "https://maps.google.com/?cid=6988823270250232013", "melon": "必搶！米其林推薦完全無羊騷味。", "cindy": "⭐⭐⭐⭐⭐ (快點幫我拍照！)", "full": 20},
             {"id": 2, "name": "美鮮牛肉湯", "cat": "food", "time": "24小時 (週一二休)", "addr": "南區新興路419號之1", "map": "https://maps.google.com/?cid=2734682962622339755", "melon": "宵夜首選！抵達台南的第一餐。", "cindy": "⭐⭐⭐⭐⭐ (熱湯配肉燥飯超讚)", "full": 20},
             {"id": 3, "name": "阿財牛肉湯", "cat": "food", "time": "11:30-22:00", "addr": "安平區古堡街5號", "map": "https://maps.google.com/?cid=14531624740468646438", "melon": "安平名店，肉質鮮嫩清甜。", "cindy": "⭐⭐⭐⭐⭐ (安平必吃牛肉湯)", "full": 20},
@@ -982,7 +1169,7 @@
             {"id": 11, "name": "丹瓦樓", "cat": "night", "time": "17:00-01:30", "addr": "北區海安路三段51號", "map": "https://maps.google.com/?cid=10538179209633656791", "melon": "營業到深夜的質感滷味名店。", "cindy": "⭐⭐⭐⭐ (宵夜良伴)", "full": 15},
             {"id": 12, "name": "豆奶宗", "cat": "night", "time": "21:40-10:30", "addr": "中西區府前路二段175號", "map": "https://maps.google.com/?cid=13132803753236278417", "melon": "深夜排隊宵夜！沙茶蛋餅與刈包是招牌。", "cindy": "⭐⭐⭐⭐ (經典中的經典)", "full": 15},
             {"id": 13, "name": "祿記水晶餃", "cat": "snack", "time": "08:00-16:30", "addr": "中西區開山路3巷27號", "map": "https://maps.google.com/?cid=15113525052136485682", "melon": "秒殺級名店！外皮晶瑩剔透爆汁。", "cindy": "⭐⭐⭐⭐⭐ (水晶皮超透Q彈)", "full": 10},
-            {"id": 14, "name": "連得堂餅家", "cat": "gift", "time": "08:00-20:00 (週六至18:00)", "addr": "北區崇安街54號", "map": "https://maps.app.goo.gl/DJBUgafAVXdprV6fA", "melon": "百年古法手工煎餅，每人限購2包！", "cindy": "⭐⭐⭐⭐⭐ (伴手禮get！)", "full": 10},
+            {"id": 14, "name": "連得堂餅家", "cat": "snack", "time": "08:00-20:00 (週六至18:00)", "addr": "北區崇安街54號", "map": "https://maps.app.goo.gl/DJBUgafAVXdprV6fA", "melon": "百年古法手工煎餅，每人限購2包！", "cindy": "⭐⭐⭐⭐⭐ (伴手禮get！)", "full": 10},
             {"id": 15, "name": "灣裡薯條脆肉店", "cat": "snack", "time": "14:30-18:00 (週日休)", "addr": "南區省躬一街58號", "map": "https://maps.google.com/?cid=1498015060232698701", "melon": "炸脆肉酥香無比，神級台南下午茶。", "cindy": "⭐⭐⭐⭐⭐ (騎車也甘願)", "full": 10},
             {"id": 16, "name": "協進國小後門黑輪", "cat": "snack", "time": "10:30-19:00", "addr": "中西區大新街18號", "map": "https://maps.google.com/?cid=16972007626922579178", "melon": "在地人從小吃到大的古早味關東煮。", "cindy": "⭐⭐⭐⭐ (熱湯免費喝到飽)", "full": 10},
             {"id": 17, "name": "台灣黑輪 (2元黑輪)", "cat": "snack", "time": "10:00-19:00", "addr": "中西區開山路74號", "map": "https://maps.google.com/?cid=14732152349071063688", "melon": "一支2元的復古風情，吃的是情懷。", "cindy": "⭐⭐⭐⭐ (吃回憶的小點心)", "full": 10},
@@ -1002,7 +1189,7 @@
             {"id": 31, "name": "J.O.X tainan", "cat": "spot", "time": "14:00-21:00", "addr": "中西區衛民街52號", "map": "https://maps.google.com/?cid=8294065933744534217", "melon": "質感文青選物店，剛好吃飽來這裡散步消化。", "cindy": "⭐⭐⭐⭐ (錢包守不住啦)", "full": -20},
             
             // 賽事與交通專屬節點
-            {"id": 101, "name": "🚆 臺鐵晨班直達 (371次 / 101次)", "cat": "traffic", "time": "06:57➜08:47 / 05:30➜07:44", "addr": "臺中車站 ➔ 臺南後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "首選自強371次！06:57開車直達台南後站，步行5分抵達自強校區！", "cindy": "⭐⭐⭐⭐⭐ (直達不用換車太舒服了)", "full": 5},
+            {"id": 101, "name": "🚆 臺鐵晨班直達 (371次 / 101次)", "cat": "traffic", "time": "06:57➜08:47", "addr": "臺中車站 ➔ 臺南後站", "map": "https://www.google.com/maps/search/?api=1&query=臺南車站後站", "melon": "首選自強371次！06:57開車直達台南後站，步行5分抵達自強校區！", "cindy": "⭐⭐⭐⭐⭐ (直達不用換車太舒服了)", "full": 5},
             {"id": 102, "name": "🎓 專利大戰桌遊競賽 (成大自強校區)", "cat": "contest", "time": "09:00-18:15", "addr": "東區大學路1號 (儀器設備大樓10F)", "map": "https://www.google.com/maps/search/+國立成功大學+自強校區+儀器設備大樓9樓會議室/@22.9976229,120.2232375,19z", "melon": "全國大專院校專利大戰！三輪總積分賽，Melon 拚拿南區冠軍！", "cindy": "⭐⭐⭐⭐⭐ (Melon 超強！幫你加油第一名！)", "full": -30},
             {"id": 103, "name": "🏠 成大朋友家 (週六免費小窩)", "cat": "hotel", "time": "18:30 入住", "addr": "成大校區周邊", "map": "https://www.google.com/maps/search/?api=1&query=國立成功大學", "melon": "成大好朋友借住神助攻！現省週六數千元天價房費，晚上一起逛大東夜市！", "cindy": "⭐⭐⭐⭐⭐ (省下來的房費吃爆台南！)", "full": 10},
             {"id": 104, "name": "🚄 週一晨光高鐵 (台南 ➔ 烏日)", "cat": "traffic", "time": "07:41 / 08:41 出發", "addr": "高鐵台南站", "map": "https://www.google.com/maps/search/?api=1&query=高鐵台南站", "melon": "搭乘大學生優惠車次，40-50分鐘極速飆回台中！", "cindy": "⭐⭐⭐⭐⭐ (車上補眠剛剛好，完全不累)", "full": 5},
@@ -1010,35 +1197,8 @@
             {"id": 106, "name": "📚 10:10 民法物權 (準時入座)", "cat": "school", "time": "10:10-12:00", "addr": "法律系系館教室", "map": "https://www.google.com/maps/search/?api=1&query=法律系館", "melon": "提前抵達系館！大件行李 Melon 全扛走，Cindy 優雅入座上課！", "cindy": "⭐⭐⭐⭐⭐ (完全沒遲到！謝謝貼心男友！)", "full": -10}
         ];
 
-        // ==========================================
-        // 2. 狀態管理 (客製化即時響應)
-        // ==========================================
-        let appState = {
-            stomach: 50,
-            activeTab: 'transit',
-            planMode: '3day', // '3day' or '5day'
-            activeDayKey: 'day_sat',
-            
-            // 交通自選
-            outboundTrain: { name: '自強(3000) 371次', dep: '06:57', arr: '08:47', fare: 487, note: '直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！' },
-            returnTrain: { name: '高鐵 0806次', dep: '07:41', arr: '08:34', fare: 570, note: '08:34 抵台中烏日，牽機車 09:05 到系館，提前 65 分鐘！' },
-            
-            // 住宿夜勾選
-            nights: {
-                '917': false,
-                '918': false,
-                '919': true,
-                '920': true
-            },
-            
-            // 勾選的自訂行程 ID
-            checkedSpots: {}
-        };
-
-        // ==========================================
-        // 3. 方案分類與定義
-        // ==========================================
-        const planModesData = {
+        // 預設方案定義
+        const defaultPlanModes = {
             '3day': {
                 title: '方案一：玩六日一 (3天2夜精華版)',
                 days: [
@@ -1100,7 +1260,45 @@
         };
 
         // ==========================================
-        // 4. 畫面切換與渲染函式
+        // 2. 本地儲存與全域狀態 (LocalStorage)
+        // ==========================================
+        function loadStorageData(key, fallback) {
+            try {
+                const item = localStorage.getItem(key);
+                return item ? JSON.parse(item) : fallback;
+            } catch (e) {
+                return fallback;
+            }
+        }
+
+        function saveStorageData(key, val) {
+            try {
+                localStorage.setItem(key, JSON.stringify(val));
+            } catch (e) {}
+        }
+
+        let allSpots = loadStorageData('sinopac_spots', JSON.parse(JSON.stringify(defaultSpots)));
+        let planModesData = loadStorageData('sinopac_plan_modes', JSON.parse(JSON.stringify(defaultPlanModes)));
+
+        let appState = {
+            stomach: 50,
+            activeTab: 'transit',
+            planMode: '3day',
+            activeDayKey: 'day_sat',
+            
+            // 交通自選
+            outboundTrain: { name: '自強(3000) 371次', dep: '06:57', arr: '08:47', fare: 487, note: '直達台南後站，步行 5 分鐘抵成大自強校區 09:00 報到！' },
+            returnTrain: { name: '高鐵 0806次', dep: '07:41', arr: '08:34', fare: 570, note: '08:34 抵台中烏日，牽機車 09:05 到系館，提前 65 分鐘！' },
+            
+            // 住宿夜勾選
+            nights: { '917': false, '918': false, '919': true, '920': true },
+            
+            // 勾選完成狀態
+            checkedSpots: loadStorageData('sinopac_checked', {})
+        };
+
+        // ==========================================
+        // 3. 介面切換函式
         // ==========================================
         function switchTab(tabName, el) {
             appState.activeTab = tabName;
@@ -1114,7 +1312,6 @@
             if (tabName === 'itinerary') renderItinerary();
         }
 
-        // 交通切換 (早班 / 傍晚)
         function switchDepGroup(group) {
             const satGroup = document.getElementById('dep-group-sat');
             const eveGroup = document.getElementById('dep-group-eve');
@@ -1138,26 +1335,21 @@
             }
         }
 
-        // 點選去程車次
         function selectOutbound(el, name, dep, arr, fare, note) {
             document.querySelectorAll('#dep-group-sat .train-option-card, #dep-group-eve .train-option-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
-
             appState.outboundTrain = { name, dep, arr, fare, note };
             updateTransitSummary();
         }
 
-        // 點選回程車次
         function selectReturn(el, name, dep, arr, fare, note) {
             const parentCards = el.parentElement.querySelectorAll('.train-option-card');
             parentCards.forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
-
             appState.returnTrain = { name, dep, arr, fare, note };
             updateTransitSummary();
         }
 
-        // 即時更新交通小計
         function updateTransitSummary() {
             const outEl = document.getElementById('summary-outbound');
             const retEl = document.getElementById('summary-return');
@@ -1169,7 +1361,6 @@
             fareEl.innerText = `$${total2Person.toLocaleString()} (雙人)`;
         }
 
-        // 行程模式切換 (六日一 vs 五天)
         function switchPlanMode(mode) {
             appState.planMode = mode;
             document.getElementById('btn-mode-3day').classList.toggle('active', mode === '3day');
@@ -1180,14 +1371,16 @@
             renderItinerary();
         }
 
-        // 渲染行程與自訂任務
+        // ==========================================
+        // 4. 自訂行程渲染、新增、編輯、刪除、排序
+        // ==========================================
         function renderItinerary() {
             const modeConfig = planModesData[appState.planMode];
             const subtabs = document.getElementById('day-subtabs');
             const titleEl = document.getElementById('itinerary-title');
             const listEl = document.getElementById('itinerary-list');
 
-            // 渲染次級天數按鈕
+            // 渲染天數次級按鈕
             subtabs.innerHTML = '';
             modeConfig.days.forEach(day => {
                 const btn = document.createElement('button');
@@ -1213,9 +1406,19 @@
             const currentDay = modeConfig.days.find(d => d.key === appState.activeDayKey) || modeConfig.days[0];
             titleEl.innerText = currentDay.title;
 
-            // 渲染景點卡片
+            // 渲染卡片清單
             listEl.innerHTML = '';
-            currentDay.spotIds.forEach(id => {
+            if (!currentDay.spotIds || currentDay.spotIds.length === 0) {
+                listEl.innerHTML = `
+                    <div style="text-align:center; padding:30px 10px; color:#94a3b8; font-size:13px;">
+                        <div>📭 今天還沒有安排行程卡片</div>
+                        <button onclick="openAddCardModal()" class="btn-add-card" style="margin:12px auto 0;">➕ 立即新增自訂行程</button>
+                    </div>
+                `;
+                return;
+            }
+
+            currentDay.spotIds.forEach((id, index) => {
                 const item = allSpots.find(s => s.id === id);
                 if (!item) return;
 
@@ -1232,35 +1435,218 @@
                 else if (item.cat === 'drink') icon = '🥤';
                 else if (item.cat === 'spot') icon = '🏖️';
                 else if (item.cat === 'night') icon = '🍢';
+                else if (item.cat === 'snack') icon = '🥟';
+
+                const mapUrl = item.map || `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.name + ' ' + (item.addr || '台南'))}`;
 
                 card.innerHTML = `
-                    <div class="spot-icon-box">${icon}</div>
-                    <div class="spot-content">
-                        <div class="spot-title">
-                            <input type="checkbox" ${isChecked ? 'checked' : ''} style="accent-color:var(--primary-green); transform:scale(1.2);" onclick="event.stopPropagation(); toggleSpotCheck(${item.id})">
-                            <span>${item.name}</span>
+                    <div class="spot-top-row" onclick="eatSpot(${JSON.stringify(item).replace(/"/g, '&quot;')})">
+                        <div class="spot-icon-box">${icon}</div>
+                        <div class="spot-content">
+                            <div class="spot-title">
+                                <input type="checkbox" ${isChecked ? 'checked' : ''} style="accent-color:var(--primary-green); transform:scale(1.2);" onclick="event.stopPropagation(); toggleSpotCheck(${item.id})">
+                                <span class="spot-name-text">${item.name}</span>
+                            </div>
+                            <div style="margin-top:2px;">
+                                <span class="spot-time-badge">🕒 ${item.time || '未指定時間'}</span>
+                                ${item.addr ? `<span style="font-size:11px; color:#64748b; margin-left:4px;">📍 ${item.addr}</span>` : ''}
+                            </div>
                         </div>
-                        <div class="spot-meta">🕒 ${item.time} | 📍 ${item.addr}</div>
-                        <div class="spot-actions">
-                            <a href="${item.map}" target="_blank" class="map-btn" onclick="event.stopPropagation()">📍 地圖導航</a>
-                            <span style="font-size:10px; font-weight:bold; color:${item.full > 0 ? 'var(--primary-green)' : '#ff4d4f'}">
-                                ${item.full > 0 ? '+' + item.full : item.full}% 飽足
-                            </span>
+                        <div style="font-size:11px; font-weight:800; color:${item.full > 0 ? 'var(--primary-green)' : (item.full < 0 ? '#ff4d4f' : '#94a3b8')};">
+                            ${item.full > 0 ? '+' + item.full : item.full}%
+                        </div>
+                    </div>
+
+                    <div class="spot-bottom-toolbar">
+                        <div class="spot-actions-left">
+                            <a href="${mapUrl}" target="_blank" class="map-btn" onclick="event.stopPropagation()">📍 地圖</a>
+                        </div>
+                        <div class="spot-actions-right">
+                            <button class="btn-card-tool" onclick="event.stopPropagation(); openEditCardModal(${item.id})">✏️ 改時間</button>
+                            <button class="btn-card-tool" onclick="event.stopPropagation(); moveCard(${index}, -1)" ${index === 0 ? 'disabled style="opacity:0.3;"' : ''}>▲</button>
+                            <button class="btn-card-tool" onclick="event.stopPropagation(); moveCard(${index}, 1)" ${index === currentDay.spotIds.length - 1 ? 'disabled style="opacity:0.3;"' : ''}>▼</button>
+                            <button class="btn-card-tool btn-card-del" onclick="event.stopPropagation(); deleteCard(${item.id})">🗑️</button>
                         </div>
                     </div>
                 `;
 
-                // 點擊觸發互動
-                card.onclick = () => eatSpot(item);
                 listEl.appendChild(card);
             });
         }
 
         function toggleSpotCheck(id) {
             appState.checkedSpots[id] = !appState.checkedSpots[id];
+            saveStorageData('sinopac_checked', appState.checkedSpots);
             renderItinerary();
         }
 
+        // ==========================================
+        // 5. 彈窗 Modal 表單操作 (新增 / 編輯卡片)
+        // ==========================================
+        function populateDayOptions(selectedKey) {
+            const select = document.getElementById('form-day-key');
+            select.innerHTML = '';
+            const modeConfig = planModesData[appState.planMode];
+            modeConfig.days.forEach(d => {
+                const opt = document.createElement('option');
+                opt.value = d.key;
+                opt.innerText = `${d.label} - ${d.title}`;
+                if (d.key === selectedKey) opt.selected = true;
+                select.appendChild(opt);
+            });
+        }
+
+        function openAddCardModal() {
+            document.getElementById('modal-title').innerText = '➕ 新增自訂行程卡片';
+            document.getElementById('form-spot-id').value = '';
+            document.getElementById('form-name').value = '';
+            document.getElementById('form-time').value = '';
+            document.getElementById('form-addr').value = '';
+            document.getElementById('form-map').value = '';
+            document.getElementById('form-cat').value = 'food';
+            document.getElementById('form-full').value = '15';
+            document.getElementById('form-melon').value = '';
+            document.getElementById('form-cindy').value = '';
+            
+            populateDayOptions(appState.activeDayKey);
+            document.getElementById('card-modal-overlay').style.display = 'flex';
+        }
+
+        function openEditCardModal(id) {
+            const item = allSpots.find(s => s.id === id);
+            if (!item) return;
+
+            document.getElementById('modal-title').innerText = '✏️ 編輯行程時間與內容';
+            document.getElementById('form-spot-id').value = item.id;
+            document.getElementById('form-name').value = item.name || '';
+            document.getElementById('form-time').value = item.time || '';
+            document.getElementById('form-addr').value = item.addr || '';
+            document.getElementById('form-map').value = item.map || '';
+            document.getElementById('form-cat').value = item.cat || 'food';
+            document.getElementById('form-full').value = item.full !== undefined ? item.full : 15;
+            document.getElementById('form-melon').value = item.melon || '';
+            document.getElementById('form-cindy').value = item.cindy || '';
+
+            // 尋找當前所在的 dayKey
+            const modeConfig = planModesData[appState.planMode];
+            const currentDay = modeConfig.days.find(d => d.spotIds && d.spotIds.includes(item.id));
+            populateDayOptions(currentDay ? currentDay.key : appState.activeDayKey);
+
+            document.getElementById('card-modal-overlay').style.display = 'flex';
+        }
+
+        function closeCardModal() {
+            document.getElementById('card-modal-overlay').style.display = 'none';
+        }
+
+        function saveCardForm() {
+            const idVal = document.getElementById('form-spot-id').value;
+            const targetDayKey = document.getElementById('form-day-key').value;
+            const name = document.getElementById('form-name').value.trim();
+            const time = document.getElementById('form-time').value.trim();
+            const addr = document.getElementById('form-addr').value.trim();
+            const map = document.getElementById('form-map').value.trim();
+            const cat = document.getElementById('form-cat').value;
+            const full = parseInt(document.getElementById('form-full').value, 10);
+            const melon = document.getElementById('form-melon').value.trim() || 'Melon 推薦行程！';
+            const cindy = document.getElementById('form-cindy').value.trim() || '⭐⭐⭐⭐⭐ (期待出發！)';
+
+            if (!name) { alert("請填寫行程名稱！"); return; }
+
+            const modeConfig = planModesData[appState.planMode];
+
+            if (idVal) {
+                // 編輯已存在的卡片
+                const id = parseInt(idVal, 10);
+                const spot = allSpots.find(s => s.id === id);
+                if (spot) {
+                    spot.name = name;
+                    spot.time = time;
+                    spot.addr = addr;
+                    spot.map = map;
+                    spot.cat = cat;
+                    spot.full = full;
+                    spot.melon = melon;
+                    spot.cindy = cindy;
+                }
+
+                // 檢查是否更換天數
+                modeConfig.days.forEach(d => {
+                    const idx = d.spotIds.indexOf(id);
+                    if (idx > -1) d.spotIds.splice(idx, 1);
+                });
+                const targetDay = modeConfig.days.find(d => d.key === targetDayKey);
+                if (targetDay) targetDay.spotIds.push(id);
+
+            } else {
+                // 新增自訂卡片
+                const newId = Date.now();
+                const newSpot = {
+                    id: newId,
+                    name: name,
+                    time: time,
+                    addr: addr,
+                    map: map,
+                    cat: cat,
+                    full: full,
+                    melon: melon,
+                    cindy: cindy
+                };
+                allSpots.push(newSpot);
+
+                const targetDay = modeConfig.days.find(d => d.key === targetDayKey);
+                if (targetDay) {
+                    targetDay.spotIds.push(newId);
+                }
+            }
+
+            // 持久化保存
+            saveStorageData('sinopac_spots', allSpots);
+            saveStorageData('sinopac_plan_modes', planModesData);
+
+            appState.activeDayKey = targetDayKey;
+            closeCardModal();
+            renderItinerary();
+        }
+
+        function deleteCard(id) {
+            if (!confirm("確定要將這張卡片從行程中移除嗎？")) return;
+            const modeConfig = planModesData[appState.planMode];
+            const currentDay = modeConfig.days.find(d => d.key === appState.activeDayKey);
+            if (currentDay && currentDay.spotIds) {
+                currentDay.spotIds = currentDay.spotIds.filter(spotId => spotId !== id);
+                saveStorageData('sinopac_plan_modes', planModesData);
+                renderItinerary();
+            }
+        }
+
+        function moveCard(index, direction) {
+            const modeConfig = planModesData[appState.planMode];
+            const currentDay = modeConfig.days.find(d => d.key === appState.activeDayKey);
+            if (!currentDay || !currentDay.spotIds) return;
+
+            const targetIndex = index + direction;
+            if (targetIndex < 0 || targetIndex >= currentDay.spotIds.length) return;
+
+            const temp = currentDay.spotIds[index];
+            currentDay.spotIds[index] = currentDay.spotIds[targetIndex];
+            currentDay.spotIds[targetIndex] = temp;
+
+            saveStorageData('sinopac_plan_modes', planModesData);
+            renderItinerary();
+        }
+
+        function resetDefaultItinerary() {
+            if (!confirm("確定要恢復官方預設行程與時間嗎？自訂的卡片修改將會重設。")) return;
+            allSpots = JSON.parse(JSON.stringify(defaultSpots));
+            planModesData = JSON.parse(JSON.stringify(defaultPlanModes));
+            localStorage.removeItem('sinopac_spots');
+            localStorage.removeItem('sinopac_plan_modes');
+            renderItinerary();
+            alert("已成功恢復官方預設行程！");
+        }
+
+        // 點擊卡片吃飽
         function eatSpot(m) {
             if (appState.stomach + m.full > 100 && m.full > 0) {
                 alert("Cindy 肚子快爆炸啦！先牽手去散步消化一下！");
@@ -1299,14 +1685,12 @@
             const el = document.getElementById('night-' + nightId);
             el.classList.toggle('active', appState.nights[nightId]);
             el.querySelector('.custom-checkbox').innerText = appState.nights[nightId] ? '✓' : '';
-
             calculateSubsidy();
         }
 
         function calculateSubsidy() {
             let totalSaved = 0;
             let activeCount = 0;
-
             if (appState.nights['917']) { totalSaved += 800; activeCount++; }
             if (appState.nights['918']) { activeCount++; }
             if (appState.nights['919']) { totalSaved += 3000; activeCount++; }
