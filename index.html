@@ -2819,6 +2819,19 @@
                 cindyPick: false
             },
             {
+                id: 'hotel_taizi',
+                name: '太子飯店 / 太子行旅 (雙重補助神店)',
+                date: '9/20 (日) ~ 9/22 (二)',
+                priceOrig: 2000,
+                priceSubsidy: 0,
+                isFree: true,
+                badge: '👑 兩晚 $2,000 全折抵 = 0 元入住！',
+                addr: '臺南市中西區友愛街349號 (友愛街/海安商圈)',
+                desc: '🎉 兩晚剛好 2,000 元整，扣國旅補助 $2,000 後 0 元入住！同時享有市府住宿點數，附免費自助洗烘衣機，下樓就是友愛街與海安路！',
+                melonPick: true,
+                cindyPick: true
+            },
+            {
                 id: 'hotel_3',
                 name: '煙波大飯店 台南館',
                 date: '9/20 (日)',
@@ -2838,8 +2851,8 @@
             const cachedHotels = localStorage.getItem('sinopac_hotels');
             if (cachedHotels) {
                 const parsed = JSON.parse(cachedHotels);
-                const hasFinders = parsed.some(h => h.id === 'hotel_finders_ximen' || (h.name && h.name.includes('西門館')));
-                if (!hasFinders) {
+                const hasTaizi = parsed.some(h => h.id === 'hotel_taizi' || (h.name && h.name.includes('太子')));
+                if (!hasTaizi) {
                     allHotels = JSON.parse(JSON.stringify(defaultHotels));
                     localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels));
                 } else {
@@ -2852,7 +2865,8 @@
             { user: '🍈 Melon', text: '成大朋友自強校區旁客房已敲定，有獨立衛浴與大客廳！', time: '9/15 00:30' },
             { user: '🍰 Cindy', text: '路徒行旅有大浴缸，逛完走累剛好可以舒服泡澡～', time: '9/15 01:05' },
             { user: '🍈 Melon', text: '📞 剛剛親自致電府城商旅（東區榮譽街292號），店家直接確認：平日連住兩晚直接 0 元免費入住！太猛了！', time: '剛剛' },
-            { user: '🍰 Cindy', text: '🎯 路境行旅西門館（西門路二段76號）三天兩夜專案只要 $2,200，全補助扣 $2,000 後兩晚自付僅 $200！正興國華街下樓就吃！', time: '剛剛' }
+            { user: '🍰 Cindy', text: '🎯 路境行旅西門館（西門路二段76號）三天兩夜專案只要 $2,200，全補助扣 $2,000 後兩晚自付僅 $200！正興國華街下樓就吃！', time: '剛剛' },
+            { user: '🍈 Melon', text: '👑 太子飯店（友愛街349號）也是兩晚剛好 2,000 元整，全額扣抵國旅補助後 0 元入住！而且它還有台南市政府集點點數，附免費洗烘衣機！', time: '剛剛' }
         ];
 
         let hotelNotes = defaultHotelNotes;
@@ -2861,9 +2875,9 @@
             if (cachedHNotes) {
                 const parsed = JSON.parse(cachedHNotes);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    const hasFindersNote = parsed.some(n => n.text && n.text.includes('西門館'));
-                    if (!hasFindersNote) {
-                        parsed.push({ user: '🍰 Cindy', text: '🎯 路境行旅西門館（西門路二段76號）三天兩夜專案只要 $2,200，全補助扣 $2,000 後兩晚自付僅 $200！正興國華街下樓就吃！', time: '剛剛' });
+                    const hasTaiziNote = parsed.some(n => n.text && n.text.includes('太子'));
+                    if (!hasTaiziNote) {
+                        parsed.push({ user: '🍈 Melon', text: '👑 太子飯店（友愛街349號）也是兩晚剛好 2,000 元整，全額扣抵國旅補助後 0 元入住！而且它還有台南市政府集點點數，附免費洗烘衣機！', time: '剛剛' });
                         localStorage.setItem('sinopac_hotel_notes', JSON.stringify(parsed));
                     }
                     hotelNotes = parsed;
