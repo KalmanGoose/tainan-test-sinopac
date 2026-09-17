@@ -2793,6 +2793,19 @@
                 cindyPick: true
             },
             {
+                id: 'hotel_finders_ximen',
+                name: '路境行旅-台南西門館',
+                date: '9/20 (日) ~ 9/22 (二)',
+                priceOrig: 2200,
+                priceSubsidy: 200,
+                isFree: false,
+                badge: '🎯 3天2夜自付僅 $200 (西門國華精華區)',
+                addr: '臺南市中西區西門路二段76號 (正興/國華街口)',
+                desc: '三天兩夜專案價 $2,200，全補助折抵 $2,000 後兩晚自付僅需 $200 元（每晚只要$100）！出門就是國華街、正興街美食戰區，再贈神秘精美好禮！',
+                melonPick: true,
+                cindyPick: true
+            },
+            {
                 id: 'hotel_roaders',
                 name: '路徒行旅-台南成大館',
                 date: '9/20 (日)',
@@ -2825,8 +2838,8 @@
             const cachedHotels = localStorage.getItem('sinopac_hotels');
             if (cachedHotels) {
                 const parsed = JSON.parse(cachedHotels);
-                const hasFucheng = parsed.some(h => h.id === 'hotel_fucheng' || (h.name && h.name.includes('府城商旅') && h.isFree));
-                if (!hasFucheng) {
+                const hasFinders = parsed.some(h => h.id === 'hotel_finders_ximen' || (h.name && h.name.includes('西門館')));
+                if (!hasFinders) {
                     allHotels = JSON.parse(JSON.stringify(defaultHotels));
                     localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels));
                 } else {
@@ -2838,7 +2851,8 @@
         const defaultHotelNotes = [
             { user: '🍈 Melon', text: '成大朋友自強校區旁客房已敲定，有獨立衛浴與大客廳！', time: '9/15 00:30' },
             { user: '🍰 Cindy', text: '路徒行旅有大浴缸，逛完走累剛好可以舒服泡澡～', time: '9/15 01:05' },
-            { user: '🍈 Melon', text: '📞 剛剛親自致電府城商旅（東區榮譽街292號），店家直接確認：平日連住兩晚直接 0 元免費入住！太猛了！', time: '剛剛' }
+            { user: '🍈 Melon', text: '📞 剛剛親自致電府城商旅（東區榮譽街292號），店家直接確認：平日連住兩晚直接 0 元免費入住！太猛了！', time: '剛剛' },
+            { user: '🍰 Cindy', text: '🎯 路境行旅西門館（西門路二段76號）三天兩夜專案只要 $2,200，全補助扣 $2,000 後兩晚自付僅 $200！正興國華街下樓就吃！', time: '剛剛' }
         ];
 
         let hotelNotes = defaultHotelNotes;
@@ -2847,9 +2861,9 @@
             if (cachedHNotes) {
                 const parsed = JSON.parse(cachedHNotes);
                 if (Array.isArray(parsed) && parsed.length > 0) {
-                    const hasFC = parsed.some(n => n.text && n.text.includes('府城商旅'));
-                    if (!hasFC) {
-                        parsed.push({ user: '🍈 Melon', text: '📞 剛剛親自致電府城商旅（東區榮譽街292號），店家直接確認：平日連住兩晚直接 0 元免費入住！太猛了！', time: '剛剛' });
+                    const hasFindersNote = parsed.some(n => n.text && n.text.includes('西門館'));
+                    if (!hasFindersNote) {
+                        parsed.push({ user: '🍰 Cindy', text: '🎯 路境行旅西門館（西門路二段76號）三天兩夜專案只要 $2,200，全補助扣 $2,000 後兩晚自付僅 $200！正興國華街下樓就吃！', time: '剛剛' });
                         localStorage.setItem('sinopac_hotel_notes', JSON.stringify(parsed));
                     }
                     hotelNotes = parsed;
