@@ -2780,15 +2780,28 @@
                 cindyPick: true
             },
             {
-                id: 'hotel_2',
-                name: '路徒行旅成大館 / 府城商旅',
+                id: 'hotel_fucheng',
+                name: '府城商旅 (電話親自證實)',
+                date: '9/20 (日) ~ 9/22 (二)',
+                priceOrig: 3200,
+                priceSubsidy: 0,
+                isFree: true,
+                badge: '🔥 店家證實：連住兩晚 0 元免費！',
+                addr: '臺南市東區崇學里榮譽街292號 (騎車8分達成大)',
+                desc: '🎉 剛剛電話向店家親自確認！平日連續入住兩晚直接 0 元免費！現省 $3,200+，近大同路美食商圈！',
+                melonPick: true,
+                cindyPick: true
+            },
+            {
+                id: 'hotel_roaders',
+                name: '路徒行旅-台南成大館',
                 date: '9/20 (日)',
                 priceOrig: 1700,
                 priceSubsidy: 900,
                 isFree: false,
-                badge: '💰 國旅補助現折 $800',
-                addr: '台南市東區大學路西段 (近成大後站)',
-                desc: '週日算平日！國旅平日補助每房折 $800，自付幾百元！有乾濕分離大浴缸！',
+                badge: '🥇 成大正對面步行1分鐘',
+                addr: '臺南市北區前鋒路318號 (正對成大校區與後站)',
+                desc: '週日算平日！每房折 $800 送專屬神秘小禮物，步行 1 分鐘進成大光復考場，體力最省！',
                 melonPick: true,
                 cindyPick: false
             },
@@ -2810,12 +2823,22 @@
         let allHotels = JSON.parse(JSON.stringify(defaultHotels));
         try {
             const cachedHotels = localStorage.getItem('sinopac_hotels');
-            if (cachedHotels) allHotels = JSON.parse(cachedHotels);
+            if (cachedHotels) {
+                const parsed = JSON.parse(cachedHotels);
+                const hasFucheng = parsed.some(h => h.id === 'hotel_fucheng' || (h.name && h.name.includes('府城商旅') && h.isFree));
+                if (!hasFucheng) {
+                    allHotels = JSON.parse(JSON.stringify(defaultHotels));
+                    localStorage.setItem('sinopac_hotels', JSON.stringify(allHotels));
+                } else {
+                    allHotels = parsed;
+                }
+            }
         } catch(e) {}
 
         const defaultHotelNotes = [
             { user: '🍈 Melon', text: '成大朋友自強校區旁客房已敲定，有獨立衛浴與大客廳！', time: '9/15 00:30' },
-            { user: '🍰 Cindy', text: '路徒行旅有大浴缸，逛完走累剛好可以舒服泡澡～', time: '9/15 01:05' }
+            { user: '🍰 Cindy', text: '路徒行旅有大浴缸，逛完走累剛好可以舒服泡澡～', time: '9/15 01:05' },
+            { user: '🍈 Melon', text: '📞 剛剛親自致電府城商旅（東區榮譽街292號），店家直接確認：平日連住兩晚直接 0 元免費入住！太猛了！', time: '剛剛' }
         ];
 
         let hotelNotes = defaultHotelNotes;
@@ -2823,7 +2846,14 @@
             const cachedHNotes = localStorage.getItem('sinopac_hotel_notes');
             if (cachedHNotes) {
                 const parsed = JSON.parse(cachedHNotes);
-                if (Array.isArray(parsed) && parsed.length > 0) hotelNotes = parsed;
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    const hasFC = parsed.some(n => n.text && n.text.includes('府城商旅'));
+                    if (!hasFC) {
+                        parsed.push({ user: '🍈 Melon', text: '📞 剛剛親自致電府城商旅（東區榮譽街292號），店家直接確認：平日連住兩晚直接 0 元免費入住！太猛了！', time: '剛剛' });
+                        localStorage.setItem('sinopac_hotel_notes', JSON.stringify(parsed));
+                    }
+                    hotelNotes = parsed;
+                }
             }
         } catch(e) {}
 
